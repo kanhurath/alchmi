@@ -1,0 +1,147 @@
+.journey-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 18, 8, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.journey-modal {
+  background: #fffdf8;
+  border: 1px solid #f3b33e;
+  max-width: 780px;
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.journey-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid #de7336;
+  color: #de7336;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.journey-modal-close:hover {
+  background: #de7336;
+  color: #fff;
+}
+
+.journey-modal-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #8b2e33;
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.journey-pdf-viewer {
+  overflow-y: auto;
+  max-height: calc(92vh - 11rem);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.journey-pdf-viewer canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+.journey-loading,
+.journey-error {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: #8b2e33;
+  padding: 3rem;
+  text-align: center;
+}
+
+.journey-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.journey-nav-btn {
+  background: transparent;
+  border: 1px solid #de7336;
+  color: #de7336;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.journey-nav-btn:hover:not(:disabled) {
+  background: #de7336;
+  color: #fff;
+}
+
+.journey-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.journey-page-info {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: #1a2543;
+  text-transform: uppercase;
+  min-width: 5rem;
+  text-align: center;
+}
+
+/* ── Explore Journey button (lives in AboutSection) ── */
+.about-journey-btn {
+  display: block;
+  margin: 1.5rem auto 0;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.75rem;
+  background: #de7336;
+  border: 1px solid #de7336;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.about-journey-btn:hover {
+  background: #f3b33e;
+  border-color: #f3b33e;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .journey-modal {
+    padding: 2rem 1rem 1.5rem;
+  }
+}

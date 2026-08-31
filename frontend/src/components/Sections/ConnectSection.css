@@ -1,0 +1,123 @@
+/* ── CONNECT SECTION ── */
+.connect-section {
+  padding: 8rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: #1a2543;
+}
+
+.connect-left {
+  padding-right: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.connect-left .section-label { color: var(--dark-bg-eyebrow, rgba(255, 255, 255, 0.85)); }
+.connect-left .section-label::before { background: var(--dark-bg-eyebrow, rgba(255, 255, 255, 0.85)); }
+.connect-left .section-title { color: var(--dark-bg-title, #ffffff); }
+.connect-left .section-title em { color: var(--dark-bg-title-em, rgba(255, 255, 255, 0.75)); }
+
+.connect-desc {
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: var(--dark-bg-desc, rgba(255, 255, 255, 0.8));
+  font-weight: 300;
+  margin: 2rem 0;
+}
+
+/* Connect links */
+.connect-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 2.5rem;
+}
+
+.connect-link {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dark-bg-link, rgba(255, 255, 255, 0.85));
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: color 0.3s, padding-left 0.3s;
+}
+
+.connect-link:last-child { border-bottom: none; }
+
+.connect-link .link-icon {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.connect-link::before {
+  content: '';
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s;
+  flex-shrink: 0;
+}
+
+.connect-link:hover { color: #ffffff; padding-left: 0.3rem; }
+.connect-link:hover::before { width: 32px; }
+.connect-link:hover .link-icon { opacity: 1; }
+
+/* Right panel */
+.connect-right {
+  background: #111b35;
+  padding: 3.5rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.connect-right::before {
+  content: 'ॐ';
+  position: absolute;
+  bottom: -3rem;
+  right: -1.5rem;
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 16rem;
+  color: rgba(139, 46, 51, 0.08);
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* Button-reset for connect-link used as button */
+.connect-link-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .connect-section {
+    grid-template-columns: 1fr;
+    padding: 4rem 1.5rem;
+  }
+
+  .connect-left {
+    padding-right: 0;
+    margin-bottom: 3rem;
+  }
+
+  .connect-right {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

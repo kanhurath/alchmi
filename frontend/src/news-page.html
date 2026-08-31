@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News &amp; Updates — Vinay Kulkarni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Serif+Devanagari:wght@300;400&family=Josefin+Sans:wght@200;300;400;700&display=swap" rel="stylesheet">
+<style>
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Cormorant Garamond', Georgia, serif; background: #ffffff; color: #1a2543; overflow-x: hidden; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .rd1 { transition-delay: .08s; } .rd2 { transition-delay: .16s; } .rd3 { transition-delay: .24s; }
+
+  /* ════════════════════════════════════
+     PAGE INTRO
+  ════════════════════════════════════ */
+  .news-intro {
+    padding: 4rem 4rem 3rem;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 2rem; flex-wrap: wrap;
+    border-bottom: 1px solid rgba(139,46,51,0.18);
+  }
+  .page-eyebrow {
+    font-family: 'Josefin Sans', sans-serif; font-size: 0.6rem;
+    letter-spacing: 0.4em; text-transform: uppercase; color: #de7336;
+    margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem;
+  }
+  .page-eyebrow::before { content:''; width:28px; height:1px; background:#de7336; }
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem,4vw,3.6rem); font-weight: 300; color:#1a2543; line-height:1;
+  }
+  .page-title em { font-style: italic; color: #de7336; }
+  .news-intro-desc {
+    font-size: 1.02rem; font-weight: 300; line-height: 1.8;
+    color: rgba(26,37,67,0.62); max-width: 480px; margin-top: 0.9rem;
+  }
+  .news-social {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+  }
+  .news-social a {
+    font-family: 'Josefin Sans', sans-serif; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; color: #1a2543;
+    text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 1.2rem; border: 1.5px solid #1a2543; border-radius: 2px;
+    transition: background .25s, color .25s;
+  }
+  .news-social a:hover { background:#1a2543; color:#fff; }
+  .news-social span { font-family:'Josefin Sans',sans-serif; font-size:0.5rem; letter-spacing:0.16em; color:rgba(26,37,67,0.4); text-transform:uppercase; }
+
+  /* ════════════════════════════════════
+     FILTER BAR
+  ════════════════════════════════════ */
+  .filter-bar {
+    background:#f4efeb; padding:1rem 4rem;
+    display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;
+    border-bottom:1px solid rgba(243,179,62,0.2);
+  }
+  .filter-label {
+    font-family:'Josefin Sans',sans-serif; font-size:0.58rem;
+    letter-spacing:0.25em; text-transform:uppercase; color:#8b2e33; margin-right:0.5rem;
+  }
+  .filter-btn {
+    font-family:'Josefin Sans',sans-serif; font-size:0.56rem;
+    letter-spacing:0.16em; text-transform:uppercase;
+    padding:0.4rem 0.9rem; border:1px solid rgba(26,37,67,0.18);
+    background:transparent; color:#1a2543; cursor:pointer; transition:all 0.2s; border-radius:2px;
+  }
+  .filter-btn:hover, .filter-btn.active { background:#de7336; color:#fff; border-color:#de7336; }
+  .filter-count {
+    margin-left:auto; font-family:'Josefin Sans',sans-serif; font-size:0.52rem;
+    letter-spacing:0.16em; color:rgba(26,37,67,0.32);
+  }
+
+  /* ════════════════════════════════════
+     MAIN LAYOUT — Feed + Sidebar
+  ════════════════════════════════════ */
+  .news-main {
+    display:grid; grid-template-columns: 1fr 320px;
+    max-width:1320px; margin:0 auto; padding: 3.5rem 4rem 5rem; gap:0 3rem;
+    align-items:start;
+  }
+
+  /* ── FEED ── */
+  .news-feed { display:flex; flex-direction:column; gap:1.5rem; }
+
+  .news-card {
+    background:#fff; border:1px solid rgba(243,179,62,0.22); border-radius:10px;
+    padding:0; position:relative; overflow:hidden;
+    transition: box-shadow 0.3s, transform 0.25s;
+  }
+  .news-card:hover { box-shadow:0 8px 28px rgba(26,37,67,0.10); transform:translateY(-2px); }
+  .news-card::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px; z-index:2;
+    background:#de7336; transform:scaleY(0); transform-origin:top; transition:transform .35s ease;
+  }
+  .news-card:hover::before { transform:scaleY(1); }
+
+  /* Cover image */
+  .news-card-image {
+    width:100%; aspect-ratio: 640/220; overflow:hidden; display:block; background:#1a2543;
+  }
+  .news-card-image svg { width:100%; height:100%; display:block; }
+  .news-card-content { padding:1.8rem 2rem; }
+
+  /* Card top row: platform badge + date */
+  .news-card-top {
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; gap:1rem; flex-wrap:wrap;
+  }
+  .news-source {
+    display:flex; align-items:center; gap:0.5rem;
+  }
+  .news-source-icon {
+    width:24px; height:24px; border-radius:50%; background:#0a66c2;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Josefin Sans',sans-serif; font-weight:700; font-size:0.65rem; color:#fff; flex-shrink:0;
+  }
+  .news-source-name {
+    font-family:'Josefin Sans',sans-serif; font-size:0.54rem; letter-spacing:0.16em;
+    text-transform:uppercase; color:rgba(26,37,67,0.55); font-weight:700;
+  }
+  .news-date {
+    font-family:'Josefin Sans',sans-serif; font-size:0.5rem; letter-spacing:0.14em;
+    color:rgba(26,37,67,0.36); text-transform:uppercase;
+  }
+
+  /* Card tags */
+  .news-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.9rem; }
+  .news-tag {
+    font-family:'Josefin Sans',sans-serif; font-size:0.46rem; letter-spacing:0.16em;
+    text-transform:uppercase; color:#de7336; padding:0.15rem 0.55rem;
+    border:1px solid rgba(222,115,54,0.28); border-radius:2px;
+  }
+
+  /* Card heading + body */
+  .news-card-title {
+    font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:500;
+    color:#1a2543; line-height:1.3; margin-bottom:0.7rem;
+  }
+  .news-card-body {
+    font-size:1rem; font-weight:300; line-height:1.78; color:rgba(26,37,67,0.74);
+  }
+  .news-card-body p { margin-bottom:0.85rem; }
+  .news-card-body p:last-child { margin-bottom:0; }
+  .news-card-body em { font-style:italic; color:#8b2e33; }
+
+  /* Pull quote inside card */
+  .news-pull {
+    border-left:3px solid #f3b33e; background:#f4efeb; border-radius:0 4px 4px 0;
+    padding:0.9rem 1.2rem; margin:0.9rem 0; font-style:italic; color:#8b2e33; font-size:0.98rem;
+  }
+
+  /* Card footer: engagement + link */
+  .news-card-footer {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:1.1rem; padding-top:0.9rem; border-top:1px solid rgba(26,37,67,0.06); flex-wrap:wrap; gap:0.6rem;
+  }
+  .news-meta-stats {
+    display:flex; gap:1rem; font-family:'Josefin Sans',sans-serif; font-size:0.5rem;
+    letter-spacing:0.1em; color:rgba(26,37,67,0.4); text-transform:uppercase;
+  }
+  .news-readmore {
+    font-family:'Josefin Sans',sans-serif; font-size:0.52rem; letter-spacing:0.2em;
+    text-transform:uppercase; color:#de7336; text-decoration:none;
+    display:flex; align-items:center; gap:0.35rem; transition:gap .25s, color .25s;
+  }
+  .news-readmore:hover { gap:0.6rem; color:#8b2e33; }
+  .news-readmore::after { content:'→'; }
+
+  /* Featured (first) card variant */
+  .news-card.featured {
+    background:linear-gradient(150deg,#1a2543 0%,#2e1515 100%); border-color:transparent;
+  }
+  .news-card.featured::before { background:#f3b33e; }
+  .news-card.featured .news-card-image { aspect-ratio: 640/260; }
+  .news-card.featured .news-source-name { color:rgba(255,255,255,0.55); }
+  .news-card.featured .news-date { color:rgba(255,255,255,0.32); }
+  .news-card.featured .news-tag { color:#f3b33e; border-color:rgba(243,179,62,0.3); }
+  .news-card.featured .news-card-title { color:#fff; font-size:1.55rem; }
+  .news-card.featured .news-card-body { color:rgba(255,255,255,0.78); }
+  .news-card.featured .news-card-body em { color:#f3b33e; }
+  .news-card.featured .news-pull { background:rgba(255,255,255,0.06); border-left-color:#f3b33e; color:#f3b33e; }
+  .news-card.featured .news-card-footer { border-top-color:rgba(255,255,255,0.1); }
+  .news-card.featured .news-meta-stats { color:rgba(255,255,255,0.4); }
+  .news-card.featured .news-readmore { color:#f3b33e; }
+  .news-card.featured .news-readmore:hover { color:#fff; }
+
+  /* ════════════════════════════════════
+     SIDEBAR
+  ════════════════════════════════════ */
+  .news-sidebar { position:sticky; top:2rem; display:flex; flex-direction:column; gap:1.5rem; }
+
+  .sidebar-block {
+    background:#fdf9f3; border:1px solid rgba(243,179,62,0.25); border-radius:8px; padding:1.5rem;
+  }
+  .sidebar-title {
+    font-family:'Josefin Sans',sans-serif; font-size:0.55rem; letter-spacing:0.26em;
+    text-transform:uppercase; color:#de7336; margin-bottom:1rem;
+    padding-bottom:0.7rem; border-bottom:1px solid rgba(222,115,54,0.18);
+    display:flex; align-items:center; gap:0.6rem;
+  }
+
+  /* Topics list */
+  .topic-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.5rem 0; border-bottom:1px solid rgba(26,37,67,0.06);
+    font-family:'Josefin Sans',sans-serif; font-size:0.62rem; letter-spacing:0.1em;
+    color:rgba(26,37,67,0.68); cursor:pointer; transition:color .2s;
+  }
+  .topic-row:last-child { border-bottom:none; }
+  .topic-row:hover { color:#de7336; }
+  .topic-count {
+    background:rgba(222,115,54,0.10); color:#de7336; border-radius:2px;
+    padding:0.1rem 0.45rem; font-size:0.5rem;
+  }
+
+  /* Profile card */
+  .profile-card { background:#1a2543; border:none; }
+  .profile-card .sidebar-title { color:#f3b33e; border-bottom-color:rgba(243,179,62,0.18); }
+  .profile-name { font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:#fff; margin-bottom:0.2rem; }
+  .profile-role { font-family:'Josefin Sans',sans-serif; font-size:0.52rem; letter-spacing:0.14em; color:rgba(255,255,255,0.5); text-transform:uppercase; margin-bottom:1rem; }
+  .profile-cta {
+    display:block; text-align:center; width:100%; font-family:'Josefin Sans',sans-serif;
+    font-size:0.58rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+    padding:0.75rem; background:#de7336; color:#fff; text-decoration:none; border-radius:3px;
+    transition:background .25s;
+  }
+  .profile-cta:hover { background:#c45e22; }
+
+  /* Newsletter */
+  .newsletter-block p { font-size:0.92rem; line-height:1.65; color:rgba(26,37,67,0.62); margin-bottom:1rem; }
+  .newsletter-btn {
+    display:block; text-align:center; width:100%; font-family:'Josefin Sans',sans-serif;
+    font-size:0.58rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+    padding:0.75rem; background:transparent; color:#1a2543; border:1.5px solid #de7336;
+    text-decoration:none; border-radius:3px; transition:all .25s;
+  }
+  .newsletter-btn:hover { background:#de7336; color:#fff; }
+
+  /* ════════════════════════════════════
+     LOAD MORE
+  ════════════════════════════════════ */
+  .load-more-wrap { display:flex; justify-content:center; margin-top:1rem; grid-column:1/-1; }
+  .load-more-btn {
+    font-family:'Josefin Sans',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.2em;
+    text-transform:uppercase; padding:0.85rem 2.2rem; background:transparent;
+    border:1.5px solid #de7336; color:#1a2543; cursor:pointer; border-radius:3px; transition:all .25s;
+  }
+  .load-more-btn:hover { background:#de7336; color:#fff; }
+
+  /* ════════════════════════════════════
+     MOBILE
+  ════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .news-intro { padding:3rem 1.5rem 2rem; flex-direction:column; align-items:flex-start; }
+    .news-social { align-items:flex-start; }
+    .filter-bar { padding:0.9rem 1.5rem; }
+    .news-main { grid-template-columns:1fr; padding:2.5rem 1.5rem 4rem; gap:2.5rem; }
+    .news-sidebar { position:static; }
+    .news-card-content { padding:1.4rem 1.4rem; }
+    .news-card.featured .news-card-title { font-size:1.3rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     PAGE INTRO
+════════════════════════════════════ -->
+<div class="news-intro reveal">
+  <div>
+    <div class="page-eyebrow">Updates &amp; Reflections</div>
+    <h1 class="page-title">News &amp; <em>Insights</em></h1>
+    <p class="news-intro-desc">A running record of talks, panels, and reflections shared on Dharma, Indian Knowledge Systems, and conscious enterprise — drawn from recent activity and writing.</p>
+  </div>
+  <div class="news-social reveal rd1">
+    <a href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">
+      <span style="background:#0a66c2;width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:0.55rem;color:#fff;font-weight:700">in</span>
+      Follow on LinkedIn
+    </a>
+    <span>Updated regularly · 2026</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     FILTER BAR
+════════════════════════════════════ -->
+<div class="filter-bar">
+  <span class="filter-label">Filter</span>
+  <button class="filter-btn active" onclick="filterNews('all',this)">All</button>
+  <button class="filter-btn" onclick="filterNews('iks',this)">IKS</button>
+  <button class="filter-btn" onclick="filterNews('dharma',this)">Dharma</button>
+  <button class="filter-btn" onclick="filterNews('education',this)">Education</button>
+  <button class="filter-btn" onclick="filterNews('events',this)">Events &amp; Panels</button>
+  <button class="filter-btn" onclick="filterNews('innovation',this)">Dharmic Innovation</button>
+  <span class="filter-count" id="newsCount">7 Updates</span>
+</div>
+
+<!-- ══════════════════════════════════
+     MAIN: FEED + SIDEBAR
+════════════════════════════════════ -->
+<div class="news-main">
+
+  <div class="news-feed" id="newsFeed">
+
+    <!-- 1 — Featured: IKS APEX Meet -->
+    <article class="news-card featured reveal" data-cat="iks events">
+      <div class="news-card-image">
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#1a2543"/><stop offset="100%" stop-color="#2e1515"/>
+</linearGradient>
+<radialGradient id="glow1" cx="50%" cy="40%" r="60%">
+<stop offset="0%" stop-color="#f3b33e" stop-opacity="0.22"/><stop offset="100%" stop-color="#f3b33e" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect width="640" height="360" fill="url(#bg1)"/>
+<rect width="640" height="360" fill="url(#glow1)"/>
+<g stroke="#de7336" stroke-width="1.1" fill="none" opacity="0.5">
+<circle cx="320" cy="180" r="125"/><circle cx="320" cy="180" r="92"/><circle cx="320" cy="180" r="58"/>
+</g>
+<circle cx="320.0" cy="55.0" r="5" fill="#f3b33e"/>
+<circle cx="370.8" cy="65.8" r="5" fill="#f3b33e"/>
+<circle cx="412.9" cy="96.4" r="5" fill="#f3b33e"/>
+<circle cx="438.9" cy="141.4" r="5" fill="#f3b33e"/>
+<circle cx="444.3" cy="193.1" r="5" fill="#f3b33e"/>
+<circle cx="428.3" cy="242.5" r="5" fill="#f3b33e"/>
+<circle cx="393.5" cy="281.1" r="5" fill="#f3b33e"/>
+<circle cx="346.0" cy="302.3" r="5" fill="#f3b33e"/>
+<circle cx="294.0" cy="302.3" r="5" fill="#f3b33e"/>
+<circle cx="246.5" cy="281.1" r="5" fill="#f3b33e"/>
+<circle cx="211.7" cy="242.5" r="5" fill="#f3b33e"/>
+<circle cx="195.7" cy="193.1" r="5" fill="#f3b33e"/>
+<circle cx="201.1" cy="141.4" r="5" fill="#f3b33e"/>
+<circle cx="227.1" cy="96.4" r="5" fill="#f3b33e"/>
+<circle cx="269.2" cy="65.8" r="5" fill="#f3b33e"/>
+<circle cx="320" cy="180" r="9" fill="#8b2e33"/>
+<circle cx="320" cy="180" r="3.5" fill="#ffffff" fill-opacity="0.9"/>
+<text x="320" y="195" font-family="serif" font-size="50" fill="#ffffff" fill-opacity="0.05" text-anchor="middle">ॐ</text>
+</svg>
+      </div>
+      <div class="news-card-content">
+      <div class="news-card-top">
+        <div class="news-source">
+          <div class="news-source-icon">in</div>
+          <span class="news-source-name">LinkedIn · Post</span>
+        </div>
+        <span class="news-date">April 14, 2026</span>
+      </div>
+      <div class="news-tags">
+        <span class="news-tag">Dharma</span>
+        <span class="news-tag">IKS</span>
+        <span class="news-tag">Dharmic Innovation</span>
+        <span class="news-tag">Entrepreneurship</span>
+      </div>
+      <h2 class="news-card-title">An Experiment in Saṃvāda: Notes from the IKS APEX Meet 2026</h2>
+      <div class="news-card-body">
+        <p>A panel of fifteen scholar-practitioners, a roomful of students, parents, teachers, and administrators — and what happens when representatives of every IKS stakeholder group in India share one structured conversation.</p>
+        <div class="news-pull">"Some gatherings inform you. A rare few rearrange the perspectives of how you see the field."</div>
+        <p>The IKS APEX Meet 2026, held at Jeppiaar University, Chennai on 10 April, was the second kind. Days later, I am still working through what it surfaced. I had the honor and the distinct privilege of moderating a panel of fifteen scholar-practitioners working across the field.</p>
+      </div>
+      <div class="news-card-footer">
+        <div class="news-meta-stats"><span>Jeppiaar University, Chennai</span></div>
+        <a class="news-readmore" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">Read Full Post</a>
+      </div>
+    
+      </div>
+    </article>
+
+    <!-- 2 — Creativity as receptivity -->
+    <article class="news-card reveal rd1" data-cat="dharma innovation">
+      <div class="news-card-image">
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#f3b33e"/><stop offset="100%" stop-color="#de7336"/>
+</linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#bg2)"/>
+<g opacity="0.18">
+<text x="320" y="270" font-family="serif" font-size="220" fill="#1a2543" text-anchor="middle">ॐ</text>
+</g>
+<!-- open petal arcs (receptivity) -->
+<g fill="none" stroke="#1a2543" stroke-width="2" opacity="0.55">
+<path d="M 320 250 Q 200 230 170 140 Q 250 160 320 250 Z"/>
+<path d="M 320 250 Q 440 230 470 140 Q 390 160 320 250 Z"/>
+<path d="M 320 250 Q 280 150 320 70 Q 360 150 320 250 Z"/>
+<path d="M 320 250 Q 220 180 230 100 Q 300 140 320 250 Z"/>
+<path d="M 320 250 Q 420 180 410 100 Q 340 140 320 250 Z"/>
+</g>
+<circle cx="320" cy="252" r="9" fill="#8b2e33"/>
+</svg>
+      </div>
+      <div class="news-card-content">
+      <div class="news-card-top">
+        <div class="news-source">
+          <div class="news-source-icon">in</div>
+          <span class="news-source-name">LinkedIn · Post</span>
+        </div>
+        <span class="news-date">April 2026</span>
+      </div>
+      <div class="news-tags"><span class="news-tag">Dharma</span><span class="news-tag">Mental Model</span><span class="news-tag">Psychology</span></div>
+      <h2 class="news-card-title">On Why Creativity Is Really About Receptivity — Not Transmission</h2>
+      <div class="news-card-body">
+        <p><em>"Using an elephant gun to shoot a fly!"</em> — this, I have come to see, is the condition of the Buddhi almost everywhere. We mistake force of intellect for depth of insight, and in doing so, miss the quieter discipline that creative work actually demands: the capacity to receive, not just to produce.</p>
+      </div>
+      <div class="news-card-footer">
+        <div class="news-meta-stats"><span>Reflection</span></div>
+        <a class="news-readmore" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">Read Full Post</a>
+      </div>
+    
+      </div>
+    </article>
+
+    <!-- 3 — Bhāratīya worldview / Dharma as cosmic law -->
+    <article class="news-card reveal rd2" data-cat="dharma iks">
+      <div class="news-card-image">
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#fdf9f3"/><stop offset="100%" stop-color="#f4efeb"/>
+</linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#bg3)"/>
+<g transform="translate(320,180)">
+<circle r="118" fill="none" stroke="#8b2e33" stroke-width="2" opacity="0.7"/>
+<circle r="84" fill="none" stroke="#de7336" stroke-width="1.2" opacity="0.45"/>
+<circle r="14" fill="#8b2e33"/>
+<circle r="5" fill="#f3b33e"/>
+<line x1="14.0" y1="0.0" x2="118.0" y2="0.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="13.5" y1="3.6" x2="114.0" y2="30.5" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="12.1" y1="7.0" x2="102.2" y2="59.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="9.9" y1="9.9" x2="83.4" y2="83.4" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="7.0" y1="12.1" x2="59.0" y2="102.2" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="3.6" y1="13.5" x2="30.5" y2="114.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="0.0" y1="14.0" x2="0.0" y2="118.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-3.6" y1="13.5" x2="-30.5" y2="114.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-7.0" y1="12.1" x2="-59.0" y2="102.2" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-9.9" y1="9.9" x2="-83.4" y2="83.4" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-12.1" y1="7.0" x2="-102.2" y2="59.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-13.5" y1="3.6" x2="-114.0" y2="30.5" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-14.0" y1="0.0" x2="-118.0" y2="0.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-13.5" y1="-3.6" x2="-114.0" y2="-30.5" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-12.1" y1="-7.0" x2="-102.2" y2="-59.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-9.9" y1="-9.9" x2="-83.4" y2="-83.4" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-7.0" y1="-12.1" x2="-59.0" y2="-102.2" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-3.6" y1="-13.5" x2="-30.5" y2="-114.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="-0.0" y1="-14.0" x2="-0.0" y2="-118.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="3.6" y1="-13.5" x2="30.5" y2="-114.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="7.0" y1="-12.1" x2="59.0" y2="-102.2" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="9.9" y1="-9.9" x2="83.4" y2="-83.4" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="12.1" y1="-7.0" x2="102.2" y2="-59.0" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<line x1="13.5" y1="-3.6" x2="114.0" y2="-30.5" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+</g></svg>
+      </div>
+      <div class="news-card-content">
+      <div class="news-card-top">
+        <div class="news-source">
+          <div class="news-source-icon">in</div>
+          <span class="news-source-name">LinkedIn · Article</span>
+        </div>
+        <span class="news-date">2026</span>
+      </div>
+      <div class="news-tags"><span class="news-tag">Dharma</span><span class="news-tag">Dharmic Economics</span><span class="news-tag">IKS</span></div>
+      <h2 class="news-card-title">What If Everything We Knew Was Built on Borrowed Assumptions?</h2>
+      <div class="news-card-body">
+        <p>What if everything we thought we knew about success, progress, happiness, and even health was built upon borrowed assumptions — mental constructs we never consciously chose? This is not a philosophical exercise. This is the ground beneath our feet.</p>
+        <p>The Bhāratīya worldview rests upon a sophisticated understanding of reality that cannot be reduced to religious belief or cultural practice. Dharma is not religion in the Western sense — it is the cosmic law that governs all existence, from the movement of galaxies to the beating of a human heart.</p>
+      </div>
+      <div class="news-card-footer">
+        <div class="news-meta-stats"><span>Essay</span></div>
+        <a class="news-readmore" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">Read Full Post</a>
+      </div>
+    
+      </div>
+    </article>
+
+    <!-- 4 — Sustainability crisis / Chitta Shuddhi -->
+    <article class="news-card reveal" data-cat="dharma iks">
+      <div class="news-card-image">
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#1a2543"/><stop offset="100%" stop-color="#3a1f1f"/>
+</linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#bg4)"/>
+<g transform="translate(320,180)">
+<circle r="135" fill="none" stroke="#8b2e33" stroke-width="1.4" opacity="0.55"/>
+<circle r="105" fill="none" stroke="#de7336" stroke-width="1.4" opacity="0.6"/>
+<circle r="75"  fill="none" stroke="#f3b33e" stroke-width="1.4" opacity="0.65"/>
+<circle r="45"  fill="none" stroke="#e8c96d" stroke-width="1.4" opacity="0.7"/>
+<circle r="18"  fill="#f3b33e" opacity="0.9"/>
+<circle r="6" fill="#ffffff" opacity="0.9"/>
+</g>
+<text x="320" y="60" font-family="'Josefin Sans',sans-serif" font-size="11" letter-spacing="3" fill="#f3b33e" fill-opacity="0.5" text-anchor="middle">ANNAMAYA → ANANDAMAYA</text>
+</svg>
+      </div>
+      <div class="news-card-content">
+      <div class="news-card-top">
+        <div class="news-source">
+          <div class="news-source-icon">in</div>
+          <span class="news-source-name">LinkedIn · Post</span>
+        </div>
+        <span class="news-date">2026</span>
+      </div>
+      <div class="news-tags"><span class="news-tag">Dharma</span><span class="news-tag">Ecomomics</span><span class="news-tag">Education</span></div>
+      <h2 class="news-card-title">The Pañcakoṣa Model and the Sustainability Crisis</h2>
+      <div class="news-card-body">
+        <p>Our current sustainability crisis has a simple diagnosis: the whole world began operating in the Artha-Kāma plane and forgot Dharma — the harmonizing principle — and Mokṣa — the liberating principle. Unlimited desires. Limited natural resources.</p>
+        <div class="news-pull">"One planet is not enough to satiate the untenable greed of a humanity operating without inner restraint. Chitta Shuddhi is the need of the hour."</div>
+        <p>Every aspect of traditional life — the food we ate, the temples we built, the cities we designed — was crafted so that even the most ordinary person was slowly moved from the Annamaya toward the Ānandamaya koṣa. Day by day. Task by task.</p>
+      </div>
+      <div class="news-card-footer">
+        <div class="news-meta-stats"><span>Essay</span></div>
+        <a class="news-readmore" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">Read Full Post</a>
+      </div>
+    
+      </div>
+    </article>
+
+    <!-- 5 — Panel discussion / Tripura Vasini -->
+    <article class="news-card reveal rd1" data-cat="events education">
+      <div class="news-card-image">
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg5" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#de7336"/><stop offset="100%" stop-color="#c45e22"/>
+</linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#bg5)"/>
+<!-- stage / podium shapes -->
+<g fill="#1a2543" opacity="0.85">
+<rect x="260" y="230" width="120" height="60" rx="4"/>
+<rect x="230" y="290" width="180" height="14" rx="2"/>
+</g>
+<!-- 3 speaker silhouettes -->
+<g fill="#1a2543" opacity="0.85">
+<circle cx="270" cy="170" r="16"/><rect x="254" y="186" width="32" height="46" rx="10"/>
+<circle cx="320" cy="155" r="18"/><rect x="302" y="173" width="36" height="52" rx="11"/>
+<circle cx="372" cy="170" r="16"/><rect x="356" y="186" width="32" height="46" rx="10"/>
+</g>
+<!-- light rays -->
+<g stroke="#fff" stroke-opacity="0.18" stroke-width="2">
+<line x1="320" y1="0" x2="270" y2="170"/>
+<line x1="320" y1="0" x2="320" y2="150"/>
+<line x1="320" y1="0" x2="372" y2="170"/>
+</g>
+</svg>
+      </div>
+      <div class="news-card-content">
+      <div class="news-card-top">
+        <div class="news-source">
+          <div class="news-source-icon">in</div>
+          <span class="news-source-name">LinkedIn · Event</span>
+        </div>
+        <span class="news-date">January 31, 2026</span>
+      </div>
+      <div class="news-tags"><span class="news-tag">Education</span><span class="news-tag">Mental Model</span><span class="news-tag">Spiritual</span></div>
+      <h2 class="news-card-title">Honouring the Past, Innovating for the Future — A Panel on IKS in Modern Education</h2>
+      <div class="news-card-body">
+        <p>An insightful dialogue on honouring the past and innovating for the future — exploring how Indian Knowledge Systems can shape modern education, research, and innovation. Joined by Prof. Shailaja Sharma (Azim Premji University) and Dr. Prathosh A P (IISc), with Vinayachandra Banavathy of Chanakya University.</p>
+      </div>
+      <div class="news-card-footer">
+        <div class="news-meta-stats"><span>Tripura Vasini Palace Grounds, Bengaluru</span></div>
+        <a class="news-readmore" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">Read Full Post</a>
+      </div>
+    
+      </div>
+    </article>
+
+    <!-- 6 — IKS Certificate Course, Session 3 -->
+    <article class="news-card reveal rd2" data-cat="iks education">
+      <div class="news-card-image">
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#f4efeb"/><stop offset="100%" stop-color="#fdf9f3"/>
+</linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#bg6)"/>
+<!-- open book -->
+<g transform="translate(320,210)">
+<path d="M -130 -10 Q -65 -45 0 -10 L 0 60 Q -65 25 -130 60 Z" fill="#1a2543" opacity="0.92"/>
+<path d="M 130 -10 Q 65 -45 0 -10 L 0 60 Q 65 25 130 60 Z" fill="#1a2543" opacity="0.92"/>
+<g stroke="#f3b33e" stroke-width="1" opacity="0.5">
+<path d="M -110 -2 Q -60 -28 -10 -2"/>
+<path d="M -110 14 Q -60 -10 -10 14"/>
+<path d="M -110 30 Q -60 8 -10 30"/>
+<path d="M 110 -2 Q 60 -28 10 -2"/>
+<path d="M 110 14 Q 60 -10 10 14"/>
+<path d="M 110 30 Q 60 8 10 30"/>
+</g>
+</g>
+<!-- diya flame above -->
+<g transform="translate(320,110)">
+<ellipse cx="0" cy="18" rx="20" ry="8" fill="#8b2e33"/>
+<path d="M 0 -28 C 10 -10 12 4 0 14 C -12 4 -10 -10 0 -28 Z" fill="#f3b33e"/>
+<path d="M 0 -16 C 5 -6 6 2 0 8 C -6 2 -5 -6 0 -16 Z" fill="#ffea00" opacity="0.9"/>
+</g>
+</svg>
+      </div>
+      <div class="news-card-content">
+      <div class="news-card-top">
+        <div class="news-source">
+          <div class="news-source-icon">in</div>
+          <span class="news-source-name">LinkedIn · Course Update</span>
+        </div>
+        <span class="news-date">2026</span>
+      </div>
+      <div class="news-tags"><span class="news-tag">IKS</span><span class="news-tag">Education</span><span class="news-tag">Dharmic Innovation</span></div>
+      <h2 class="news-card-title">The Sacred Role of the Teacher in Rebuilding Bhārat — Session 3</h2>
+      <div class="news-card-body">
+        <p>Integrating Indian Knowledge Systems in Academia through NEP 2020: A Vision for Civilizational Reclamation. Delivered as part of the 10-Day IKS Certificate Course, moderated by Nidhi Ji (NLD Platform), in collaboration with Śrī Guru Teg Bahadur Khalsa College, Śrī Ānandpur Sāhib, Punjab.</p>
+        <p>Recap of previous sessions: we began with Patañjali Yoga Sūtra — an extremely experiential session that set the tone for everything since.</p>
+      </div>
+      <div class="news-card-footer">
+        <div class="news-meta-stats"><span>10-Day IKS Certificate Course</span></div>
+        <a class="news-readmore" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">Read Full Post</a>
+      </div>
+    
+      </div>
+    </article>
+
+    <!-- 7 — Article: Viewing the World Through IKS -->
+    <article class="news-card reveal" data-cat="iks dharma">
+      <div class="news-card-image">
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="bg7" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#8b2e33"/><stop offset="100%" stop-color="#541501"/>
+</linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#bg7)"/>
+<g transform="translate(320,180)">
+<!-- eye / darshana shape -->
+<path d="M -150 0 Q 0 -90 150 0 Q 0 90 -150 0 Z" fill="none" stroke="#f3b33e" stroke-width="2.2" opacity="0.8"/>
+<circle r="46" fill="#1a2543"/>
+<circle r="46" fill="none" stroke="#f3b33e" stroke-width="1.4" opacity="0.7"/>
+<circle r="18" fill="#f3b33e"/>
+<circle r="7" fill="#1a2543"/>
+<circle cx="-6" cy="-6" r="4" fill="#ffffff" opacity="0.85"/>
+</g>
+<g stroke="#f3b33e" stroke-width="1" opacity="0.3">
+<line x1="170" y1="180" x2="220" y2="180"/>
+<line x1="470" y1="180" x2="420" y2="180"/>
+</g>
+</svg>
+      </div>
+      <div class="news-card-content">
+      <div class="news-card-top">
+        <div class="news-source">
+          <div class="news-source-icon">in</div>
+          <span class="news-source-name">LinkedIn · Article</span>
+        </div>
+        <span class="news-date">2026</span>
+      </div>
+      <div class="news-tags"><span class="news-tag">Dharma</span><span class="news-tag">IKS</span><span class="news-tag">Psychology</span></div>
+      <h2 class="news-card-title">Viewing the World Through Indian Knowledge Systems</h2>
+      <div class="news-card-body">
+        <p>From ancient wisdom to living ways of seeing, being, and healing — a summary article based on responses to questions asked during a recent full panel discussion on Dharma, Dharmic Economics, Dharmic Innovation, and Education.</p>
+      </div>
+      <div class="news-card-footer">
+        <div class="news-meta-stats"><span>Full Article</span></div>
+        <a class="news-readmore" href="http://localhost:3001/category/iks/" target="_blank">Read Full Article</a>
+      </div>
+    
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ══════════════════════════════════
+       SIDEBAR
+  ════════════════════════════════════ -->
+  <aside class="news-sidebar reveal rd1">
+
+    <!-- Profile -->
+    <div class="sidebar-block profile-card">
+      <div class="sidebar-title">Follow Along</div>
+      <div class="profile-name">Vinay Kulkarni</div>
+      <div class="profile-role">Founder, ALCHMI · Dharmic Enterprise</div>
+      <a class="profile-cta" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">View LinkedIn Activity</a>
+    </div>
+
+    <!-- Topics -->
+    <div class="sidebar-block">
+      <div class="sidebar-title">Topics</div>
+      <div class="topic-row" onclick="filterNews('iks',null,'IKS')"><span>Indian Knowledge Systems</span><span class="topic-count">3</span></div>
+      <div class="topic-row" onclick="filterNews('dharma',null,'Dharma')"><span>Dharma</span><span class="topic-count">4</span></div>
+      <div class="topic-row" onclick="filterNews('education',null,'Education')"><span>Education</span><span class="topic-count">3</span></div>
+      <div class="topic-row" onclick="filterNews('events',null,'Events')"><span>Events &amp; Panels</span><span class="topic-count">2</span></div>
+      <div class="topic-row" onclick="filterNews('innovation',null,'Innovation')"><span>Dharmic Innovation</span><span class="topic-count">2</span></div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="sidebar-block newsletter-block">
+      <div class="sidebar-title">Dharmic Ideas &amp; Insights</div>
+      <p>Vinay's LinkedIn newsletter — reflections on Dharma, IKS, and conscious enterprise, delivered as they're written.</p>
+      <a class="newsletter-btn" href="https://www.linkedin.com/in/vinkulkarni/recent-activity/all/" target="_blank">Subscribe on LinkedIn</a>
+    </div>
+
+  </aside>
+
+</div>
+
+<script>
+  // Reveal on scroll
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Filter
+  function filterNews(cat, btn) {
+    if (btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    } else {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      const match = Array.from(document.querySelectorAll('.filter-btn')).find(b => b.getAttribute('onclick')?.includes(`'${cat}'`));
+      if (match) match.classList.add('active');
+    }
+    const cards = document.querySelectorAll('.news-card');
+    let shown = 0;
+    cards.forEach(card => {
+      const cats = (card.dataset.cat || '').split(' ');
+      const match = cat === 'all' || cats.includes(cat);
+      card.style.display = match ? '' : 'none';
+      if (match) shown++;
+    });
+    document.getElementById('newsCount').textContent = shown + ' Update' + (shown !== 1 ? 's' : '');
+  }
+</script>
+
+</body>
+</html>

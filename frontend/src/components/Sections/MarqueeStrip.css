@@ -1,0 +1,33 @@
+/* ── MARQUEE STRIP ── */
+.marquee-strip {
+  background: #8b2e33;
+  padding: 0.75rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-inner {
+  display: inline-flex;
+  gap: 0;
+  animation: marquee 35s linear infinite;
+}
+
+.marquee-item {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0 3rem;
+}
+
+.marquee-dot {
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0 0.5rem;
+  font-size: 0.6rem;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}

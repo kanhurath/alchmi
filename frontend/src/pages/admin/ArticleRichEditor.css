@@ -1,0 +1,75 @@
+/* ── ArticleRichEditor — CKEditor 5 host styles ──────────────────────── */
+
+.art-rich-editor {
+  border: 1px solid #d8cfc0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Toolbar */
+.art-rich-editor .ck.ck-toolbar {
+  background: #f5f3ef;
+  border: none;
+  border-bottom: 1px solid #e0d8cc;
+  padding: 4px 6px;
+}
+
+.art-rich-editor .ck.ck-toolbar .ck-toolbar__separator {
+  background: #d8cfc0;
+}
+
+/* Editable area */
+.art-rich-editor .ck.ck-editor__editable {
+  min-height: 420px;
+  max-height: 680px;
+  padding: 1.4rem 1.8rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #1a1208;
+  background: #fff;
+  border: none !important;
+  box-shadow: none !important;
+  overflow-y: auto;
+}
+
+.art-rich-editor .ck.ck-editor__editable:focus {
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* Source editing mode — monospace */
+.art-rich-editor .ck.ck-source-editing-area textarea {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  min-height: 420px;
+  padding: 1rem;
+  color: #1a1208;
+  background: #fdf8f3;
+}
+
+/* Focus ring on the outer container */
+.art-rich-editor:focus-within {
+  border-color: #d4670a;
+  box-shadow: 0 0 0 3px rgba(212, 103, 10, 0.1);
+}
+
+/* ── Balloon / dropdown overrides ───────────────────────────────────── */
+
+/* Keep dropdowns above other admin elements */
+.ck.ck-balloon-panel {
+  z-index: 99999 !important;
+}
+
+.ck.ck-dropdown__panel {
+  z-index: 99999 !important;
+}
+
+/* Button hover tint to match admin palette */
+.art-rich-editor .ck.ck-button:not(.ck-disabled):hover,
+.art-rich-editor .ck.ck-button.ck-on {
+  background: rgba(212, 103, 10, 0.10) !important;
+  color: #d4670a !important;
+}

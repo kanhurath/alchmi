@@ -1,0 +1,457 @@
+/* ── BIO PROFILE ── */
+.bio-profile {
+  background: #ffffff;
+  padding: 6rem 4rem;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.bio-photo-col { position: relative; }
+
+.bio-photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  filter: sepia(8%) contrast(1.04);
+  display: block;
+}
+
+.bio-photo-frame {
+  position: absolute;
+  top: -1rem;
+  left: -1rem;
+  right: 1rem;
+  bottom: 1rem;
+  border: 1px solid rgba(243, 179, 62, 0.35);
+  z-index: -1;
+}
+
+.bio-role-badge {
+  position: absolute;
+  bottom: -1.8rem;
+  right: -1.8rem;
+  background: #8b2e33;
+  padding: 1.2rem 1.5rem;
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 2rem;
+  color: #f3b33e;
+  line-height: 1;
+  text-align: center;
+}
+
+.bio-role-badge small {
+  display: block;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(243, 179, 62, 0.7);
+  margin-top: 0.3rem;
+}
+
+/* Bio content */
+.bio-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: #1a2543;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.bio-tagline {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bio-tagline span { opacity: 0.4; }
+
+.bio-quote-block {
+  border-left: 3px solid #f3b33e;
+  background: #f4efeb;
+  padding: 1.5rem 2rem;
+  margin: 1.5rem 0 2.5rem;
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.75;
+}
+
+.bio-para {
+  font-size: 1.1rem;
+  line-height: 1.85;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+.bio-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 2rem 0;
+}
+
+button.bio-social-link { background: none; }
+
+.bio-social-link {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #1a2543;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(26, 37, 67, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.bio-social-link:hover { background: #1a2543; color: #fff; border-color: #1a2543; }
+
+.bio-social-link.primary {
+  background: #de7336;
+  color: #fff;
+  border-color: #de7336;
+}
+
+.bio-social-link.primary:hover { background: #c45e22; border-color: #c45e22; }
+
+/* ── HOW VINAY ENGAGES (redesign) ── */
+.bio-engage {
+  background: #ffffff;
+  padding: 6rem 4rem;
+}
+.bio-engage .section-label::before { background: #de7336; }
+
+.engage-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+.engage-intro-text { max-width: 520px; }
+.engage-intro-desc {
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.82;
+  margin-top: 1rem;
+}
+
+.engage-cta-link {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #de7336;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  transition: gap 0.2s;
+  padding: 0;
+}
+.engage-cta-link::after { content: '→'; }
+.engage-cta-link:hover { gap: 0.9rem; }
+
+/* Three stacked cards */
+.engage-cards { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.eng-card {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(243, 179, 62, 0.22);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  transition: box-shadow 0.35s, transform 0.28s;
+  background: #ffffff;
+}
+.eng-card:hover {
+  box-shadow: 0 10px 40px rgba(26, 37, 67, 0.10);
+  transform: translateY(-2px);
+}
+
+/* Left accent panel */
+.eng-accent {
+  padding: 2.4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.eng-card:nth-child(1) .eng-accent { background: linear-gradient(160deg, #1a2543 0%, #2e1a08 100%); }
+.eng-card:nth-child(2) .eng-accent { background: linear-gradient(160deg, #8b2e33 0%, #541501 100%); }
+.eng-card:nth-child(3) .eng-accent { background: linear-gradient(160deg, #de7336 0%, #c45e22 100%); }
+
+.eng-accent::before {
+  content: attr(data-num);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 8rem;
+  font-weight: 300;
+  line-height: 1;
+  position: absolute;
+  bottom: -1rem;
+  right: -0.5rem;
+  color: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  user-select: none;
+}
+
+.eng-category {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.50);
+  margin-bottom: 0.6rem;
+}
+.eng-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.2;
+}
+.eng-slug {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.30);
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.eng-slug::before { content: '🔗'; font-size: 0.55rem; }
+
+/* Right content panel */
+.eng-content {
+  padding: 2.2rem 2.4rem;
+  background: #f4efeb;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.eng-content-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.eng-card:nth-child(2) .eng-content-label { color: #8b2e33; }
+.eng-content-label::before { content: ''; width: 20px; height: 1px; background: currentColor; }
+
+.eng-venues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  flex: 1;
+}
+.eng-venue {
+  font-size: 0.97rem;
+  font-style: italic;
+  font-weight: 300;
+  background: #fff;
+  border-radius: 4px;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(243, 179, 62, 0.28);
+  line-height: 1.3;
+  transition: border-color 0.2s, color 0.2s;
+}
+.eng-card:hover .eng-venue { border-color: rgba(222, 115, 54, 0.40); }
+.eng-card:nth-child(2):hover .eng-venue { border-color: rgba(139, 46, 51, 0.35); }
+
+.eng-venue-link {
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.eng-venue-link::after {
+  content: ' ↗';
+  font-size: 0.72em;
+  opacity: 0.55;
+  font-style: normal;
+}
+.eng-venue-link:hover {
+  color: #de7336;
+  border-color: #de7336;
+  background: rgba(222, 115, 54, 0.06);
+}
+
+.eng-content-footer {
+  margin-top: 1.4rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(243, 179, 62, 0.22);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.eng-count {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #de7336;
+  line-height: 1;
+}
+.eng-card:nth-child(2) .eng-count { color: #8b2e33; }
+.eng-count-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.42);
+}
+
+/* ── VENTURES ── */
+.bio-ventures {
+  background: #ffffff;
+  padding: 6rem 4rem;
+}
+
+.ventures-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5px;
+  background: rgba(243, 179, 62, 0.2);
+  margin-top: 3rem;
+  border: 1px solid rgba(243, 179, 62, 0.2);
+}
+
+.venture-card {
+  background: #fff;
+  padding: 2.2rem 2rem;
+  transition: background 0.25s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.6rem;
+}
+
+.venture-logo-wrap {
+  flex-shrink: 0;
+  width: 80px;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 0.2rem;
+}
+
+.venture-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.venture-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.venture-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #de7336;
+  transition: width 0.4s;
+}
+
+.venture-card:hover { background: #fdf8f2; }
+.venture-card:hover::after { width: 100%; }
+
+.venture-designation {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-bottom: 0.6rem;
+}
+
+.venture-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #1a2543;
+  margin-bottom: 0.4rem;
+}
+
+.venture-type {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8b2e33;
+  margin-bottom: 0.8rem;
+}
+
+.venture-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.venture-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #de7336;
+  text-decoration: none;
+}
+
+.venture-link::after { content: ' →'; }
+.venture-link:hover { color: #8b2e33; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .bio-profile {
+    grid-template-columns: 1fr;
+    padding: 4rem 1.5rem;
+    gap: 3rem;
+  }
+
+  .bio-photo-col { max-width: 300px; }
+
+  .bio-engage { padding: 4rem 1.5rem; }
+  .engage-intro { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .eng-card { grid-template-columns: 1fr; }
+  .eng-accent { padding: 1.8rem 1.6rem; }
+  .eng-accent::before { font-size: 6rem; }
+  .eng-content { padding: 1.6rem; }
+
+  .bio-ventures { padding: 4rem 1.5rem; }
+
+  .ventures-grid { grid-template-columns: 1fr; }
+  .venture-card { flex-direction: column; gap: 1rem; }
+  .venture-logo-wrap { width: 64px; }
+}

@@ -1,0 +1,128 @@
+/**
+ * Central registry of all website pages for the CMS admin.
+ * status: 'active' = CMS editor built | 'planned' = not yet built
+ * Add a new entry here + a route in AdminApp.jsx when adding CMS for a new page.
+ */
+export const ADMIN_PAGES = [
+  {
+    id:        'home',
+    label:     'Home',
+    frontPath: '/',
+    adminPath: '/admin/pages/home',
+    status:    'active',
+    sections:  ['Hero', 'About', 'Articles', 'Themes', 'Talks', 'Connect'],
+    desc:      'Landing page with hero canvas, marquee, and all home sections.',
+  },
+  {
+    id:        'methodology',
+    label:     'Methodology',
+    frontPath: '/methodology',
+    adminPath: '/admin/pages/methodology',
+    status:    'active',
+    sections:  ['Hero', 'Frameworks', 'Explainer', 'CTA Band'],
+    desc:      'Proprietary frameworks — Dharmic Enterprise, Innovation, Design, Leadership — plus methodology explainer.',
+  },
+  {
+    id:        'services',
+    label:     'Services',
+    frontPath: '/services',
+    adminPath: '/admin/pages/services',
+    status:    'active',
+    sections:  ['Hero', 'Service Cards', 'Facilitation', 'Workshops', 'Retreats', 'Industries', 'Long-form', 'C-Growth', 'CTA'],
+    desc:      'Services offered — cards grid, facilitation, workshops, retreats, industries, and long-form detail.',
+  },
+  {
+    id:        'biography',
+    label:     'Biography',
+    frontPath: '/biography',
+    adminPath: '/admin/pages/biography',
+    status:    'active',
+    sections:  ['Hero', 'Profile', 'Engagements', 'Ventures'],
+    desc:      'Full biography, engagement types, and ventures/initiatives.',
+  },
+  {
+    id:        'teaching',
+    label:     'Teaching',
+    frontPath: '/teaching',
+    adminPath: '/admin/pages/teaching',
+    status:    'active',
+    sections:  ['Hero', 'Programs', 'Curriculum', 'CTA'],
+    desc:      'Teaching philosophy, programs offered, and curriculum details.',
+  },
+  {
+    id:        'articles',
+    label:     'Articles',
+    frontPath: '/articles',
+    adminPath: '/admin/pages/articles',
+    status:    'active',
+    sections:  ['Hero', 'Article List', 'Categories', 'SEO'],
+    desc:      'Written articles, essays, and thought-leadership content — fully CMS-driven from local database.',
+  },
+  {
+    id:        'videos',
+    label:     'Videos',
+    frontPath: '/videos',
+    adminPath: '/admin/pages/videos',
+    status:    'active',
+    sections:  ['Hero', 'Video List', 'Playlists'],
+    desc:      'Talks, keynote recordings, and video content.',
+  },
+  {
+    id:        'events',
+    label:     'Events',
+    frontPath: '/events',
+    adminPath: '/admin/pages/events',
+    status:    'active',
+    sections:  ['Hero', 'Upcoming Events', 'Past Events'],
+    desc:      'Upcoming and past speaking events.',
+  },
+  {
+    id:        'news',
+    label:     'News & Insights',
+    frontPath: '/news',
+    adminPath: '/admin/pages/news',
+    status:    'active',
+    sections:  ['Intro', 'Articles', 'Filters', 'Sidebar'],
+    desc:      'News feed with articles, filter categories, and sidebar.',
+  },
+  {
+    id:        'workshops',
+    label:     'Workshops & Retreats',
+    frontPath: '/workshops',
+    adminPath: '/admin/pages/workshops',
+    status:    'active',
+    sections:  ['Hero', 'Workshop List', 'Retreat Details', 'Booking CTA'],
+    desc:      'Upadesha Academy workshops and immersive retreat programs.',
+  },
+  {
+    id:        'testimonials',
+    label:     'Testimonials',
+    frontPath: '/testimonials',
+    adminPath: '/admin/pages/testimonials',
+    status:    'active',
+    sections:  ['Featured Testimonial', 'Cards', 'Pull Quotes', 'Stats'],
+    desc:      'Client and participant testimonials with stats.',
+  },
+  {
+    id:        'gallery',
+    label:     'Gallery',
+    frontPath: '/gallery',
+    adminPath: '/admin/pages/gallery',
+    status:    'active',
+    sections:  ['Hero', 'Photo Albums', 'Video Gallery'],
+    desc:      'Photo and video gallery from events and programs.',
+  },
+  {
+    id:        'connect',
+    label:     'Connect',
+    frontPath: '/connect',
+    adminPath: '/admin/pages/connect',
+    status:    'active',
+    sections:  ['Hero', 'Contact Form', 'Social Links'],
+    desc:      'Contact form, social profiles, and booking links.',
+  },
+];
+
+export const getPage     = (id) => ADMIN_PAGES.find(p => p.id === id);
+export const activePages  = ADMIN_PAGES.filter(p => p.status === 'active');
+export const plannedPages = ADMIN_PAGES.filter(p => p.status === 'planned');

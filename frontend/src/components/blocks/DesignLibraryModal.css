@@ -1,0 +1,102 @@
+.dl-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 18, 8, 0.55);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.dl-modal {
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 860px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(26,18,8,0.28);
+}
+
+.dl-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid #ede8df;
+  flex-shrink: 0;
+}
+
+.dl-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  color: #1a1208;
+  margin: 0 0 0.15rem;
+}
+
+.dl-hint {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  color: #888;
+  margin: 0;
+}
+
+.dl-close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #888;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.dl-close:hover { color: #c0392b; }
+
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+}
+
+.dl-card {
+  background: #fdf6ee;
+  border: 1.5px solid #ede8df;
+  border-radius: 8px;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.dl-card:hover {
+  border-color: #de7336;
+  background: #fff8f2;
+  box-shadow: 0 3px 12px rgba(222,115,54,0.15);
+}
+
+.dl-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.45rem;
+}
+
+.dl-name {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #1a1208;
+  margin-bottom: 0.3rem;
+}
+
+.dl-desc {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.66rem;
+  color: #888;
+  line-height: 1.4;
+}

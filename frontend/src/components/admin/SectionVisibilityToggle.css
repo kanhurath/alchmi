@@ -1,0 +1,89 @@
+.svt-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.85rem;
+  background: #f6f2ec;
+  border: 1px solid #e4ddd2;
+  border-radius: 7px;
+  margin-bottom: 1rem;
+}
+
+.svt-label-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.svt-label-wrap--busy {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ── Toggle switch (mirrors SectionOrderTab.css .sol-toggle) ── */
+.svt-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.svt-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.svt-track {
+  display: inline-block;
+  width: 34px;
+  height: 18px;
+  background: #d4c9b8;
+  border-radius: 9px;
+  transition: background 0.2s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.svt-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.svt-input:checked + .svt-track {
+  background: #4a7d57;
+}
+
+.svt-input:checked + .svt-track::after {
+  transform: translateX(16px);
+}
+
+/* ── Label text ── */
+.svt-text {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.77rem;
+  letter-spacing: 0.03em;
+  color: #4a4030;
+}
+
+/* ── Status messages ── */
+.svt-status {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+.svt-status--saving { color: #9a8a75; }
+.svt-status--saved  { color: #4a7d57; }
+.svt-status--error  { color: #b93030; }

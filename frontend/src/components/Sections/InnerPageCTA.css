@@ -1,0 +1,74 @@
+/* ── INNER PAGE CTA STRIP ── */
+.inner-cta-strip {
+  background: #1a2543;
+  padding: 5rem 4rem;
+  text-align: center;
+}
+
+.inner-cta-strip h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 300;
+  color: var(--dark-bg-title, #fff);
+  margin-bottom: 0.8rem;
+}
+
+.inner-cta-strip h2 em {
+  font-style: italic;
+  color: #f3b33e;
+}
+
+.inner-cta-strip p {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--dark-bg-desc, rgba(255, 255, 255, 0.7));
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+}
+
+.cta-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+button.btn-light { background: none; }
+
+.btn-light {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1rem 2.2rem;
+  background: var(--dark-bg-btn-bg, #fff);
+  color: var(--dark-bg-btn-color, #1a1208);
+  text-decoration: none;
+  transition: background 0.3s;
+  border: 1px solid var(--dark-bg-btn-bg, #fff);
+}
+
+.btn-light:hover { background: var(--dark-bg-btn-hover-bg, #f3b33e); color: var(--dark-bg-btn-hover-color, #1a1208); border-color: var(--dark-bg-btn-hover-bg, #f3b33e); }
+
+button.btn-outline-light { cursor: pointer; }
+
+.btn-outline-light {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1rem 2.2rem;
+  background: transparent;
+  color: var(--dark-bg-btn, #fff);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.btn-outline-light:hover { border-color: var(--dark-bg-btn, #fff); background: rgba(255, 255, 255, 0.1); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .inner-cta-strip { padding: 4rem 1.5rem; }
+}

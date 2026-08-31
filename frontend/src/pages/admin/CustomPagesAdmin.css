@@ -1,0 +1,57 @@
+.cpg-root { padding: 2rem 2.5rem; max-width: 1100px; display: flex; flex-direction: column; gap: 2rem; }
+
+.cpg-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+.cpg-eyebrow {
+  display: block; font-family: 'Josefin Sans', sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.25em; text-transform: uppercase; color: #d4670a; margin-bottom: 0.35rem;
+}
+.cpg-title  { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 2rem; font-weight: 600; color: #1a1208; margin: 0 0 0.25rem; }
+.cpg-sub    { font-family: 'Josefin Sans', sans-serif; font-size: 0.75rem; color: #8b7355; margin: 0; letter-spacing: 0.03em; }
+
+.cpg-new-btn {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 0.7rem 1.5rem;
+  background: #de7336; border: 1px solid #de7336; color: #fff;
+  cursor: pointer; transition: background 0.2s; white-space: nowrap;
+}
+.cpg-new-btn:hover { background: #c4622d; }
+
+.cpg-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  padding: 4rem 2rem; color: #8b7355; text-align: center;
+}
+.cpg-empty-icon { font-size: 3rem; opacity: 0.25; }
+.cpg-empty p { font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; letter-spacing: 0.05em; }
+
+.cpg-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e8e0d4; }
+.cpg-table th {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: #8b7355; padding: 0.75rem 1rem; border-bottom: 1px solid #e8e0d4; text-align: left; background: #faf7f3;
+}
+.cpg-table td { padding: 0.85rem 1rem; border-bottom: 1px solid #f0ece4; vertical-align: middle; }
+.cpg-table tr:last-child td { border-bottom: none; }
+.cpg-row-pub { background: #fdfaf7; }
+
+.cpg-page-title { font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; color: #1a1208; font-weight: 600; }
+.cpg-slug       { font-family: monospace; font-size: 0.78rem; color: #de7336; background: #fdf0e8; padding: 0.15em 0.4em; }
+.cpg-status     { font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem; letter-spacing: 0.1em; }
+.cpg-status.published { color: #4a6b53; }
+.cpg-status.draft     { color: #8b7355; }
+.cpg-count, .cpg-date { font-family: 'Josefin Sans', sans-serif; font-size: 0.75rem; color: #8b7355; }
+
+.cpg-actions { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+
+.cpg-edit-btn, .cpg-view-btn, .cpg-del-btn {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.35rem 0.85rem; border: 1px solid; cursor: pointer; text-decoration: none;
+  display: inline-block; transition: background 0.15s, color 0.15s;
+}
+.cpg-edit-btn { border-color: #de7336; color: #de7336; background: transparent; }
+.cpg-edit-btn:hover { background: #de7336; color: #fff; }
+.cpg-view-btn { border-color: #8b7355; color: #8b7355; background: transparent; }
+.cpg-view-btn:hover { background: #8b7355; color: #fff; }
+.cpg-del-btn  { border-color: #c0392b; color: #c0392b; background: transparent; }
+.cpg-del-btn:hover:not(:disabled) { background: #c0392b; color: #fff; }
+.cpg-del-btn:disabled { opacity: 0.4; cursor: not-allowed; }

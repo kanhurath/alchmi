@@ -1,0 +1,83 @@
+/* ── QUOTE SECTION ── */
+.quote-section {
+  padding: 8rem 4rem;
+  background-image: url('../../assets/Images/Taittirīya-Upaniṣad-bg-01_VK.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.quote-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 20rem;
+  color: rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.quote-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+
+.quote-mark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.quote-mark-img {
+  width: auto;
+  max-width: min(420px, 90%);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.quote-text {
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--dark-bg-title, #ffffff);
+  margin: 2rem 0;
+}
+
+.ornament {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.ornament-img {
+  width: auto;
+  max-width: min(380px, 85%);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.quote-attr {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--dark-bg-link, rgba(255, 255, 255, 0.75));
+  margin-top: 2rem;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .quote-section {
+    padding: 5rem 1.5rem;
+  }
+}

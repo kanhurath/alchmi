@@ -1,0 +1,366 @@
+/* ══════════════════════════════════════════════════
+   SINGLE ARTICLE PAGE
+══════════════════════════════════════════════════ */
+
+.article-single {
+  min-height: 60vh;
+  background: #fdf9f3;
+}
+
+/* ── Loading / Error ──────────────────────────────── */
+.article-loading,
+.article-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  min-height: 50vh;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.5);
+}
+
+.article-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(222, 115, 54, 0.2);
+  border-top-color: #de7336;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.article-back-link {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #de7336;
+  text-decoration: none;
+}
+.article-back-link:hover { color: #8b2e33; }
+
+
+/* ── Featured Image ────────────────────────────────── */
+.article-featured-image {
+  max-width: 1100px;
+  margin: 40px auto 3rem;
+  padding: 0 2rem;
+}
+
+.article-featured-image img {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  box-shadow: 0 8px 40px rgba(26, 37, 67, 0.12);
+}
+
+/* ── Article Body ──────────────────────────────────── */
+.article-body-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+}
+
+/* WordPress post content typography */
+.article-body {
+  font-family: sans-serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #1a1208;
+  background: #fff;
+  padding: 20px;
+}
+
+.article-body p {
+  font-family: sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.8 !important;
+  margin-bottom: 1.4em;
+}
+
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-body h4 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  color: #1a2543;
+  margin: 1.8em 0 0.65em;
+  line-height: 1.25;
+}
+
+.article-body h2 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+.article-body h3 { font-size: clamp(1.2rem, 2vw, 1.55rem); }
+.article-body h4 { font-size: 1.1rem; }
+
+.article-body a {
+  color: #de7336;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+.article-body a:hover { color: #8b2e33; }
+
+.article-body blockquote {
+  border-left: 4px solid #f3b33e;
+  background: #f4efeb;
+  border-radius: 0 4px 4px 0;
+  padding: 1.1rem 1.5rem;
+  margin: 1.8rem 0;
+  font-style: italic;
+  color: #8b2e33;
+}
+
+.article-body blockquote p { margin-bottom: 0; }
+
+.article-body ul,
+.article-body ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.4em;
+}
+
+.article-body li { margin-bottom: 0.5em; }
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  display: block;
+}
+
+.article-body figure {
+  margin: 2rem 0;
+}
+
+.article-body figcaption {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.45);
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid rgba(243, 179, 62, 0.35);
+  margin: 2.5rem 0;
+}
+
+.article-body strong { font-weight: 600; color: #1a2543; }
+.article-body em { font-style: italic; }
+
+/* WordPress "wp-block" gutenberg compatibility */
+.article-body .wp-block-image { margin: 1.5rem 0; }
+.article-body .wp-block-quote { /* use blockquote styles above */ }
+.article-body .wp-block-separator { border-top: 1px solid rgba(243,179,62,0.35); margin: 2.5rem 0; border-bottom: none; }
+.article-body .wp-block-pullquote {
+  border-top: 3px solid #f3b33e;
+  border-bottom: 3px solid #f3b33e;
+  padding: 1.5rem 0;
+  margin: 2.5rem 0;
+  text-align: center;
+}
+.article-body .wp-block-pullquote blockquote {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.article-body .wp-block-pullquote p {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: #8b2e33;
+  font-style: italic;
+}
+
+/* ── Tags row ──────────────────────────────────────── */
+.article-tags-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 2.5rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(243, 179, 62, 0.25);
+}
+
+.article-tags-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.45);
+  margin-right: 0.25rem;
+}
+
+.article-tag-chip {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #de7336;
+  padding: 0.22rem 0.6rem;
+  border: 1px solid rgba(222, 115, 54, 0.28);
+  border-radius: 2px;
+}
+
+/* ── Author Card ───────────────────────────────────── */
+.article-author-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  background: #f4efeb;
+  border: 1px solid rgba(243, 179, 62, 0.25);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2.5rem 0;
+}
+
+.author-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #1a2543;
+  color: #f3b33e;
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.author-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.author-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #1a2543;
+  margin-bottom: 0.4rem;
+}
+
+.author-bio {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.20rem;
+  letter-spacing: 0.05em;
+  line-height: 1.65;
+  color: rgba(26, 37, 67, 0.6);
+}
+
+/* ── Prev / Next ───────────────────────────────────── */
+.article-prev-next {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 2.5rem 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(243, 179, 62, 0.25);
+}
+
+.article-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.2rem;
+  background: #fff;
+  border: 1px solid rgba(243, 179, 62, 0.22);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+
+.article-nav-link:hover {
+  box-shadow: 0 4px 16px rgba(26, 37, 67, 0.08);
+  border-color: #de7336;
+}
+
+.article-nav-link.next {
+  text-align: right;
+}
+
+.nav-dir {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #de7336;
+}
+
+.nav-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.40rem;
+  color: #1a2543;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Back link ─────────────────────────────────────── */
+.article-back {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.article-back-btn {
+  display: inline-block;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #de7336;
+  text-decoration: none;
+  padding: 0.75rem 1.8rem;
+  border: 1.5px solid #de7336;
+  border-radius: 3px;
+  transition: background 0.25s, color 0.25s;
+}
+
+.article-back-btn:hover {
+  background: #de7336;
+  color: #fff;
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 760px) {
+  .article-hero { padding: 2rem 1.25rem 1.5rem; }
+  .article-featured-image { padding: 0 1.25rem; margin-bottom: 2rem; }
+  .article-body-wrap { padding: 0 1.25rem 4rem; }
+  .article-breadcrumb { padding: 1rem 1.25rem 0; }
+
+  .article-prev-next {
+    grid-template-columns: 1fr;
+  }
+
+  .article-nav-link.next { text-align: left; }
+
+  .article-author-card { flex-direction: column; gap: 1rem; }
+}
+
+@media (max-width: 767px) {
+  .article-body,
+  .article-body p {
+    font-family: sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .article-body h2 {
+    font-size: 30px;
+  }
+}

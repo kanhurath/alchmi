@@ -1,0 +1,299 @@
+/* ── Dashboard root ───────────────────────────────────────────────────────── */
+
+.dash-root {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  max-width: 1100px;
+}
+
+/* ── Welcome banner ───────────────────────────────────────────────────────── */
+
+.dash-welcome {
+  background: #1a1208;
+  border-radius: 16px;
+  padding: 2.25rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-welcome::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: 120px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,103,10,0.14) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.dash-welcome-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dash-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #d4670a;
+  font-weight: 700;
+}
+
+.dash-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.dash-title em {
+  color: #d4670a;
+  font-style: italic;
+}
+
+.dash-subtitle {
+  font-size: 0.84rem;
+  color: #9a8e78;
+  margin: 0;
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+.dash-welcome-badge {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgba(212,103,10,0.25);
+  flex-shrink: 0;
+  user-select: none;
+  line-height: 1;
+}
+
+/* ── Stats row ────────────────────────────────────────────────────────────── */
+
+.dash-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.dash-stat {
+  background: #fff;
+  border: 1px solid #e8e0d4;
+  border-radius: 12px;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dash-stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1a1208;
+  line-height: 1;
+}
+
+.dash-stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5a4e3a;
+}
+
+.dash-stat-sub {
+  font-size: 0.72rem;
+  color: #9a8e78;
+}
+
+/* ── Sections ─────────────────────────────────────────────────────────────── */
+
+.dash-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dash-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.dash-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1a1208;
+  margin: 0;
+}
+
+.dash-badge {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: #f0ece4;
+  color: #7a6e5a;
+  border: 1px solid #e0d8cc;
+  padding: 0.2em 0.65em;
+  border-radius: 999px;
+}
+
+.dash-badge.green {
+  background: #eef6f0;
+  color: #2a6a3a;
+  border-color: #b8dfc4;
+}
+
+/* ── Page grid ────────────────────────────────────────────────────────────── */
+
+.dash-page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* ── Page card ────────────────────────────────────────────────────────────── */
+
+.dash-page-card {
+  background: #fff;
+  border: 1px solid #e8e0d4;
+  border-radius: 12px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  text-align: left;
+  cursor: default;
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+}
+
+.dash-page-card.active {
+  cursor: pointer;
+}
+
+.dash-page-card.active:hover {
+  border-color: #d4670a;
+  box-shadow: 0 4px 20px rgba(212,103,10,0.12);
+  transform: translateY(-2px);
+}
+
+.dash-page-card.planned {
+  opacity: 0.7;
+}
+
+/* Card top row */
+.dash-page-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.dash-page-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c8bfb0;
+  flex-shrink: 0;
+}
+
+.dash-page-status-dot.active {
+  background: #3a9a52;
+  box-shadow: 0 0 5px rgba(58,154,82,0.5);
+}
+
+.dash-page-status-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9a8e78;
+  flex: 1;
+}
+
+.dash-page-view-link {
+  font-size: 0.8rem;
+  color: #9a8e78;
+  text-decoration: none;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #e0d8cc;
+  transition: color 0.12s, border-color 0.12s;
+  line-height: 1;
+}
+
+.dash-page-view-link:hover { color: #d4670a; border-color: #d4670a; }
+
+/* Card body */
+.dash-page-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a1208;
+  margin: 0;
+}
+
+.dash-page-desc {
+  font-size: 0.8rem;
+  color: #7a6e5a;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.dash-page-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.dash-page-section-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #7a6e5a;
+  background: #f5f2ec;
+  border: 1px solid #e8e0d4;
+  padding: 0.18em 0.55em;
+  border-radius: 4px;
+}
+
+.dash-page-cta {
+  margin-top: 0.25rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #d4670a;
+}
+
+.dash-page-cta.planned {
+  color: #9a8e78;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .dash-root { padding: 1.5rem; }
+  .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .dash-welcome { flex-direction: column; }
+  .dash-welcome-badge { display: none; }
+}
+
+@media (max-width: 500px) {
+  .dash-stats-row { grid-template-columns: 1fr 1fr; }
+  .dash-page-grid { grid-template-columns: 1fr; }
+}

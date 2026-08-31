@@ -1,0 +1,92 @@
+.themes-page {
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+.page-header {
+  background: linear-gradient(135deg, var(--deep-red) 0%, var(--saffron) 100%);
+  color: white;
+  padding: 4rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.themes-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+  padding: 4rem;
+}
+
+.theme-full-card {
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 4px;
+  text-align: center;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.theme-full-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.theme-icon {
+  font-size: 4rem;
+}
+
+.theme-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.theme-description {
+  color: var(--warm-gray);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.theme-content {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  width: 100%;
+}
+
+.theme-content p {
+  color: var(--warm-gray);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .page-header {
+    padding: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .themes-full-grid {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+  }
+}

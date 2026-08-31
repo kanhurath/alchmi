@@ -1,0 +1,175 @@
+/* ── What We Do Section ── */
+.wwd-section {
+  background: var(--parchment, #f5edd8);
+  padding: 5rem 4rem 6rem;
+}
+
+.wwd-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Eyebrow ── */
+.wwd-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.25rem;
+}
+
+.wwd-eyebrow-dash {
+  display: inline-block;
+  width: 26px;
+  height: 2px;
+  background: var(--saffron, #d4670a);
+  flex-shrink: 0;
+}
+
+.wwd-eyebrow-text {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--saffron, #d4670a);
+}
+
+/* ── Heading ── */
+.wwd-heading {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.15;
+  color: var(--ink, #1a1208);
+  margin: 0 0 1.5rem;
+  max-width: 20ch;
+}
+
+.wwd-heading em {
+  font-style: italic;
+  color: var(--gold, #b8922a);
+}
+
+/* ── Lede ── */
+.wwd-lede {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.75;
+  color: #5a4e3a;
+  max-width: 52ch;
+  margin: 0 0 3.5rem;
+}
+
+/* ── Cards grid ── */
+.wwd-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* ── Individual card ── */
+.wwd-card {
+  background: var(--cream, #faf6ee);
+  border: 1px solid rgba(184, 146, 42, 0.22);
+  padding: 2.5rem 2rem 2.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+
+.wwd-card:hover {
+  box-shadow: 0 8px 28px rgba(26, 18, 8, 0.08);
+  transform: translateY(-3px);
+}
+
+/* ── Card icon ── */
+.wwd-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid var(--saffron, #d4670a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+  flex-shrink: 0;
+  color: var(--saffron, #d4670a);
+}
+
+.wwd-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.wwd-icon img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+/* ── Card title ── */
+.wwd-card-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  color: var(--ink, #1a1208);
+  margin: 0 0 0.85rem;
+}
+
+/* ── Card description ── */
+.wwd-card-desc {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: #7a6a55;
+  margin: 0 0 1.5rem;
+  flex: 1;
+}
+
+/* ── Learn more link ── */
+.wwd-learn-more {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--saffron, #d4670a);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.2s, color 0.2s;
+  margin-top: auto;
+}
+
+.wwd-learn-more:hover {
+  color: #8b2e33;
+  gap: 10px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .wwd-section {
+    padding: 3.5rem 1.5rem 4.5rem;
+  }
+
+  .wwd-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .wwd-heading {
+    max-width: none;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+  .wwd-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

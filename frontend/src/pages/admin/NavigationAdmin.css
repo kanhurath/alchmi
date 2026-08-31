@@ -1,0 +1,151 @@
+/* ── Nav item block ──────────────────────────────────────────────────────────── */
+.nav-item-block {
+  border: 1px solid #e8e0d4;
+  background: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.nav-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  flex-wrap: wrap;
+}
+
+/* ── Order buttons ───────────────────────────────────────────────────────────── */
+.nav-order-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-ord-btn {
+  background: transparent;
+  border: 1px solid #d4c9b8;
+  color: #8b7355;
+  width: 22px;
+  height: 22px;
+  font-size: 0.65rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.nav-ord-btn:hover:not(:disabled) { background: #f3b33e; color: #fff; border-color: #f3b33e; }
+.nav-ord-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+/* ── Input ───────────────────────────────────────────────────────────────────── */
+.nav-inp {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #d4c9b8;
+  background: #faf7f3;
+  color: #1a1208;
+  outline: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-inp:focus { border-color: #de7336; }
+
+/* ── URL picker ──────────────────────────────────────────────────────────────── */
+.nav-url-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.nav-mode-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.nav-mode-tab {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border: 1px solid #d4c9b8;
+  background: transparent;
+  color: #8b7355;
+  cursor: pointer;
+  margin-right: -1px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-mode-tab.active { background: #de7336; color: #fff; border-color: #de7336; z-index: 1; }
+.nav-mode-tab:hover:not(.active) { background: #f3b33e20; }
+
+/* ── Item actions ────────────────────────────────────────────────────────────── */
+.nav-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.nav-saved { color: #4a6b53; font-size: 0.8rem; }
+.nav-error { color: #c0392b; font-size: 0.8rem; cursor: help; }
+
+/* ── Submenu block ───────────────────────────────────────────────────────────── */
+.nav-submenu-block {
+  border-top: 1px solid #e8e0d4;
+  background: #f9f5f0;
+  padding: 0.75rem 0.75rem 0.5rem 2.5rem;
+}
+
+.nav-submenu-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8b7355;
+  margin-bottom: 0.5rem;
+}
+
+.nav-submenu-block .nav-item-block {
+  background: #fff;
+  margin-bottom: 0.35rem;
+}
+
+/* ── Add form ────────────────────────────────────────────────────────────────── */
+.nav-add-btn {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.25rem;
+  border: 1px dashed #d4c9b8;
+  background: transparent;
+  color: #8b7355;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.5rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.nav-add-btn:hover { border-color: #de7336; color: #de7336; }
+
+.nav-add-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  background: #f9f5f0;
+  border: 1px dashed #d4c9b8;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Menu editor ─────────────────────────────────────────────────────────────── */
+.nav-menu-editor {
+  margin-top: 1rem;
+}

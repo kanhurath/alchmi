@@ -1,0 +1,128 @@
+.talks-page {
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+.page-header {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--saffron) 100%);
+  color: white;
+  padding: 4rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.talks-full-list {
+  display: grid;
+  gap: 2rem;
+  padding: 4rem;
+}
+
+.talk-full-item {
+  padding: 2.5rem;
+  background: var(--section-bg);
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s;
+  border-left: 4px solid var(--gold);
+}
+
+.talk-full-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.talk-full-content {
+  flex: 1;
+}
+
+.talk-full-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.5rem 0;
+}
+
+.talk-full-event {
+  font-size: 1rem;
+  color: var(--saffron);
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.talk-full-meta {
+  display: flex;
+  gap: 2rem;
+  font-size: 0.95rem;
+  color: var(--warm-gray);
+  margin-bottom: 1rem;
+}
+
+.talk-full-description {
+  color: var(--warm-gray);
+  line-height: 1.7;
+  margin: 1rem 0 0 0;
+}
+
+.talk-full-button {
+  padding: 0.8rem 2rem;
+  background: var(--saffron);
+  color: white;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-left: 2rem;
+}
+
+.talk-full-button:hover {
+  background: var(--deep-red);
+  transform: scale(1.05);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .page-header {
+    padding: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .talks-full-list {
+    padding: 2rem;
+  }
+
+  .talk-full-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .talk-full-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .talk-full-button {
+    margin-left: 0;
+    width: 100%;
+  }
+}

@@ -1,0 +1,46 @@
+/* ── PAGE LOADER ── */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeOut 0.8s ease 1.8s forwards;
+}
+
+.loader-om {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 7rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loader-icon-img {
+  object-fit: contain;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loader-line {
+  width: 0;
+  height: 1px;
+  margin-top: 1.5rem;
+  animation: expand 1.8s ease forwards 0.3s;
+}
+
+@keyframes pulse {
+  0%,
+  100% { opacity: 0.4; }
+  50%  { opacity: 1;   }
+}
+
+@keyframes expand {
+  to { width: 160px; }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

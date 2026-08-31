@@ -1,0 +1,133 @@
+/* ── ABOUT ── */
+.about {
+  padding: 8rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+  background: #ffffff;
+}
+
+/* ── MEDIA COLUMN ── */
+.about-media {
+  position: relative;
+}
+
+.about-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  filter: sepia(15%) contrast(1.05);
+  display: block;
+}
+
+.about-photo-frame {
+  position: absolute;
+  top: -1.5rem;
+  left: -1.5rem;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  border: 1px solid var(--border);
+  z-index: -1;
+}
+
+.about-badge {
+  position: absolute;
+  bottom: -2rem;
+  right: -2rem;
+  width: 120px;
+  height: 120px;
+  background: #4a6b53;
+  border: 1px solid #4a6b53;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.about-badge .devanagari {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 1.8rem;
+  color: #f3b33e;
+  line-height: 1;
+}
+
+.about-badge span {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: #f3b33e;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT COLUMN ── */
+.about-content .section-label::before {
+  background: #de7336;
+}
+
+.about-bio {
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.85;
+  margin: 2rem 0;
+}
+
+.about-quote {
+  border-left: 2px solid #f3b33e;
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  background: #f4efeb;
+  font-size: 1.2rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.75;
+}
+
+/* ── TAGS ── */
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2rem;
+}
+
+.tag {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--border);
+  color: var(--warm-gray);
+  background: transparent;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.tag:hover {
+  border-color: var(--saffron);
+  color: var(--saffron);
+}
+
+.tag.tag-accent {
+  border-color: #f3b33e;
+  color: #f3b33e;
+}
+
+.tag.tag-accent:hover {
+  border-color: #de7336;
+  color: #de7336;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .about {
+    grid-template-columns: 1fr;
+    padding: 4rem 1.5rem;
+    gap: 3rem;
+  }
+
+  .about-badge {
+    display: none;
+  }
+}

@@ -1,0 +1,307 @@
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* Background image layer */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: var(--hero-bg-desktop);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 900px) {
+  .hero-bg {
+    background-image: var(--hero-bg-mobile);
+  }
+}
+
+/* Kundalini canvas overlay */
+.kundalini-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.62;
+}
+
+/* Hide canvas on the breakpoint that has a replacement */
+@media (min-width: 701px) {
+  .canvas-hidden-desktop { display: none !important; }
+}
+@media (max-width: 700px) {
+  .canvas-hidden-mobile  { display: none !important; }
+}
+
+/* Static image replacements for the canvas animation */
+.hero-anim-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.62;
+  pointer-events: none;
+}
+.hero-anim-img--desktop { display: block; }
+.hero-anim-img--mobile  { display: none;  }
+
+@media (max-width: 700px) {
+  .hero-anim-img--desktop { display: none;  }
+  .hero-anim-img--mobile  { display: block; }
+}
+
+/* HTML/CSS/SVG code replacements for the canvas animation */
+.hero-anim-html {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-anim-html svg,
+.hero-anim-html img,
+.hero-anim-html canvas {
+  width: 100%;
+  height: 100%;
+}
+.hero-anim-html--desktop { display: block; }
+.hero-anim-html--mobile  { display: none;  }
+
+@media (max-width: 700px) {
+  .hero-anim-html--desktop { display: none;  }
+  .hero-anim-html--mobile  { display: block; }
+}
+
+/* Left column: text */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 9rem 3rem 5rem 4rem;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Right column: portrait */
+.hero-portrait-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+}
+
+.hero-portrait {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 95vh;
+  max-height: 900px;
+  object-fit: contain;
+  object-position: bottom center;
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 1) 8%);
+  mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 1) 8%);
+  filter: sepia(5%) contrast(1.03) brightness(0.96);
+  opacity: 0;
+  animation: fadeUp 1.2s ease forwards 1.8s;
+}
+
+/* ── HERO TEXT ELEMENTS ── */
+.hero-mantra {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 0.95rem;
+  color: #8b2e33;
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.8s;
+  max-width: 560px;
+}
+
+.hero-eyebrow {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #d4670a;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 1s;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 300;
+  line-height: 0.95;
+  color: #1a1208;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 1.2s;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: #8b2e33;
+}
+
+.hero-subtitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #1a2543;
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 1.4s;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 1.6s;
+}
+
+.btn-primary {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1rem 2.2rem;
+  background: #de7336;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.3s;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: #c45e22;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1rem 2.2rem;
+  background: transparent;
+  border: 1px solid #de7336;
+  color: #1a2543;
+  text-decoration: none;
+  transition: border-color 0.3s, color 0.3s;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  border-color: #c45e22;
+  color: #c45e22;
+}
+
+/* ── SCROLL INDICATOR ── */
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 2s;
+  z-index: 3;
+}
+
+.hero-scroll span {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #1a2543;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, #1a2543, transparent);
+  animation: scrollAnim 2s ease-in-out infinite;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollAnim {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* portrait visibility */
+.hero-portrait--mobile  { display: none; }
+.hero-portrait--desktop { display: block; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .hero-content {
+    padding: 2rem 1.5rem 3.5rem;
+    order: 1;
+  }
+
+  .hero-portrait-wrap {
+    order: 2;
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  .hero-portrait--desktop { display: none; }
+  .hero-portrait--mobile  { display: block; }
+
+  .hero-portrait {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 1) 6%);
+    mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 1) 6%);
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+
+  .hero-mantra {
+    font-size: 0.85rem;
+  }
+
+  .hero-actions {
+    flex-wrap: wrap;
+  }
+}

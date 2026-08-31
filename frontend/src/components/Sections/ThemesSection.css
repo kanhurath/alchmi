@@ -1,0 +1,148 @@
+/* ── THEMES SECTION ── */
+.themes-section {
+  padding: 8rem 4rem;
+  background: #ffffff;
+}
+
+.themes-section .section-label {
+  color: #de7336;
+}
+
+.themes-section .section-label::before {
+  background: #de7336;
+}
+
+.themes-section .section-title {
+  color: #8b2e33;
+}
+
+.themes-section .section-title em {
+  font-style: italic;
+  color: #de7336;
+}
+
+/* ── GRID ── */
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+}
+
+/* ── CARD ── */
+a.theme-card { text-decoration: none; color: inherit; }
+
+.theme-card {
+  background: linear-gradient(175deg, #ffffff 55%, #fdf0d5 100%);
+  border: 1.5px solid #f3b33e;
+  border-radius: 16px;
+  padding: 2.2rem 1.8rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.theme-card:hover {
+  box-shadow: 0 8px 32px rgba(243, 179, 62, 0.22);
+  transform: translateY(-3px);
+}
+
+/* ── ICON WRAP ── */
+.theme-icon-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #f3b33e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+  flex-shrink: 0;
+  transition: background 0.3s;
+  color: #8b2e33;
+}
+
+.theme-card:hover .theme-icon-wrap {
+  background: #de7336;
+}
+
+/* Force SVG children to use currentColor */
+.theme-icon-wrap svg {
+  width: 42px;
+  height: 42px;
+  overflow: visible;
+}
+
+.theme-icon-wrap svg path,
+.theme-icon-wrap svg g,
+.theme-icon-wrap svg line,
+.theme-icon-wrap svg rect,
+.theme-icon-wrap svg ellipse,
+.theme-icon-wrap svg circle,
+.theme-icon-wrap svg polyline,
+.theme-icon-wrap svg polygon {
+  stroke: currentColor !important;
+  fill: currentColor !important;
+}
+
+/* Keep outline-only paths transparent-filled */
+.theme-icon-wrap svg [style*="fill:none"],
+.theme-icon-wrap svg [style*="fill: none"] {
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+/* ── CARD TEXT ── */
+.theme-devanagari {
+  font-family: 'Noto Serif Devanagari', serif;
+  font-size: 2.2rem;
+  color: #de7336;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.theme-name {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin-bottom: 0.8rem;
+}
+
+.theme-desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  font-weight: 300;
+  flex: 1;
+}
+
+.theme-count {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.theme-count::after {
+  content: '→';
+  font-size: 0.75rem;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .themes-section {
+    padding: 4rem 1.5rem;
+  }
+
+  .themes-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

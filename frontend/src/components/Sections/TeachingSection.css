@@ -1,0 +1,243 @@
+/* ── OUTER WRAPPER ── */
+.teaching-page {
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 5rem 4rem 6rem;
+}
+
+/* ── SECTION HEADER ── */
+.teaching-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid rgba(139, 46, 51, 0.25);
+  margin-bottom: 3.5rem;
+  flex-wrap: wrap;
+}
+
+.teaching-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+}
+
+.section-numeral {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 400;
+  color: #de7336;
+  flex-shrink: 0;
+}
+
+.teaching-header h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #1a2543;
+}
+
+.teaching-header h1 em {
+  font-style: italic;
+  color: #de7336;
+}
+
+.all-offerings-link {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.7);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.all-offerings-link:hover { color: #de7336; }
+.all-offerings-link::after { content: '→'; }
+
+/* ── INTRO TEXT ── */
+.teaching-intro {
+  max-width: 820px;
+  margin: 0 auto 4rem;
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.85;
+  color: #1a2543;
+  text-align: left;
+  padding-left: 3rem;
+}
+
+/* ── 2×2 GRID ── */
+.teaching-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgba(139, 46, 51, 0.18);
+}
+
+/* ── CARD ── */
+.teach-card {
+  padding: 3rem 3rem 2.5rem;
+  border: 1px solid rgba(139, 46, 51, 0.18);
+  background: #f4efeb;
+  position: relative;
+  transition: background 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.teach-card:hover { background: #f0e8de; }
+
+/* Card header row */
+.teach-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-numeral {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 400;
+  color: #de7336;
+  line-height: 1.1;
+  min-width: 2.2rem;
+  flex-shrink: 0;
+  padding-top: 0.15rem;
+}
+
+.card-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: #1a2543;
+  margin-bottom: 0.35rem;
+}
+
+.card-subtitle {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8b2e33;
+  font-weight: 400;
+}
+
+/* Card body */
+.card-desc {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: #1a2543;
+  padding-left: calc(2.2rem + 1.5rem);
+  flex: 1;
+}
+
+/* Card footer note */
+.card-note {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.45);
+  padding-left: calc(2.2rem + 1.5rem);
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(139, 46, 51, 0.12);
+}
+
+/* ── ADDITIONAL OFFERINGS ── */
+.additional-section { margin-top: 4rem; }
+
+.additional-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.additional-label::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: #de7336;
+}
+
+.additional-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.additional-card {
+  background: #fff;
+  border: 1px solid rgba(243, 179, 62, 0.3);
+  border-radius: 4px;
+  padding: 1.8rem;
+  transition: box-shadow 0.3s, transform 0.25s;
+}
+
+.additional-card:hover {
+  box-shadow: 0 5px 20px rgba(26, 37, 67, 0.08);
+  transform: translateY(-2px);
+}
+
+.add-numeral {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: #de7336;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+.add-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #1a2543;
+  margin-bottom: 0.3rem;
+}
+
+.add-subtitle {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b2e33;
+  margin-bottom: 0.85rem;
+}
+
+.add-desc {
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(26, 37, 67, 0.65);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .teaching-page { padding: 3rem 1.5rem 4rem; }
+  .teaching-header { flex-direction: column; gap: 1rem; }
+  .teaching-intro { padding-left: 0; }
+  .teaching-grid { grid-template-columns: 1fr; }
+  .teach-card { padding: 2rem 1.5rem; }
+  .card-desc, .card-note { padding-left: 0; }
+  .additional-grid { grid-template-columns: 1fr; }
+}

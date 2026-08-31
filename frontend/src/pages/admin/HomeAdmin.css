@@ -1,0 +1,230 @@
+/* HomeAdmin reuses all .adm-* primitives from BiographyAdmin.css */
+/* Extra classes specific to home sections */
+
+/* ── Hero Style tab ── */
+.adm-style-group {
+  background: #faf7f2;
+  border: 1px solid #e8e0d4;
+  border-radius: 8px;
+  padding: 1rem 1.1rem 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.adm-style-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid #ede8e0;
+}
+.adm-style-row:last-child { border-bottom: none; }
+
+.adm-style-label {
+  font-size: 0.8rem;
+  color: #5a4e3a;
+  flex: 1;
+  min-width: 0;
+}
+
+.adm-style-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.adm-color-swatch-wrap {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.adm-color-swatch {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.15);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.adm-color-hidden-inp {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.adm-style-val {
+  font-size: 0.72rem;
+  font-family: 'Menlo', 'Consolas', monospace;
+  color: #5a4e3a;
+  min-width: 70px;
+}
+
+.adm-style-unit {
+  font-size: 0.72rem;
+  color: #9a8a75;
+}
+
+.adm-style-reset {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #b09070;
+  padding: 0 2px;
+  line-height: 1;
+}
+.adm-style-reset:hover { color: #8b2e33; }
+
+.adm-style-size-inp {
+  width: 70px !important;
+  text-align: right;
+}
+
+.adm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.adm-list-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff;
+  border: 1px solid #e8e0d4;
+  border-radius: 7px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.85rem;
+}
+
+.adm-list-num {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #d4670a;
+  background: #fdf0e8;
+  border: 1px solid #f0d4b8;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  min-width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.adm-list-text {
+  flex: 1;
+  color: #1a1208;
+}
+
+.adm-tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+}
+
+.adm-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f5f2ec;
+  border: 1px solid #e0d8cc;
+  border-radius: 999px;
+  padding: 0.2em 0.65em 0.2em 0.8em;
+  font-size: 0.78rem;
+  color: #5a4e3a;
+}
+
+.adm-tag-chip button {
+  background: none;
+  border: none;
+  color: #9a8e78;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.12s;
+}
+
+.adm-tag-chip button:hover { color: #c0392b; }
+
+.adm-badge-pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: #eef6f0;
+  color: #2a7a3a;
+  border: 1px solid #b8dfc4;
+  padding: 0.15em 0.55em;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.adm-article-img-preview {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e0d8cc;
+  margin-bottom: 0.5rem;
+}
+
+.adm-talk-thumb-preview {
+  width: 180px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e0d8cc;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Canvas Animation mode tabs ── */
+.adm-anim-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 0.75rem;
+  border: 1px solid #e0d0c0;
+  border-radius: 6px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.adm-anim-tab {
+  padding: 0.4rem 1.1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: #faf7f2;
+  color: #7a6a55;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.adm-anim-tab + .adm-anim-tab {
+  border-left: 1px solid #e0d0c0;
+}
+
+.adm-anim-tab.active {
+  background: #d4670a;
+  color: #fff;
+}
+
+.adm-code-area {
+  font-family: 'Menlo', 'Consolas', 'Monaco', monospace;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border-color: #3a3a5c;
+  border-radius: 6px;
+  resize: vertical;
+}

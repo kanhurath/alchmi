@@ -1,0 +1,598 @@
+/* ── Biography Admin — root (AdminLayout provides the outer shell) ─────────── */
+
+.bio-adm-root {
+  font-family: 'Josefin Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 56px);
+}
+
+.bio-adm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.75rem 2.5rem 0;
+  flex-wrap: wrap;
+}
+
+.bio-adm-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #d4670a;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.bio-adm-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #1a1208;
+  margin: 0;
+}
+
+.bio-adm-view-link {
+  font-size: 0.76rem;
+  color: #7a6e5a;
+  text-decoration: none;
+  border: 1px solid #e0d8cc;
+  padding: 0.4em 0.9em;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  transition: color 0.12s, border-color 0.12s;
+  flex-shrink: 0;
+}
+
+.bio-adm-view-link:hover { color: #d4670a; border-color: #d4670a; }
+
+.bio-adm-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Section tabs */
+.bio-adm-tabs {
+  display: flex;
+  gap: 0;
+  padding: 1.25rem 2.5rem 0;
+  border-bottom: 1px solid #e8e0d4;
+  background: transparent;
+  margin-top: 1rem;
+}
+
+.bio-adm-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #9a8e78;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.13s, border-color 0.13s;
+  margin-bottom: -1px;
+}
+
+.bio-adm-tab:hover  { color: #5a4e3a; }
+.bio-adm-tab.active { color: #d4670a; border-bottom-color: #d4670a; }
+
+/* Content area */
+.bio-adm-content {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  background: #f0ece4;
+}
+
+/* ── Shared form components (used inside tabs) ──────────────────────────────── */
+
+.adm-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Josefin Sans', sans-serif;
+  background: #f5f3ef;
+  color: #1a1208;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────────────────── */
+
+.adm-sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: #1a1208;
+  color: #e8dfc8;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.25rem;
+  gap: 2rem;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+.adm-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.adm-sidebar-logo {
+  width: 40px;
+  height: 40px;
+  background: #d4670a;
+  color: #fff;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.adm-sidebar-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.adm-sidebar-sub {
+  font-size: 0.72rem;
+  color: #9a8e78;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+.adm-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.adm-nav-item {
+  background: none;
+  border: none;
+  color: #9a8e78;
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+
+.adm-nav-item:hover,
+.adm-nav-item.active {
+  background: rgba(212, 103, 10, 0.18);
+  color: #d4670a;
+}
+
+.adm-view-link {
+  color: #9a8e78;
+  font-size: 0.78rem;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid #2e2618;
+  border-radius: 6px;
+  text-align: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.adm-view-link:hover {
+  color: #d4670a;
+  border-color: #d4670a;
+}
+
+/* ── Main area ────────────────────────────────────────────────────────────── */
+
+.adm-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.adm-topbar {
+  background: #fff;
+  border-bottom: 1px solid #e0d8cc;
+  padding: 1.1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.adm-page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #1a1208;
+  margin: 0;
+}
+
+.adm-badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: #fdf0e8;
+  color: #d4670a;
+  border: 1px solid #f0d4b8;
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+}
+
+.adm-content {
+  padding: 2rem;
+  max-width: 860px;
+}
+
+/* ── Section ──────────────────────────────────────────────────────────────── */
+
+.adm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.adm-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.adm-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #8b2e33;
+  margin: 0 0 0.25rem;
+}
+
+.adm-sub-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5a4e3a;
+  margin: 0 0 0.75rem;
+}
+
+.adm-divider {
+  border: none;
+  border-top: 1px solid #e0d8cc;
+  margin: 1.5rem 0;
+}
+
+/* ── Form fields ──────────────────────────────────────────────────────────── */
+
+.adm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.adm-field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.adm-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #5a4e3a;
+}
+
+.adm-input {
+  border: 1px solid #d8cfc0;
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1a1208;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.adm-input:focus {
+  outline: none;
+  border-color: #d4670a;
+  box-shadow: 0 0 0 3px rgba(212, 103, 10, 0.12);
+}
+
+.adm-textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.adm-input-sm {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.65rem;
+}
+
+.adm-file {
+  font-size: 0.82rem;
+  color: #5a4e3a;
+}
+
+/* ── Hints ────────────────────────────────────────────────────────────────── */
+
+.adm-hint {
+  font-size: 0.76rem;
+  color: #9a8e78;
+  margin: 0;
+}
+
+/* ── Save bar ─────────────────────────────────────────────────────────────── */
+
+.adm-save-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.adm-saved-msg {
+  font-size: 0.8rem;
+  color: #2a7a3a;
+  font-weight: 600;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.adm-btn {
+  border: 1px solid #d8cfc0;
+  background: #fff;
+  color: #5a4e3a;
+  padding: 0.5rem 1.1rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.adm-btn:hover {
+  background: #f5f0e8;
+  border-color: #b8a898;
+}
+
+.adm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.adm-btn-primary {
+  background: #d4670a;
+  border-color: #d4670a;
+  color: #fff;
+}
+
+.adm-btn-primary:hover:not(:disabled) {
+  background: #b85509;
+  border-color: #b85509;
+}
+
+.adm-btn-danger {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+.adm-btn-danger:hover {
+  background: #fdf0ee;
+}
+
+.adm-btn-sm {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.76rem;
+}
+
+/* ── Card blocks ──────────────────────────────────────────────────────────── */
+
+.adm-card-block {
+  border: 1px solid #e0d8cc;
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.adm-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.adm-card-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #d4670a;
+  background: #fdf0e8;
+  border: 1px solid #f0d4b8;
+  padding: 0.15em 0.55em;
+  border-radius: 4px;
+}
+
+.adm-card-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1a1208;
+  flex: 1;
+  min-width: 0;
+}
+
+.adm-card-edit-form {
+  border-top: 1px solid #e8e0d4;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* ── Venues ───────────────────────────────────────────────────────────────── */
+
+.adm-venues-block {
+  border-top: 1px solid #f0e8dc;
+  padding-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adm-venue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.adm-venue-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  color: #3a2e1e;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  background: #faf7f2;
+  min-height: 2.2rem;
+}
+
+/* Read mode — text + action buttons */
+.adm-venue-text {
+  flex: 1;
+  font-size: 0.84rem;
+  color: #3a2e1e;
+  line-height: 1.4;
+}
+
+.adm-venue-actions {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+/* Inline edit mode — stacked inputs + Save / Cancel */
+.adm-venue-edit-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.25rem 0;
+}
+
+.adm-venue-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.adm-venue-edit-row .adm-input-sm {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Add venue block — stacked name + URL rows */
+.adm-venue-add-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.adm-venue-add {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.adm-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+
+.adm-checkbox-label input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+/* ── Photo preview ────────────────────────────────────────────────────────── */
+
+.adm-photo-row {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 1rem;
+  background: #faf7f2;
+  border-radius: 8px;
+  border: 1px solid #e8e0d4;
+}
+
+.adm-photo-preview {
+  width: 100px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #d8cfc0;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 700px) {
+  .adm-layout {
+    flex-direction: column;
+  }
+
+  .adm-sidebar {
+    width: 100%;
+    min-height: auto;
+    position: static;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .adm-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .adm-content {
+    padding: 1.25rem;
+  }
+}

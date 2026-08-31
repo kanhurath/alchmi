@@ -1,0 +1,382 @@
+/* ── MAIN CONTENT WRAPPER ── */
+.events-content-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── SECTION HEADER ── */
+.events-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 0 4rem 1.2rem;
+  border-bottom: 1px solid rgba(139, 46, 51, 0.22);
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.events-section-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+}
+
+.events-section-header .section-numeral {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #de7336;
+}
+
+.events-section-header h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #1a2543;
+}
+
+.events-section-header h2 em {
+  font-style: italic;
+  color: #de7336;
+}
+
+.events-count-badge {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: #de7336;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.events-count-badge.muted {
+  background: rgba(26, 37, 67, 0.15);
+  color: rgba(26, 37, 67, 0.55);
+}
+
+/* ── UPCOMING SECTION ── */
+.upcoming-section {
+  padding: 4rem 0 0;
+}
+
+.upcoming-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* ── UPCOMING CARD ── */
+.upcoming-card {
+  background: #fff;
+  border: 1px solid rgba(243, 179, 62, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s, transform 0.25s;
+  color: inherit;
+  position: relative;
+  cursor: pointer;
+}
+
+.upcoming-card:hover {
+  box-shadow: 0 8px 32px rgba(26, 37, 67, 0.1);
+  transform: translateY(-3px);
+}
+
+.upcoming-card.featured {
+  grid-column: span 2;
+  flex-direction: row;
+}
+
+/* Date block */
+.event-date-block {
+  background: #8b2e33;
+  padding: 1.6rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.upcoming-card.featured .event-date-block {
+  min-width: 110px;
+  padding: 2rem 1.6rem;
+}
+
+.event-day {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2.8rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #f3b33e;
+}
+
+.upcoming-card.featured .event-day { font-size: 3.5rem; }
+
+.event-month {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(243, 179, 62, 0.7);
+  margin-top: 0.2rem;
+}
+
+.event-year {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 0.15rem;
+}
+
+/* Card content */
+.upcoming-content {
+  padding: 1.6rem 1.8rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.upcoming-card.featured .upcoming-content { padding: 2rem 2.2rem; }
+
+.event-type-tag {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-bottom: 0.5rem;
+}
+
+.event-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.1rem, 1.8vw, 1.45rem);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #1a2543;
+  margin-bottom: 0.6rem;
+  transition: color 0.2s;
+}
+
+.upcoming-card.featured .event-title { font-size: clamp(1.3rem, 2vw, 1.8rem); }
+.upcoming-card:hover .event-title { color: #8b2e33; }
+
+.event-desc {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.75;
+  flex: 1;
+  margin-bottom: 1.2rem;
+}
+
+.event-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(26, 37, 67, 0.07);
+}
+
+.event-meta-item {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.meta-icon { color: #de7336; font-size: 0.7rem; }
+
+.event-register-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #de7336;
+  text-decoration: none;
+  margin-left: auto;
+  transition: color 0.2s, gap 0.2s;
+}
+
+.upcoming-card:hover .event-register-btn { gap: 0.8rem; color: #8b2e33; }
+.event-register-btn::after { content: '→'; }
+
+/* Spots bar */
+.spots-bar {
+  margin-top: 1rem;
+  background: rgba(243, 179, 62, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  height: 3px;
+}
+
+.spots-fill { height: 100%; background: #f3b33e; border-radius: 2px; }
+
+.spots-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.4);
+  margin-top: 0.35rem;
+}
+
+/* ── COMPLETED SECTION ── */
+.completed-section {
+  padding: 5rem 0 4rem;
+  background: #ffffff;
+  margin-top: 4rem;
+}
+
+.completed-list { padding: 0 4rem; }
+
+.completed-item {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 2rem;
+  align-items: start;
+  padding: 1.8rem 0;
+  border-bottom: 1px solid rgba(26, 37, 67, 0.07);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.completed-item::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(139, 46, 51, 0.25);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s;
+}
+
+.completed-item:hover::before { transform: scaleY(1); }
+.completed-item:last-child { border-bottom: none; }
+
+/* Completed date */
+.completed-date { text-align: center; }
+
+.comp-day {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(26, 37, 67, 0.3);
+}
+
+.comp-month {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.28);
+}
+
+/* Completed content */
+.completed-type {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(139, 46, 51, 0.55);
+  margin-bottom: 0.35rem;
+}
+
+.completed-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgba(26, 37, 67, 0.7);
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+  transition: color 0.2s;
+}
+
+.completed-item:hover .completed-title { color: #1a2543; }
+
+.completed-meta {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.38);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Completed status */
+.completed-status {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.3);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 0.2rem;
+  white-space: nowrap;
+  gap: 0.35rem;
+}
+
+.completed-status .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(26, 37, 67, 0.2);
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .events-section-header { padding: 0 1.5rem 1rem; }
+
+  .upcoming-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1.5rem;
+  }
+
+  .upcoming-card.featured {
+    grid-column: span 1;
+    flex-direction: column;
+  }
+
+  .upcoming-card.featured .event-date-block {
+    min-width: auto;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 1rem 1.4rem;
+  }
+
+  .completed-list { padding: 0 1.5rem; }
+
+  .completed-item { grid-template-columns: 70px 1fr; }
+  .completed-status { display: none; }
+}
