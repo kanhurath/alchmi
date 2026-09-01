@@ -23,7 +23,6 @@ export const navigationLinks = [
       { id: 'workshops', label: 'Workshops & Retreats', path: '/workshops' },
     ],
   },
-  { id: 'news',     label: 'News',      path: '/news' },
   { id: 'connect',   label: 'Connect',   path: '/connect' },
   { id: 'gallery',   label: 'Gallery',   path: '/gallery' },
 ];

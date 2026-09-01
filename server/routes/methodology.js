@@ -184,7 +184,19 @@ router.get('/frameworks', async (_req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM methodology_frameworks ORDER BY sort_order ASC, id ASC');
     if (rows.length) return res.json(rows);
-    res.json(FRAMEWORK_DEFAULTS);
+    // Auto-seed defaults into DB so every framework gets a real ID
+    for (const fw of FRAMEWORK_DEFAULTS) {
+      await db.query(
+        `INSERT INTO methodology_frameworks
+         (label,title,body,checklist,image_key,bg,layout_reverse,sort_order,graphic_type,graphic_url,graphic_svg,graphic_html)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
+        [fw.label, fw.title, fw.body, fw.checklist,
+         fw.image_key, fw.bg, fw.layout_reverse, fw.sort_order,
+         fw.graphic_type, fw.graphic_url, fw.graphic_svg, fw.graphic_html]
+      );
+    }
+    const [seeded] = await db.query('SELECT * FROM methodology_frameworks ORDER BY sort_order ASC, id ASC');
+    res.json(seeded);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 

@@ -198,7 +198,7 @@ function ExplainerSection({ data }) {
 
   return (
     <section className="mth-explainer reveal">
-      <div className="mth-container mth-container--narrow">
+      <div className="mth-container">
         {data.h1    && <h1 className="mth-expl-h1">{data.h1}</h1>}
         {data.lede  && <p className="mth-expl-lede">{data.lede}</p>}
         {data.h2    && <h2 className="mth-expl-h2">{data.h2}</h2>}

@@ -155,7 +155,7 @@ function FrameworkForm({ initial, frameworkId, onSave, onCancel, saving, onGraph
         presetLabel="Built-in decorative SVG (selected below)"
         form={form}
         onChange={patchGraphic}
-        onUpload={frameworkId ? handleGraphicUpload : undefined}
+        onUpload={handleGraphicUpload}
         uploadNote={!frameworkId ? 'Save the framework first, then upload a graphic.' : undefined}
       />
 
@@ -219,6 +219,7 @@ function FrameworksTab() {
   };
 
   const update = async (form) => {
+    if (!editing) { setError('Cannot save: framework has no ID. Please reload the page.'); return; }
     setSaving(true); setError('');
     try {
       await api.updateMethodologyFramework(editing, form);

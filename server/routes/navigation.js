@@ -17,6 +17,9 @@ function buildTree(rows) {
   }));
 }
 
+// Remove legacy News nav item if present
+db.query("DELETE FROM nav_items WHERE menu='header' AND url='/news'").catch(() => {});
+
 // ── GET /api/navigation — full header + footer tree ───────────────────────────
 router.get('/', async (_req, res) => {
   try {

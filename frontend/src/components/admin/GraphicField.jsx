@@ -78,12 +78,12 @@ export function GraphicField({ label, presetLabel, form, onChange, onUpload, upl
           )}
           {onUpload && (
             <>
-              <input type="file" accept="image/*" onChange={handleFile} disabled={uploading} />
-              {uploadNote && <p className="adm-hint">{uploadNote}</p>}
+              <input type="file" accept="image/*" className="adm-file" onChange={handleFile} disabled={uploading} />
               {uploading    && <p className="adm-hint">Uploading…</p>}
               {uploadError  && <p className="adm-hint" style={{ color: '#c0392b' }}>{uploadError}</p>}
             </>
           )}
+          {uploadNote && <p className="adm-hint">{uploadNote}</p>}
         </div>
       )}
 
