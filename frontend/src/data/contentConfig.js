@@ -58,7 +58,7 @@ export const articles = [
     title: 'Repositioning Sanskrit for India’s Next Civilizational Chapter',
     excerpt: 'Saṃskṛta is not merely a language — it is the very grammar of consciousness, the scaffolding of a civilization that never separated knowing from being.',
     date: 'May 23, 2026',
-    url: 'http://localhost:3001/blog/2026/05/23/sa%e1%b9%83sk%e1%b9%9bta-is-not-merely-a-language/',
+    url: 'https://alchmi.com/blog/2026/05/23/sa%e1%b9%83sk%e1%b9%9bta-is-not-merely-a-language/',
     image: new URL('../assets/Images/samskrita-nation.png', import.meta.url).href,
   },
   {
@@ -68,7 +68,7 @@ export const articles = [
     title: 'Vedanta in Education – Or Is Vedanta Itself Education?',
     excerpt: 'Reflecting on a panel discussion that became a churning of minds around what it truly means to educate a human being.',
     date: 'May 17, 2026',
-    url: 'http://localhost:3001/blog/2026/05/17/vedanta-in-education-or-is-vedanta-itself-education/',
+    url: 'https://alchmi.com/blog/2026/05/17/vedanta-in-education-or-is-vedanta-itself-education/',
   },
   {
     id: 3,
@@ -77,7 +77,7 @@ export const articles = [
     title: 'The Eight-Second Mind',
     excerpt: 'The average human attention span has collapsed from twelve seconds to eight — and what five quiet days of Bhāratīya cultural education might give back.',
     date: 'May 2, 2026',
-    url: 'http://localhost:3001/blog/2026/05/02/the-eight-second-mind/',
+    url: 'https://alchmi.com/blog/2026/05/02/the-eight-second-mind/',
   },
   {
     id: 4,
@@ -86,7 +86,7 @@ export const articles = [
     title: 'The Great Inversion',
     excerpt: 'Why sustainable lifestyles must come before sustainable products — a case for Dharmic Innovation.',
     date: 'May 1, 2026',
-    url: 'http://localhost:3001/blog/2026/05/01/the-great-inversion/',
+    url: 'https://alchmi.com/blog/2026/05/01/the-great-inversion/',
   },
   {
     id: 5,
@@ -95,7 +95,7 @@ export const articles = [
     title: 'Jala-Brahma: The Sacred Intelligence of Water',
     excerpt: 'A contemplation on the seven streams within, beginning where the Ṝgveda begins — in the primordial waters before creation.',
     date: 'April 23, 2026',
-    url: 'http://localhost:3001/blog/2026/04/23/jala-brahma-the-sacred-intelligence-of-water/',
+    url: 'https://alchmi.com/blog/2026/04/23/jala-brahma-the-sacred-intelligence-of-water/',
   },
 ];
 

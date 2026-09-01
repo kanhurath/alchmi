@@ -36,7 +36,7 @@ const PILLARS = [
     label: "Writing",
     stat:  "64",
     desc:  "Essays on dharmic ideas, Sanskrit thought, contemplative philosophy, and civilisational renewal.",
-    detailLink: { href: "http://localhost:3001/blog/", label: "vinaykulkarni.com/blog" },
+    detailLink: { href: "https://alchmi.com/blog/", label: "vinaykulkarni.com/blog" },
   },
 ];
 
@@ -45,19 +45,19 @@ const ARTICLES = [
     tag:     "Music · Vedānta",
     title:   "The Sacred Symphony: Music as the Gateway to Divine Union",
     excerpt: "On nāda, consciousness, and what classical Indian music theory reveals about the nature of attention.",
-    href:    "http://localhost:3001/2025/06/23/the-sacred-symphony-music-as-the-gateway-to-divine-union/",
+    href:    "https://alchmi.com/2025/06/23/the-sacred-symphony-music-as-the-gateway-to-divine-union/",
   },
   {
     tag:     "Philosophy · Epistemology",
     title:   "The Art of Thinking Clearly: Beyond Labels, Concepts and Boxes",
     excerpt: "How categorisation constrains perception — and what viveka offers as a corrective.",
-    href:    "http://localhost:3001/2025/03/24/the-art-of-thinking-clearly-beyond-labels-concepts-and-boxes/",
+    href:    "https://alchmi.com/2025/03/24/the-art-of-thinking-clearly-beyond-labels-concepts-and-boxes/",
   },
   {
     tag:     "IKS · Education",
     title:   "From Adhyāpaka to Ācārya: The Teacher as Civilisational Anchor",
     excerpt: "What separates a teacher of subjects from a teacher of persons — and why the distinction matters now.",
-    href:    "http://localhost:3001/blog/",
+    href:    "https://alchmi.com/blog/",
   },
 ];
 
@@ -145,7 +145,7 @@ function Nav() {
         {/* Logo */}
         <a href="/" className="nav-logo" aria-label="Vinay Kulkarni — Homepage">
           <img
-            src="http://localhost:3001/wp-content/uploads/2024/12/Vinay-Ji-Logo-White.png"
+            src="https://alchmi.com/wp-content/uploads/2024/12/Vinay-Ji-Logo-White.png"
             alt="Vinay Kulkarni"
             onError={e => {
               e.currentTarget.style.display = "none";
@@ -292,7 +292,7 @@ function Writing() {
     <section className="section" aria-labelledby="writing-heading">
       <div className="writing-header">
         <h2 className="writing-title" id="writing-heading">Latest Writing</h2>
-        <a href="http://localhost:3001/blog/" className="writing-all">All 64 Articles →</a>
+        <a href="https://alchmi.com/blog/" className="writing-all">All 64 Articles →</a>
       </div>
       <div className="articles-grid">
         {ARTICLES.map(a => <ArticleCard key={a.href} {...a} />)}
