@@ -5,9 +5,10 @@ import './CustomPagesAdmin.css';
 
 function CustomPagesAdmin() {
   const navigate = useNavigate();
-  const [pages,   setPages]   = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [deleting, setDeleting] = useState(null);
+  const [pages,      setPages]      = useState([]);
+  const [loading,    setLoading]    = useState(true);
+  const [deleting,   setDeleting]   = useState(null);
+  const [duplicating, setDuplicating] = useState(null);
 
   const load = useCallback(async () => {
     try { setPages(await api.listPages()); }
@@ -22,6 +23,18 @@ function CustomPagesAdmin() {
     setDeleting(id);
     try { await api.deletePage(id); setPages(p => p.filter(x => x.id !== id)); }
     finally { setDeleting(null); }
+  };
+
+  const duplicate = async page => {
+    setDuplicating(page.id);
+    try {
+      const copy = await api.duplicatePage(page.id);
+      setPages(p => [copy, ...p]);
+    } catch (e) {
+      alert(`Duplicate failed: ${e.message}`);
+    } finally {
+      setDuplicating(null);
+    }
   };
 
   return (
@@ -82,6 +95,14 @@ function CustomPagesAdmin() {
                     {p.status === 'published' && (
                       <a href={`/${p.slug}`} target="_blank" rel="noreferrer" className="cpg-view-btn">View ↗</a>
                     )}
+                    <button
+                      className="cpg-dup-btn"
+                      onClick={() => duplicate(p)}
+                      disabled={duplicating === p.id}
+                      title="Duplicate page as draft"
+                    >
+                      {duplicating === p.id ? '…' : 'Duplicate'}
+                    </button>
                     <button
                       className="cpg-del-btn"
                       onClick={() => remove(p.id)}

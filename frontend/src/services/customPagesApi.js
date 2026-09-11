@@ -16,7 +16,8 @@ export const getPage     = id          => get(`${BASE}/${id}`);
 export const getPageSlug = slug        => get(`${BASE}/by-slug/${slug}`);
 export const createPage  = data        => post(BASE, data);
 export const updatePage  = (id, data)  => put(`${BASE}/${id}`, data);
-export const deletePage  = id          => del(`${BASE}/${id}`);
+export const deletePage    = id          => del(`${BASE}/${id}`);
+export const duplicatePage = id          => post(`${BASE}/${id}/duplicate`, {});
 
 // Blocks
 export const addBlock      = (pid, data)       => post(`${BASE}/${pid}/blocks`, data);

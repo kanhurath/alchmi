@@ -145,6 +145,77 @@ router.put('/:id', verifyToken, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ── POST /api/custom-pages/:id/duplicate ─────────────────────────────────────
+router.post('/:id/duplicate', verifyToken, async (req, res) => {
+  const numId = parseInt(req.params.id, 10);
+  if (!numId) return res.status(404).json({ error: 'Not found' });
+
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    // Fetch original page
+    const [[orig]] = await conn.query('SELECT * FROM custom_pages WHERE id=?', [numId]);
+    if (!orig) { await conn.rollback(); conn.release(); return res.status(404).json({ error: 'Not found' }); }
+
+    // Build a unique slug: append -copy, then -copy-2, -copy-3 … until unused
+    const baseSlug = `${orig.slug}-copy`;
+    let candidate  = baseSlug;
+    let suffix     = 2;
+    while (true) {
+      const [[clash]] = await conn.query('SELECT id FROM custom_pages WHERE slug=?', [candidate]);
+      if (!clash) break;
+      candidate = `${baseSlug}-${suffix++}`;
+    }
+
+    // Insert duplicate page as draft
+    const [ins] = await conn.query(
+      `INSERT INTO custom_pages
+         (title, slug, status, layout,
+          meta_description, seo_title, focus_keyword,
+          canonical_url, og_image_url, custom_schema)
+       VALUES (?,?,?,?,?,?,?,?,?,?)`,
+      [
+        `${orig.title} (Copy)`,
+        candidate,
+        'draft',
+        orig.layout || 'no_sidebar',
+        orig.meta_description || '',
+        orig.seo_title   ? `${orig.seo_title} (Copy)`  : null,
+        orig.focus_keyword || null,
+        null,                          // canonical_url intentionally cleared
+        orig.og_image_url || null,
+        orig.custom_schema || null,
+      ]
+    );
+    const newId = ins.insertId;
+
+    // Copy all blocks
+    const [blocks] = await conn.query(
+      'SELECT * FROM page_blocks WHERE page_id=? ORDER BY sort_order',
+      [numId]
+    );
+    for (const b of blocks) {
+      await conn.query(
+        'INSERT INTO page_blocks (page_id, block_type, content, sort_order, area) VALUES (?,?,?,?,?)',
+        [newId, b.block_type, b.content, b.sort_order, b.area || 'main']
+      );
+    }
+
+    await conn.commit();
+    const [[newPage]] = await conn.query(
+      'SELECT p.*, COUNT(b.id) AS block_count FROM custom_pages p LEFT JOIN page_blocks b ON b.page_id=p.id WHERE p.id=? GROUP BY p.id',
+      [newId]
+    );
+    res.status(201).json(newPage);
+  } catch (err) {
+    await conn.rollback();
+    res.status(500).json({ error: err.message });
+  } finally {
+    conn.release();
+  }
+});
+
 // ── DELETE /api/custom-pages/:id ─────────────────────────────────────────────
 router.delete('/:id', verifyToken, async (req, res) => {
   const numId = parseInt(req.params.id, 10);

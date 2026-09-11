@@ -52,6 +52,9 @@
 .cpg-edit-btn:hover { background: #de7336; color: #fff; }
 .cpg-view-btn { border-color: #8b7355; color: #8b7355; background: transparent; }
 .cpg-view-btn:hover { background: #8b7355; color: #fff; }
+.cpg-dup-btn  { border-color: #3b82c4; color: #3b82c4; background: transparent; }
+.cpg-dup-btn:hover:not(:disabled) { background: #3b82c4; color: #fff; }
+.cpg-dup-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .cpg-del-btn  { border-color: #c0392b; color: #c0392b; background: transparent; }
 .cpg-del-btn:hover:not(:disabled) { background: #c0392b; color: #fff; }
 .cpg-del-btn:disabled { opacity: 0.4; cursor: not-allowed; }
