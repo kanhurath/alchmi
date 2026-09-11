@@ -68,7 +68,7 @@ function UrlPicker({ url, isExternal, onChange }) {
 }
 
 // ── Single nav item row ───────────────────────────────────────────────────────
-function NavItemRow({ item, isFirst, isLast, onMove, onSave, onDelete, onAddSub, children }) {
+function NavItemRow({ item, isFirst, isLast, onMove, onSave, onDelete, onAddSub, subLabel = 'Submenu items', children }) {
   const [form,    setForm]    = useState({ label: item.label, url: item.url, is_external: !!item.is_external });
   const [saving,  setSaving]  = useState(false);
   const [saved,   setSaved]   = useState(false);
@@ -131,7 +131,7 @@ function NavItemRow({ item, isFirst, isLast, onMove, onSave, onDelete, onAddSub,
       {/* Submenu */}
       {subOpen && (
         <div className="nav-submenu-block">
-          <div className="nav-submenu-label">Submenu items</div>
+          <div className="nav-submenu-label">{subLabel}</div>
           {children}
           <AddItemForm menu={item.menu} parentId={item.id} onAdded={onAddSub} />
         </div>
@@ -222,7 +222,8 @@ function MenuEditor({ menu, items, onReload }) {
             onMove={move}
             onSave={save}
             onDelete={remove}
-            onAddSub={menu === 'header' ? onReload : null}
+            onAddSub={onReload}
+            subLabel={menu === 'footer' ? 'Column links' : 'Submenu items'}
           >
             {subs.map((sub, si) => (
               <NavItemRow
@@ -308,6 +309,11 @@ function NavigationAdmin() {
             {active === 'header' && (
               <p className="adm-hint">
                 Header items can have submenu children (click <strong>+ Sub</strong>). Submenu is only supported one level deep.
+              </p>
+            )}
+            {active === 'footer' && (
+              <p className="adm-hint">
+                Footer uses a <strong>column structure</strong>: top-level items are <strong>column headings</strong> (e.g. Explore, Connect, Legal). Click <strong>+ Sub</strong> on a column heading to add links inside that column. The URL of a column heading can be left blank.
               </p>
             )}
             <MenuEditor

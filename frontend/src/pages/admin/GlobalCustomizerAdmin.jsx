@@ -1178,6 +1178,7 @@ const DEF_FOOTER = {
   logoWidth:        '',
   logoHeight:       '80',
   logoAlt:          'Vinay Kulkarni',
+  tagline:          'Insights and resources on strategy, marketing, and growth.',
   copyrightText:    '© 2026 Vinay Kulkarni · All Rights Reserved',
   footerBg:         '',
   navFontColor:     '',
@@ -1298,7 +1299,19 @@ function FooterTab() {
             style={{ flex: 1 }}
           />
         </div>
-        <p className="gc-hint">Recommended: PNG with transparent background, shown on a dark footer. Leave a dimension blank to scale proportionally. Footer navigation links are managed under Admin → Navigation.</p>
+        <p className="gc-hint">Recommended: PNG with transparent background, shown on a dark footer. Leave a dimension blank to scale proportionally. Footer navigation columns are managed under Admin → Navigation.</p>
+      </div>
+
+      {/* Tagline */}
+      <SectionDivider label="Tagline" />
+      <div className="gc-section">
+        <input
+          className="adm-inp"
+          value={form.tagline}
+          onChange={e => set('tagline', e.target.value)}
+          placeholder="e.g. Insights and resources on strategy, marketing, and growth."
+        />
+        <p className="gc-hint">Short description shown below the logo in the footer's brand column.</p>
       </div>
 
       {/* Copyright */}
@@ -1319,7 +1332,7 @@ function FooterTab() {
         <p className="gc-hint" style={{ margin: '0 0 0.5rem' }}>Background color of the entire footer strip.</p>
         <ColorSwatch
           label="Background"
-          value={form.footerBg || '#8b2e33'}
+          value={form.footerBg || '#0d1f3c'}
           onChange={v => set('footerBg', v)}
           onReset={() => set('footerBg', '')}
         />

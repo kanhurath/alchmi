@@ -104,6 +104,7 @@ const DEFAULTS = {
     logoWidth:     '',
     logoHeight:    '80',
     logoAlt:       'Vinay Kulkarni',
+    tagline:       'Insights and resources on strategy, marketing, and growth.',
     copyrightText: '© 2026 Vinay Kulkarni · All Rights Reserved',
     footerBg:      '',
     navFontColor:  '',
