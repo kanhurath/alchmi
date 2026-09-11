@@ -1860,6 +1860,75 @@ function CustomCssTab() {
   );
 }
 
+// ── Tab icons ─────────────────────────────────────────────────────────────────
+
+const TAB_ICONS = {
+  typography: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+      <line x1="3" y1="5"  x2="17" y2="5" />
+      <line x1="3" y1="9"  x2="13" y2="9" />
+      <line x1="3" y1="13" x2="15" y2="13" />
+      <line x1="3" y1="17" x2="10" y2="17" />
+    </svg>
+  ),
+  colors: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="10" cy="10" r="7" />
+      <path d="M10 3 A7 7 0 0 1 17 10" strokeWidth="1.6" />
+      <line x1="10" y1="3" x2="10" y2="17" />
+      <line x1="3"  y1="10" x2="17" y2="10" />
+    </svg>
+  ),
+  container: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="16" height="12" rx="1.5" />
+      <line x1="2" y1="8" x2="18" y2="8" />
+    </svg>
+  ),
+  buttons: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="7" width="16" height="6" rx="3" />
+    </svg>
+  ),
+  header: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="16" height="14" rx="1.5" />
+      <line x1="2" y1="7.5" x2="18" y2="7.5" />
+    </svg>
+  ),
+  footer: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="16" height="14" rx="1.5" />
+      <line x1="2" y1="12.5" x2="18" y2="12.5" />
+    </svg>
+  ),
+  'inner-hero': (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="16" height="12" rx="1.5" />
+      <path d="M2 13 l4-4 3 3 3-2.5 6 4" />
+      <circle cx="6.5" cy="8" r="1.2" />
+    </svg>
+  ),
+  loader: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+      <circle cx="10" cy="10" r="7" />
+      <polyline points="10,6 10,10 13,12" />
+    </svg>
+  ),
+  security: (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 2 L17 5 V10 C17 14 13.5 17.5 10 18 C6.5 17.5 3 14 3 10 V5 Z" />
+    </svg>
+  ),
+  'custom-css': (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="7,6 3,10 7,14" />
+      <polyline points="13,6 17,10 13,14" />
+      <line x1="11" y1="5" x2="9" y2="15" />
+    </svg>
+  ),
+};
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 const TABS = [
@@ -1880,39 +1949,48 @@ function GlobalCustomizerAdmin() {
 
   return (
     <div className="bio-adm-root gc-root">
-      <div className="bio-adm-header">
-        <div>
-          <span className="bio-adm-eyebrow">Global Settings</span>
-          <h1 className="bio-adm-title">Customizer</h1>
+      <div className="gc-body">
+
+        <nav className="gc-sidebar" role="tablist" aria-label="Customizer sections">
+          {/* Header lives inside the sidebar */}
+          <div className="gc-sidebar-header">
+            <span className="gc-sidebar-eyebrow">Global settings</span>
+            <h1 className="gc-sidebar-title">Customizer</h1>
+          </div>
+
+          <div className="gc-sidebar-nav">
+            {TABS.map(t => (
+              <button
+                key={t.id}
+                role="tab"
+                aria-selected={active === t.id}
+                className={`gc-sidebar-tab${active === t.id ? ' active' : ''}`}
+                onClick={() => setActive(t.id)}
+              >
+                <span className="gc-sidebar-tab-icon">{TAB_ICONS[t.id]}</span>
+                <span className="gc-sidebar-tab-label">{t.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <a href="/" target="_blank" rel="noreferrer" className="gc-sidebar-view-link">
+            ↗ View Site
+          </a>
+        </nav>
+
+        <div className="gc-content">
+          {active === 'typography'  && <TypographyTab />}
+          {active === 'colors'      && <ColorsTab />}
+          {active === 'container'   && <ContainerTab />}
+          {active === 'buttons'     && <ButtonsTab />}
+          {active === 'header'      && <HeaderTab />}
+          {active === 'footer'      && <FooterTab />}
+          {active === 'inner-hero'  && <InnerHeroTab />}
+          {active === 'loader'      && <LoaderFaviconTab />}
+          {active === 'security'    && <SecurityTab />}
+          {active === 'custom-css'  && <CustomCssTab />}
         </div>
-        <a href="/" target="_blank" rel="noreferrer" className="bio-adm-view-link">↗ View Site</a>
-      </div>
 
-      <div className="bio-adm-tabs" role="tablist">
-        {TABS.map(t => (
-          <button
-            key={t.id}
-            role="tab"
-            aria-selected={active === t.id}
-            className={`bio-adm-tab${active === t.id ? ' active' : ''}`}
-            onClick={() => setActive(t.id)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="gc-content">
-        {active === 'typography'  && <TypographyTab />}
-        {active === 'colors'      && <ColorsTab />}
-        {active === 'container'   && <ContainerTab />}
-        {active === 'buttons'     && <ButtonsTab />}
-        {active === 'header'      && <HeaderTab />}
-        {active === 'footer'      && <FooterTab />}
-        {active === 'inner-hero'  && <InnerHeroTab />}
-        {active === 'loader'      && <LoaderFaviconTab />}
-        {active === 'security'    && <SecurityTab />}
-        {active === 'custom-css'  && <CustomCssTab />}
       </div>
     </div>
   );

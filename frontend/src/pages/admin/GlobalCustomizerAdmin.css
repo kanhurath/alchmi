@@ -40,9 +40,153 @@
   gap: 0;
 }
 
+/* ── Vertical tab layout ───────────────────────────────────────────────────── */
+
+/* Override bio-adm-root defaults so gc-body controls all layout */
+.gc-root {
+  padding: 0 !important;
+  display: block !important;
+  min-height: unset !important;
+}
+
+.gc-body {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+
+.gc-sidebar {
+  flex: 0 0 240px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-right: 1px solid #ede8e0;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  padding-bottom: 2rem;
+  box-sizing: border-box;
+}
+
+/* Header block inside sidebar */
+.gc-sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 1px solid #f0ece4;
+  margin-bottom: 0.5rem;
+}
+
+.gc-sidebar-eyebrow {
+  display: block;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #d4670a;
+  margin-bottom: 0.35rem;
+}
+
+.gc-sidebar-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a2543;
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Nav list */
+.gc-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 0.75rem;
+  flex: 1;
+}
+
+/* Tab button */
+.gc-sidebar-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 0.9rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #4a3f30;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+
+.gc-sidebar-tab:hover:not(.active) {
+  background: #f7f3ed;
+  color: #1a1208;
+}
+
+.gc-sidebar-tab.active {
+  background: #c0431f;
+  color: #ffffff;
+}
+
+/* Icon wrapper */
+.gc-sidebar-tab-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.75;
+  transition: opacity 0.14s;
+}
+
+.gc-sidebar-tab-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.gc-sidebar-tab:hover:not(.active) .gc-sidebar-tab-icon { opacity: 1; }
+.gc-sidebar-tab.active .gc-sidebar-tab-icon             { opacity: 1; }
+
+.gc-sidebar-tab-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* View site link at sidebar bottom */
+.gc-sidebar-view-link {
+  display: block;
+  margin: 1.25rem 1.5rem 0;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9a8e78;
+  text-decoration: none;
+  transition: color 0.13s;
+}
+
+.gc-sidebar-view-link:hover { color: #d4670a; }
+
+/* ── Content pane ────────────────────────────────────────────────────────── */
+
 .gc-content {
+  flex: 1;
   background: #f0ece4;
-  min-height: calc(100vh - 56px - 100px);
+  min-height: 100vh;
 }
 
 /* ── Tab body (scroll container) ──────────────────────────────────────────── */
@@ -793,6 +937,36 @@
 }
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .gc-body { flex-direction: column; }
+
+  .gc-sidebar {
+    flex: none;
+    min-height: unset;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid #ede8e0;
+    width: 100%;
+    padding-bottom: 0.75rem;
+  }
+
+  .gc-sidebar-header { padding: 1.25rem 1.25rem 1rem; margin-bottom: 0; }
+  .gc-sidebar-title  { font-size: 1.5rem; }
+
+  .gc-sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0.5rem 0.75rem;
+    gap: 4px;
+  }
+
+  .gc-sidebar-tab { width: auto; padding: 0.45rem 0.75rem; }
+
+  .gc-sidebar-view-link { margin: 0.5rem 1.25rem 0.25rem; }
+
+  .gc-content { min-height: unset; }
+}
 
 @media (max-width: 680px) {
   .gc-tab-body { padding: 1.25rem 1rem 2.5rem; }
