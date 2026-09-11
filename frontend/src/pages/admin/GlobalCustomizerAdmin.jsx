@@ -1799,6 +1799,67 @@ function InnerHeroTab() {
   );
 }
 
+// ── Custom CSS Tab ────────────────────────────────────────────────────────────
+
+const DEF_GLOBAL_SETTINGS = { customCss: '' };
+
+function CustomCssTab() {
+  const [form, setForm]   = useState(DEF_GLOBAL_SETTINGS);
+  const [saving, setSaving] = useState(false);
+  const [saved,  setSaved]  = useState(false);
+
+  useEffect(() => {
+    api.getCustomizerSection('global-settings').then(d => setForm({ ...DEF_GLOBAL_SETTINGS, ...d }));
+  }, []);
+
+  async function save() {
+    setSaving(true);
+    try {
+      await api.saveCustomizerSection('global-settings', form);
+      applyCustomizerSettings({ 'global-settings': form });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="gc-tab-body">
+      <div className="gc-section">
+        <div className="gc-section-title">Custom CSS</div>
+        <p style={{ fontSize: '0.85rem', color: '#7a6a55', marginBottom: '1rem', lineHeight: 1.5 }}>
+          Write any CSS here. It is injected into the frontend after all other customizer styles,
+          so it can override anything. Changes are applied immediately when saved.
+        </p>
+        <textarea
+          value={form.customCss}
+          onChange={e => setForm(f => ({ ...f, customCss: e.target.value }))}
+          placeholder={"/* Example */\n.my-class { color: red; }\nbody { font-size: 18px; }"}
+          rows={20}
+          style={{
+            width: '100%',
+            fontFamily: 'monospace',
+            fontSize: '0.875rem',
+            lineHeight: 1.6,
+            padding: '0.75rem 1rem',
+            border: '1px solid var(--border, rgba(184,146,42,0.25))',
+            borderRadius: '6px',
+            background: '#faf8f5',
+            color: '#1a1208',
+            resize: 'vertical',
+            boxSizing: 'border-box',
+          }}
+          spellCheck={false}
+        />
+      </div>
+      <div className="gc-section" style={{ borderRadius: '0 0 8px 8px' }}>
+        <SaveBar onSave={save} saving={saving} saved={saved} />
+      </div>
+    </div>
+  );
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 const TABS = [
@@ -1811,6 +1872,7 @@ const TABS = [
   { id: 'inner-hero',  label: 'Inner Page Hero' },
   { id: 'loader',      label: 'Loader & Favicon' },
   { id: 'security',    label: 'Security' },
+  { id: 'custom-css',  label: 'Custom CSS' },
 ];
 
 function GlobalCustomizerAdmin() {
@@ -1850,6 +1912,7 @@ function GlobalCustomizerAdmin() {
         {active === 'inner-hero'  && <InnerHeroTab />}
         {active === 'loader'      && <LoaderFaviconTab />}
         {active === 'security'    && <SecurityTab />}
+        {active === 'custom-css'  && <CustomCssTab />}
       </div>
     </div>
   );

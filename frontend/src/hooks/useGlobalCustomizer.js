@@ -226,6 +226,7 @@ export function applyCustomizerSettings({
   'site-protection': protection = {},
   favicon       = {},
   'inner-hero': innerHero = {},
+  'global-settings': globalSettings = {},
 }) {
   // ── Content protection — each toggle is fully independent ───────────────────
   if (protection.frontendProtection) _initFrontendProtection();
@@ -442,6 +443,15 @@ export function applyCustomizerSettings({
     document.head.appendChild(styleEl);
   }
   styleEl.textContent = css;
+
+  // ── Custom CSS (injected after overrides so it can override anything) ────────
+  let customStyleEl = document.getElementById('gc-custom-css');
+  if (!customStyleEl) {
+    customStyleEl = document.createElement('style');
+    customStyleEl.id = 'gc-custom-css';
+    document.head.appendChild(customStyleEl);
+  }
+  customStyleEl.textContent = globalSettings.customCss || '';
 }
 
 const DEF_LOADER = {

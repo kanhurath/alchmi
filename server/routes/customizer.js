@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 // ── Sections & defaults ───────────────────────────────────────────────────────
-const SECTIONS = ['typography', 'colors', 'container', 'buttons', 'site-protection', 'header', 'footer', 'loader', 'favicon', 'admin-settings', 'inner-hero'];
+const SECTIONS = ['typography', 'colors', 'container', 'buttons', 'site-protection', 'header', 'footer', 'loader', 'favicon', 'admin-settings', 'inner-hero', 'global-settings'];
 
 const DEFAULTS = {
   typography: {
@@ -128,6 +128,9 @@ const DEFAULTS = {
     h1Color: '',     h1Size: '',     h1MobileSize: '',
     h1EmColor: '',   h1EmSize: '',   h1EmMobileSize: '',
     subColor: '',    subSize: '',    subMobileSize: '',
+  },
+  'global-settings': {
+    customCss: '',
   },
   'admin-settings': {
     logoUrl:          '',

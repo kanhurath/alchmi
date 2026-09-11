@@ -11,9 +11,12 @@
 const fs   = require('fs');
 const path = require('path');
 
-// Built frontend is deployed directly at public_html/ (index.html + assets/),
-// not public_html/frontend/dist — there is no frontend/dist on this server.
-const DIST_DIR  = path.join(__dirname, '..');
+// Local dev: built files land in alchmi-new/dist/ (vite outDir: '../dist').
+// Production: contents of dist/ are deployed directly to public_html/ (parent of server/).
+const _distLocal = path.join(__dirname, '..', 'dist');
+const DIST_DIR  = fs.existsSync(path.join(_distLocal, 'index.html'))
+  ? _distLocal
+  : path.join(__dirname, '..');
 const DIST_HTML = path.join(DIST_DIR, 'index.html');
 const _rawSiteUrl = process.env.SITE_URL || 'http://localhost:3001';
 if (_rawSiteUrl.includes('localhost') || _rawSiteUrl.includes('127.0.0.1')) {

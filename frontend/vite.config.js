@@ -136,12 +136,14 @@ function seoDevPlugin(apiBase) {
 
 // ── Vite config ───────────────────────────────────────────────────────────────
 export default defineConfig(({ mode }) => {
-  const env    = loadEnv(mode, process.cwd(), 'VITE_');
-  // In production mode, fall back to the live domain. In dev mode .env.development.local supplies localhost.
-  const apiBase = env.VITE_API_URL || (mode === 'production' ? 'http://localhost:3001/api' : 'http://localhost:3001/api');
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
 
-  // Derive the local Express origin for the dev proxy (strip /api suffix)
-  const localOrigin = apiBase.replace(/\/api$/, ''); // e.g. http://localhost:3001
+  // Production build uses VITE_API_URL from .env (https://alchmi.com/api).
+  // Dev mode uses .env.development.local (also https://alchmi.com/api after the prod switch).
+  const apiBase = env.VITE_API_URL || 'https://alchmi.com/api';
+
+  // Derive origin for the dev proxy (strip /api suffix)
+  const proxyTarget = apiBase.replace(/\/api$/, '');
 
   return {
     plugins: [
@@ -149,12 +151,33 @@ export default defineConfig(({ mode }) => {
       seoDevPlugin(apiBase),
     ],
     assetsInclude: ['**/*.pdf'],
-    // In dev, proxy /uploads/ and /api/ to the Express server so root-relative
-    // upload URLs work the same as in production (no VITE_SERVER_URL prefix needed).
+
+    // Output built files to alchmi-new/dist/ (sibling of frontend/ and server/).
+    // On production the contents of dist/ are deployed to public_html/.
+    build: {
+      outDir: '../dist',
+      emptyOutDir: true,
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
+              return 'vendor-react';
+            }
+            if (id.includes('node_modules/react-router-dom') || id.includes('node_modules/react-router/')) {
+              return 'vendor-router';
+            }
+          },
+        },
+      },
+    },
+
+    // In dev, proxy /uploads/ and /api/ to the configured API server so
+    // root-relative upload URLs work without hardcoding the origin.
     server: {
       proxy: {
-        '/uploads': { target: localOrigin, changeOrigin: true },
-        '/api':     { target: localOrigin, changeOrigin: true },
+        '/uploads': { target: proxyTarget, changeOrigin: true },
+        '/api':     { target: proxyTarget, changeOrigin: true },
       },
     },
   };

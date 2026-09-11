@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import * as api from '../../services/articlesApi';
-import ArticleRichEditor from './ArticleRichEditor';
+const ArticleRichEditor = lazy(() => import('./ArticleRichEditor'));
 import { SeoTab }          from './SeoTab';
 import { SiteBlocksTab }   from './SiteBlocksTab';
 import { SectionOrderTab } from './SectionOrderTab';
@@ -297,11 +297,13 @@ function ArticleEditor({ article, categories, onSave, onCancel }) {
             hint="Short summary shown in article listings. Can contain HTML." />
           <div className="adm-field">
             <label className="adm-label">Full Content</label>
-            <ArticleRichEditor
-              value={form.content}
-              onChange={(html) => setForm(f => ({ ...f, content: html }))}
-              uploadUrl={api.getInlineImageUploadUrl()}
-            />
+            <Suspense fallback={<div style={{ padding: '1rem', color: '#999', fontSize: '0.85rem' }}>Loading editor…</div>}>
+              <ArticleRichEditor
+                value={form.content}
+                onChange={(html) => setForm(f => ({ ...f, content: html }))}
+                uploadUrl={api.getInlineImageUploadUrl()}
+              />
+            </Suspense>
             <p className="adm-hint">
               Use the toolbar to format text, insert images, tables, videos, code blocks, and more.
               Switch to <strong>Source</strong> view to edit raw HTML directly.

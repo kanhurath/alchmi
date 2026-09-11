@@ -5,9 +5,13 @@ const fs = require('fs');
 require('dotenv').config();
 
 const { injectSeo } = require('./seoInjector');
-// Built frontend is deployed directly at public_html/ (index.html + assets/),
-// not public_html/frontend/dist — there is no frontend/dist on this server.
-const FRONTEND_DIST = path.join(__dirname, '..');
+// Local dev: built files land in alchmi-new/dist/ (vite outDir: '../dist').
+// Production: contents of dist/ are deployed directly to public_html/ (parent of server/).
+// Check for a local dist/index.html first so `node index.js` works for both.
+const _distLocal = path.join(__dirname, '..', 'dist');
+const FRONTEND_DIST = fs.existsSync(path.join(_distLocal, 'index.html'))
+  ? _distLocal
+  : path.join(__dirname, '..');
 
 const biographyRoutes = require('./routes/biography');
 const homeRoutes      = require('./routes/home');
