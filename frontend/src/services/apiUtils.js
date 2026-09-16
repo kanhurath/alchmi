@@ -11,7 +11,11 @@ export function authHeaders() {
  * Shared JSON response handler with error throwing.
  */
 export async function handleJson(res) {
-  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { const body = await res.json(); detail = body.error || body.message || detail; } catch (_) {}
+    throw new Error(`API ${res.status}: ${detail}`);
+  }
   return res.json();
 }
 

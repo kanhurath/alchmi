@@ -26,10 +26,24 @@ const STATIC_COLUMNS = [
 ];
 
 function NavLink({ link }) {
-  if (link.is_external) {
-    return <a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>;
+  let url = link.url || '/';
+  // If the URL is absolute but points to this same site, strip the origin
+  // so React Router can handle it as an internal <Link>.
+  if (url.startsWith('http')) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname === window.location.hostname) {
+        url = parsed.pathname + parsed.search + parsed.hash;
+      } else {
+        // Genuinely external — always open in new tab
+        return <a href={url} target="_blank" rel="noreferrer">{link.label}</a>;
+      }
+    } catch (_) { /* malformed URL — fall through */ }
   }
-  return <Link to={link.url}>{link.label}</Link>;
+  if (link.is_external) {
+    return <a href={url} target="_blank" rel="noreferrer">{link.label}</a>;
+  }
+  return <Link to={url}>{link.label}</Link>;
 }
 
 function Footer() {
@@ -46,10 +60,31 @@ function Footer() {
       .then(r => r.json())
       .then(data => {
         const tree = data.footer || [];
-        // Only use API data when it has the column structure (parent items with children).
-        // Flat items (no children) mean the admin hasn't set up columns yet — keep STATIC_COLUMNS.
+        if (!tree.length) return;
+
         const hasColumns = tree.some(i => i.children?.length > 0);
-        if (hasColumns) setColumns(tree);
+        if (hasColumns) {
+          // Admin set up a proper column/group structure — use it directly.
+          setColumns(tree);
+        } else {
+          // Admin has flat items (no column groups).
+          // Build a URL map keyed by normalised label so we can patch STATIC_COLUMNS
+          // with the correct URLs the admin configured, while keeping the 3-column layout.
+          const urlMap = {};
+          tree.forEach(item => {
+            const key = item.label.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+            urlMap[key] = { url: item.url, is_external: item.is_external };
+          });
+
+          const patched = STATIC_COLUMNS.map(col => ({
+            ...col,
+            children: col.children.map(child => {
+              const key = child.label.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+              return urlMap[key] ? { ...child, ...urlMap[key] } : child;
+            }),
+          }));
+          setColumns(patched);
+        }
       })
       .catch(() => {});
     fetch(`${API_ROOT}/customizer/footer`)

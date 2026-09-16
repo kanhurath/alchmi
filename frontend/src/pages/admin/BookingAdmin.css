@@ -1,0 +1,407 @@
+/* ── Booking Admin — extends the shared adm-* design system ──────────────── */
+
+.bka-root {
+  padding: 2rem 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 1100px;
+}
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+.bka-page-header { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.bka-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #d4670a;
+}
+
+.bka-page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #1a1208;
+  margin: 0;
+}
+
+.bka-page-desc {
+  font-size: 0.84rem;
+  color: #9a8e78;
+  margin: 0;
+  max-width: 580px;
+  line-height: 1.6;
+}
+
+/* ── Stats row ────────────────────────────────────────────────────────────── */
+.bka-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.bka-stat {
+  background: #fff;
+  border: 1px solid #e8e0d4;
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.bka-stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1208;
+  line-height: 1;
+}
+
+.bka-stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5a4e3a;
+}
+
+/* ── Tabs (matches bio-adm-tabs pattern) ─────────────────────────────────── */
+.bka-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e8e0d4;
+  background: transparent;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bka-tabs::-webkit-scrollbar { display: none; }
+
+.bka-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #9a8e78;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.13s, border-color 0.13s;
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+.bka-tab:hover  { color: #5a4e3a; }
+.bka-tab.active { color: #d4670a; border-bottom-color: #d4670a; }
+
+/* ── Tab content wrapper ──────────────────────────────────────────────────── */
+.bka-tab-content {
+  background: #fff;
+  border: 1px solid #e8e0d4;
+  border-radius: 10px;
+  padding: 1.75rem 2rem;
+}
+
+/* ── Section heading inside tab ──────────────────────────────────────────── */
+.bka-sub-heading {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f0ece4;
+}
+.bka-sub-heading h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a1208;
+  margin: 0 0 0.2rem;
+}
+.bka-sub-heading p {
+  font-size: 0.8rem;
+  color: #9a8e78;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── Toggle switch ────────────────────────────────────────────────────────── */
+.bka-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+}
+.bka-toggle-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5a4e3a;
+  font-family: inherit;
+}
+.bka-switch {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.bka-switch input { opacity: 0; width: 0; height: 0; }
+.bka-switch-slider {
+  position: absolute;
+  inset: 0;
+  background: #d8cfc0;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+.bka-switch-slider::before {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  left: 3px; bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+.bka-switch input:checked + .bka-switch-slider { background: #d4670a; }
+.bka-switch input:checked + .bka-switch-slider::before { transform: translateX(18px); }
+
+/* ── Save bar (reuse adm-save-bar but add error state) ───────────────────── */
+.bka-save-err {
+  font-size: 0.78rem;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+/* ── Durations table ──────────────────────────────────────────────────────── */
+.bka-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.bka-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #e8e0d4; }
+
+.bka-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.bka-table th {
+  background: #f5f0e8;
+  padding: 0.6rem 1rem;
+  text-align: left;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5a4e3a;
+  border-bottom: 1px solid #e8e0d4;
+  white-space: nowrap;
+}
+.bka-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  color: #1a1208;
+  border-bottom: 1px solid #f0ece4;
+  vertical-align: middle;
+}
+.bka-table tr:last-child td { border-bottom: none; }
+.bka-table tr:hover td { background: #fdf9f4; }
+
+.bka-table-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  color: #9a8e78;
+}
+
+.bka-cell-actions { display: flex; gap: 0.5rem; }
+
+/* ── Status badges ────────────────────────────────────────────────────────── */
+.bka-badge {
+  display: inline-block;
+  padding: 0.18rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: inherit;
+}
+.bka-badge-active    { background: #eef6f0; color: #2a6a3a; border: 1px solid #b8dfc4; }
+.bka-badge-inactive  { background: #f5f0e8; color: #9a8e78; border: 1px solid #e0d8cc; }
+.bka-badge-confirmed { background: #eef6f0; color: #2a6a3a; border: 1px solid #b8dfc4; }
+.bka-badge-pending   { background: #fff8e8; color: #8a5a00; border: 1px solid #f5d98b; }
+.bka-badge-cancelled { background: #fdf0ee; color: #a93226; border: 1px solid #f0b8b0; }
+.bka-badge-completed { background: #eef4fb; color: #1a5299; border: 1px solid #aacbee; }
+.bka-badge-paid      { background: #eef6f0; color: #2a6a3a; border: 1px solid #b8dfc4; }
+.bka-badge-failed    { background: #fdf0ee; color: #a93226; border: 1px solid #f0b8b0; }
+.bka-badge-refunded  { background: #eef4fb; color: #1a5299; border: 1px solid #aacbee; }
+
+/* ── Filter row ───────────────────────────────────────────────────────────── */
+.bka-filter-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.bka-filter-row select {
+  border: 1px solid #d8cfc0;
+  border-radius: 6px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  color: #1a1208;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+}
+.bka-filter-row select:focus { border-color: #d4670a; box-shadow: 0 0 0 3px rgba(212,103,10,0.1); }
+.bka-filter-count {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: #9a8e78;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ── Pagination ──────────────────────────────────────────────────────────── */
+.bka-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  font-size: 0.76rem;
+  color: #5a4e3a;
+  font-weight: 600;
+}
+
+/* ── Modal ───────────────────────────────────────────────────────────────── */
+.bka-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(26, 18, 8, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.bka-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 24px 64px rgba(26, 18, 8, 0.18);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.bka-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1a1208;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f0ece4;
+}
+
+.bka-modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0ece4;
+}
+
+/* ── Booking detail grid inside modal ────────────────────────────────────── */
+.bka-detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: #fdf9f4;
+  border: 1px solid #e8e0d4;
+  border-radius: 8px;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.bka-detail-row { display: flex; gap: 0.75rem; align-items: flex-start; }
+.bka-detail-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a8e78;
+  min-width: 110px;
+  padding-top: 0.1rem;
+  flex-shrink: 0;
+}
+.bka-detail-value {
+  font-size: 0.88rem;
+  color: #1a1208;
+  line-height: 1.4;
+}
+
+/* ── Security / info note ────────────────────────────────────────────────── */
+.bka-info-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #fff8e8;
+  border: 1px solid #f0d080;
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  color: #6a4800;
+  line-height: 1.55;
+  margin-bottom: 0.5rem;
+}
+.bka-info-note svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ── Password field wrapper ──────────────────────────────────────────────── */
+.bka-pw-wrap { position: relative; }
+.bka-pw-wrap .adm-input { padding-right: 3.5rem; }
+.bka-pw-toggle {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a8e78;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transition: color 0.13s;
+}
+.bka-pw-toggle:hover { color: #d4670a; }
+
+/* ── Spinner ─────────────────────────────────────────────────────────────── */
+.bka-loading {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  color: #9a8e78;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .bka-root { padding: 1.25rem 1rem 2.5rem; }
+  .bka-tab-content { padding: 1.25rem; }
+  .bka-stats { grid-template-columns: repeat(2, 1fr); }
+  .bka-modal { padding: 1.25rem 1.25rem; }
+}

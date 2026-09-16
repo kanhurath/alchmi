@@ -65,9 +65,11 @@ router.get('/', async (_req, res) => {
 // ── GET /api/custom-pages/by-slug/:slug — frontend fetch ─────────────────────
 router.get('/by-slug/:slug', async (req, res) => {
   try {
+    // Normalise: strip any leading slash the admin may have saved in the slug field
+    const slug = req.params.slug.replace(/^\/+/, '');
     const [[page]] = await db.query(
-      "SELECT * FROM custom_pages WHERE slug=? AND status='published'",
-      [req.params.slug]
+      "SELECT * FROM custom_pages WHERE (slug=? OR slug=?) AND status='published'",
+      [slug, '/' + slug]
     );
     if (!page) return res.status(404).json({ error: 'Page not found or not published' });
     const [blocks] = await db.query(

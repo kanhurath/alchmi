@@ -13,7 +13,9 @@ function DynamicPage() {
 
   useEffect(() => {
     setLoading(true); setNotFound(false);
-    getPageSlug(slug)
+    // Strip a leading slash in case the nav URL was saved as "/privacy" instead of "privacy"
+    const cleanSlug = slug.replace(/^\/+/, '');
+    getPageSlug(cleanSlug)
       .then(data => setPage(data))
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));

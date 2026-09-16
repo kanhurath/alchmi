@@ -23,6 +23,7 @@ import ServicesPage     from './pages/ServicesPage';
 import MethodologyPage  from './pages/MethodologyPage';
 import TeachingPage from './pages/TeachingPage';
 import TestimonialsPage from './pages/TestimonialsPage';
+import BookingPage from './pages/BookingPage';
 import AdminApp    from './pages/admin/AdminApp';
 import DynamicPage from './pages/DynamicPage';
 import PageLoader from './components/UI/PageLoader';
@@ -88,7 +89,8 @@ function SiteShell({ isLoading, loaderSettings }) {
         <Route path="/news"        element={<PageGate slug="news"><NewsPage /></PageGate>} />
         <Route path="/gallery"     element={<PageGate slug="gallery"><GalleryPage /></PageGate>} />
         <Route path="/workshops"   element={<PageGate slug="workshops"><WorkshopsPage /></PageGate>} />
-        <Route path="/testimonials" element={<PageGate slug="testimonials"><TestimonialsPage /></PageGate>} />
+        <Route path="/testimonials"  element={<PageGate slug="testimonials"><TestimonialsPage /></PageGate>} />
+        <Route path="/book-discovery" element={<PageGate slug="booking"><BookingPage /></PageGate>} />
         <Route path="/admin/*"     element={<AdminApp />} />
         <Route path="/:slug"       element={<DynamicPage />} />
       </Routes>

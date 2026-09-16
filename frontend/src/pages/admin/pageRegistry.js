@@ -121,6 +121,15 @@ export const ADMIN_PAGES = [
     sections:  ['Hero', 'Contact Form', 'Social Links'],
     desc:      'Contact form, social profiles, and booking links.',
   },
+  {
+    id:        'booking',
+    label:     'Discovery Session Booking',
+    frontPath: '/book-discovery',
+    adminPath: '/admin/booking',
+    status:    'active',
+    sections:  ['Page Settings', 'Session Durations', 'Bookings', 'Payment', 'Email'],
+    desc:      'End-to-end session booking with Razorpay payment, email notifications, and full booking management.',
+  },
 ];
 
 export const getPage     = (id) => ADMIN_PAGES.find(p => p.id === id);
