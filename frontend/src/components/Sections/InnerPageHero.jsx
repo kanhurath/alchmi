@@ -1,12 +1,19 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './InnerPageHero.css';
 
 function InnerPageHero({ eyebrow, title, titleEm, subtitle, breadcrumb }) {
+  // Signal to the Header that this page has a dark hero so nav links flip to white
+  useEffect(() => {
+    document.body.setAttribute('data-hero-theme', 'dark');
+    return () => document.body.removeAttribute('data-hero-theme');
+  }, []);
+
   return (
     <section className="inner-hero">
       <div className="hero-mandala" aria-hidden="true">
         <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" className="mandala-svg">
-          <g fill="none" stroke="rgba(139,46,51,0.22)" strokeWidth="0.8">
+          <g fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8">
             <circle cx="250" cy="250" r="240"/>
             <circle cx="250" cy="250" r="210"/>
             <circle cx="250" cy="250" r="180"/>
@@ -37,15 +44,15 @@ function InnerPageHero({ eyebrow, title, titleEm, subtitle, breadcrumb }) {
             <ellipse cx="250" cy="115" rx="10" ry="22" transform="rotate(225 250 250)"/>
             <ellipse cx="250" cy="115" rx="10" ry="22" transform="rotate(270 250 250)"/>
             <ellipse cx="250" cy="115" rx="10" ry="22" transform="rotate(315 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(0 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(45 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(90 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(135 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(180 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(225 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(270 250 250)"/>
-            <circle cx="250" cy="68" r="3" fill="rgba(139,46,51,0.3)" stroke="none" transform="rotate(315 250 250)"/>
-            <circle cx="250" cy="250" r="6" fill="rgba(139,46,51,0.35)" stroke="none"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(0 250 250)"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(45 250 250)"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(90 250 250)"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(135 250 250)"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(180 250 250)"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(225 250 250)"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(270 250 250)"/>
+            <circle cx="250" cy="68" r="3" fill="rgba(255,255,255,0.2)" stroke="none" transform="rotate(315 250 250)"/>
+            <circle cx="250" cy="250" r="6" fill="rgba(255,255,255,0.15)" stroke="none"/>
           </g>
         </svg>
       </div>

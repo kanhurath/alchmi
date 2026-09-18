@@ -1603,7 +1603,7 @@ function LoaderFaviconTab() {
 // ── INNER HERO TAB ────────────────────────────────────────────────────────────
 
 const DEF_INNER_HERO = {
-  bgColor: '', bgImage: '', mandalaImage: '', afterColor: '', afterImage: '',
+  bgColor: '#012e5e', bgImage: '', mandalaImage: '', afterColor: '', afterImage: '',
   eyebrowColor: '', eyebrowSize: '', eyebrowMobileSize: '',
   h1Color: '',     h1Size: '',     h1MobileSize: '',
   h1EmColor: '',   h1EmSize: '',   h1EmMobileSize: '',
@@ -1692,11 +1692,11 @@ function InnerHeroTab() {
       <div className="gc-section">
         <ColorSwatch
           label="Background Color"
-          value={form.bgColor || '#f3b33e'}
+          value={form.bgColor || '#012e5e'}
           onChange={v => set('bgColor', v)}
           onReset={() => set('bgColor', '')}
         />
-        <p className="gc-hint">Replaces the default saffron-to-orange gradient. Set a solid colour or leave empty to keep the gradient.</p>
+        <p className="gc-hint">Default is <code>#012e5e</code> (deep navy). Change to any solid colour, or leave empty to use the default navy gradient.</p>
       </div>
 
       <ImageUploadRow

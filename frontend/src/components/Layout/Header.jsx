@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { navigationLinks as staticLinks } from '../../data/contentConfig';
 import { useBookingModal } from '../../context/BookingModalContext';
+import { useCustomerAuth } from '../../context/CustomerAuthContext';
+import LoginModal from '../UI/LoginModal';
 import './Header.css';
 
 const API_ROOT = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
@@ -97,6 +99,9 @@ function Header() {
   }, []);
 
   const { openModal } = useBookingModal();
+  const { customer, logout } = useCustomerAuth();
+  const navigate = useNavigate();
+  const [loginOpen, setLoginOpen] = useState(false);
 
   const logoSrc = headerSettings.logoUrl
     ? (headerSettings.logoUrl.startsWith('http')
@@ -234,6 +239,28 @@ function Header() {
           ))}
 
           <div className="mm-cta-wrap">
+            {customer ? (
+              <>
+                <Link to="/my-profile" className="mmlink" onClick={closeMenu} style={{ fontSize: '0.75rem', letterSpacing: '0.15em' }}>
+                  My Profile
+                </Link>
+                <button
+                  className="mmlink"
+                  onClick={() => { closeMenu(); logout(); navigate('/'); }}
+                  style={{ fontSize: '0.75rem', letterSpacing: '0.15em', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', padding: '0.9rem 2rem', color: '#8a7d6b', fontFamily: 'Josefin Sans, sans-serif', textTransform: 'uppercase', width: '100%' }}
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                className="mobile-cta-btn"
+                style={{ background: 'none', border: '1px solid rgba(26,37,67,0.3)', color: '#1a2543', marginBottom: '0.75rem' }}
+                onClick={() => { closeMenu(); setLoginOpen(true); }}
+              >
+                Login
+              </button>
+            )}
             <button
               className="mobile-cta-btn"
               onClick={() => { closeMenu(); handleCta(); }}
@@ -302,6 +329,23 @@ function Header() {
           ))}
         </ul>
 
+        {customer ? (
+          <div className="nav-user-menu">
+            <button className="nav-login-btn" onClick={() => navigate('/my-profile')} title="My Profile">
+              <span className="nav-user-avatar">{customer.full_name?.[0]?.toUpperCase() || '?'}</span>
+            </button>
+            <div className="nav-user-dropdown">
+              <div className="nav-user-dropdown-inner">
+                <Link to="/my-profile" className="nav-user-dd-link">My Profile</Link>
+                <Link to="/my-profile" className="nav-user-dd-link">My Bookings</Link>
+                <button className="nav-user-dd-link nav-user-dd-logout" onClick={() => { logout(); navigate('/'); }}>Sign Out</button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <button className="nav-cta" onClick={() => setLoginOpen(true)}>Login</button>
+        )}
+
         <button className="nav-cta" onClick={handleCta}>
           {headerSettings.ctaText}
         </button>
@@ -317,6 +361,7 @@ function Header() {
           <span />
         </button>
       </nav>
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </>
   );
 }

@@ -1,5 +1,6 @@
 const express  = require('express');
 const crypto   = require('crypto');
+const bcrypt   = require('bcryptjs');
 const db       = require('../db');
 const { verifyToken } = require('../middleware/verifyToken');
 
@@ -122,6 +123,37 @@ async function sendBookingEmails(booking, { isUpdate = false } = {}) {
   }
 }
 
+async function createOrUpdateCustomer(name, email, phone) {
+  try {
+    const [existing] = await db.query('SELECT id FROM customers WHERE email=? LIMIT 1', [email]);
+    if (existing.length) {
+      // Update phone if provided and not already set
+      if (phone) {
+        await db.query('UPDATE customers SET phone=COALESCE(phone,?) WHERE id=?', [phone, existing[0].id]);
+      }
+      return;
+    }
+    // Generate a secure random password
+    const chars  = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$';
+    let plain = '';
+    for (let i = 0; i < 12; i++) plain += chars[crypto.randomInt(chars.length)];
+    const hash = await bcrypt.hash(plain, 12);
+    await db.query(
+      'INSERT INTO customers (email,phone,full_name,password_hash) VALUES (?,?,?,?)',
+      [email, phone || null, name, hash]
+    );
+    // Get the newly created customer to send credentials
+    const [rows] = await db.query('SELECT * FROM customers WHERE email=? LIMIT 1', [email]);
+    if (rows.length) {
+      // Lazy-load to avoid circular deps
+      const { sendCredentialsEmail } = require('./customers');
+      await sendCredentialsEmail(rows[0], plain);
+    }
+  } catch (err) {
+    console.error('[create-customer]', err.message);
+  }
+}
+
 // ── Public endpoints ──────────────────────────────────────────────────────────
 
 // Full availability snapshot: active time slots + open days + blocked dates
@@ -233,7 +265,10 @@ router.post('/verify-payment', async (req, res) => {
 
     const [rows] = await db.query('SELECT * FROM bookings WHERE payment_order_id=? LIMIT 1', [razorpay_order_id]);
     const booking = rows[0];
-    if (booking) await sendBookingEmails(booking);
+    if (booking) {
+      await sendBookingEmails(booking);
+      await createOrUpdateCustomer(booking.customer_name, booking.customer_email, booking.customer_phone);
+    }
 
     res.json({ success: true, booking_ref: booking?.booking_ref });
   } catch (err) {
@@ -315,6 +350,7 @@ router.post('/manual', async (req, res) => {
     );
 
     const [rows] = await db.query('SELECT * FROM bookings WHERE booking_ref=? LIMIT 1', [ref]);
+    await createOrUpdateCustomer(customer_name, customer_email, customer_phone);
     res.json(rows[0]);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

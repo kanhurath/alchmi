@@ -25,6 +25,7 @@ import ServicesAdmin          from './ServicesAdmin.jsx';
 import MethodologyAdmin       from './MethodologyAdmin.jsx';
 import WebsiteSettingsAdmin   from './WebsiteSettingsAdmin.jsx';
 import BookingAdmin           from './BookingAdmin.jsx';
+import CustomersAdmin         from './CustomersAdmin.jsx';
 
 /**
  * Self-contained admin sub-application mounted at /admin/* in the main Router.
@@ -65,6 +66,7 @@ function AdminApp() {
             <Route path="customizer"         element={<GlobalCustomizerAdmin />} />
             <Route path="website-settings"   element={<WebsiteSettingsAdmin />} />
             <Route path="booking"            element={<BookingAdmin />} />
+            <Route path="customers"          element={<CustomersAdmin />} />
           </Route>
         </Route>
 

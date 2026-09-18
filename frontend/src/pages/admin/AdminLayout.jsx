@@ -54,6 +54,7 @@ function AdminLayout() {
       : pathname.includes('builder')        ? 'Page Builder'
       : pathname.includes('navigation')     ? 'Navigation'
       : pathname.includes('users')          ? 'Users'
+      : pathname.includes('customers')      ? 'Customers'
       : pathname.includes('dashboard')      ? 'Dashboard'
       : ADMIN_PAGES.find(p => pathname.startsWith(p.adminPath))?.label || 'Admin';
     document.title = `${pageName} — ${siteName} CMS`;
@@ -164,6 +165,16 @@ function AdminLayout() {
               Users
             </NavLink>
           )}
+
+          {/* Customers */}
+          <NavLink
+            to="/admin/customers"
+            className={({ isActive }) => `adm-nav-item${isActive ? ' active' : ''}`}
+            onClick={() => setSidebarOpen(false)}
+          >
+            <span className="adm-nav-icon">♟</span>
+            Customers
+          </NavLink>
 
           {/* Pages section */}
           <div className="adm-nav-group">

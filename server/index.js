@@ -37,6 +37,8 @@ const sectionStylesRoutes = require('./routes/sectionStyles');
 const servicesRoutes      = require('./routes/services');
 const methodologyRoutes   = require('./routes/methodology');
 const bookingRoutes       = require('./routes/booking');
+const { router: customerAuthRoutes } = require('./routes/customerAuth');
+const { router: customersRoutes }    = require('./routes/customers');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -116,6 +118,8 @@ app.use('/api/section-styles',  sectionStylesRoutes);
 app.use('/api/services',        servicesRoutes);
 app.use('/api/methodology',     methodologyRoutes);
 app.use('/api/booking',         bookingRoutes);
+app.use('/api/customer-auth',   customerAuthRoutes);
+app.use('/api/customers',       customersRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));

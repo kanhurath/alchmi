@@ -124,7 +124,7 @@ const DEFAULTS = {
     faviconUrl: '',
   },
   'inner-hero': {
-    bgColor: '', bgImage: '', mandalaImage: '', afterColor: '', afterImage: '',
+    bgColor: '#012e5e', bgImage: '', mandalaImage: '', afterColor: '', afterImage: '',
     eyebrowColor: '', eyebrowSize: '', eyebrowMobileSize: '',
     h1Color: '',     h1Size: '',     h1MobileSize: '',
     h1EmColor: '',   h1EmSize: '',   h1EmMobileSize: '',

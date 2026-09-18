@@ -1,0 +1,356 @@
+/* ── Customer Profile — Hero Banner ────────────────────────────────────────────
+   The .inner-hero class (from InnerPageHero.css, imported above) drives all
+   background, typography, spacing, and decoration. Changes in Admin → Customizer
+   → Inner Pages → Inner Hero automatically flow through to this section.
+   Only the upload button and responsive override are defined here.
+── */
+
+/* Banner upload button */
+.cp-hero-upload-btn {
+  position: absolute;
+  bottom: 1.4rem;
+  right: 1.8rem;
+  z-index: 2;
+  background: rgba(26, 18, 8, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.88);
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.45rem 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.cp-hero-upload-btn:hover {
+  background: rgba(184, 146, 42, 0.75);
+  border-color: #e8c96d;
+  color: #fff;
+}
+
+/* ── Page content area ── */
+.cp-page {
+  padding: 3rem 2rem 4rem;
+  background: var(--parchment, #f5f0e8);
+}
+
+.cp-loading {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cp-spinner {
+  display: inline-block;
+  width: 32px; height: 32px;
+  border: 3px solid #e8c96d;
+  border-top-color: #b8922a;
+  border-radius: 50%;
+  animation: cp-spin 0.8s linear infinite;
+}
+@keyframes cp-spin { to { transform: rotate(360deg); } }
+
+.cp-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ── Sidebar ── */
+.cp-sidebar {
+  background: #fff;
+  border: 1px solid #e8c96d;
+  border-radius: 3px;
+  padding: 2rem 1.5rem;
+  position: sticky;
+  top: 90px;
+}
+
+.cp-avatar-wrap { text-align: center; margin-bottom: 1.2rem; }
+
+.cp-avatar {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: #e8c96d;
+  margin: 0 auto 0.4rem;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border: 3px solid #b8922a;
+}
+.cp-avatar-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.cp-avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1208;
+}
+.cp-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 18, 8, 0.45);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cp-avatar:hover .cp-avatar-overlay { opacity: 1; }
+
+.cp-avatar-hint {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: #aaa098;
+  margin: 0;
+}
+
+.cp-user-info {
+  text-align: center;
+  border-bottom: 1px solid #f0e6cc;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.cp-user-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1208;
+  margin: 0 0 0.25rem;
+}
+.cp-user-email,
+.cp-user-company {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  color: #8a7d6b;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.cp-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+.cp-tab {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7d6b;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s;
+}
+.cp-tab:hover  { background: #fdf6e3; color: #1a1208; }
+.cp-tab.active { background: #fdf6e3; color: #b8922a; font-weight: 600; }
+
+.cp-logout {
+  width: 100%;
+  padding: 0.55rem;
+  background: none;
+  border: 1px solid #d4c4a0;
+  border-radius: 2px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a7d6b;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.cp-logout:hover { border-color: #c0392b; color: #c0392b; }
+
+/* ── Main Panel ── */
+.cp-main {
+  background: #fff;
+  border: 1px solid #e8c96d;
+  border-radius: 3px;
+  padding: 2rem 2.2rem;
+}
+
+.cp-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1208;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0e6cc;
+}
+
+.cp-form { display: flex; flex-direction: column; gap: 0; }
+
+.cp-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.cp-grid-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cp-field { display: flex; flex-direction: column; gap: 0.3rem; }
+.cp-span-2 { grid-column: span 2; }
+
+.cp-field label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.63rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7d6b;
+}
+.cp-req { color: #c0392b; }
+
+.cp-field input,
+.cp-field select,
+.cp-field textarea {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d4c4a0;
+  border-radius: 2px;
+  background: #fff;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: #1a1208;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cp-field input:focus,
+.cp-field select:focus,
+.cp-field textarea:focus { border-color: #b8922a; }
+
+.cp-readonly { background: #fafaf7 !important; color: #8a7d6b !important; cursor: not-allowed; }
+
+.cp-msg {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+  background: rgba(39, 174, 96, 0.08);
+  border-left: 3px solid #27ae60;
+  color: #1a6e3c;
+}
+.cp-msg-err {
+  background: rgba(192, 57, 43, 0.07);
+  border-left-color: #c0392b;
+  color: #8b1a1a;
+}
+
+.cp-save-btn {
+  align-self: flex-start;
+  padding: 0.7rem 2rem;
+  background: #b8922a;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cp-save-btn:hover:not(:disabled) { background: #9a7a22; }
+.cp-save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Bookings ── */
+.cp-loading-text,
+.cp-empty {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem;
+  color: #8a7d6b;
+  letter-spacing: 0.05em;
+}
+
+.cp-booking-card {
+  border: 1px solid #e8c96d;
+  border-radius: 3px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1rem;
+  background: #fffdf6;
+}
+.cp-bk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.cp-bk-ref {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: #1a1208;
+}
+.cp-bk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.6rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.cp-bk-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  color: #1a1208;
+}
+.cp-bk-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7d6b;
+}
+.cp-bk-notes {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  color: #5a4e40;
+  margin: 0.4rem 0 0;
+}
+.cp-bk-date {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  color: #aaa098;
+  margin: 0.5rem 0 0;
+  letter-spacing: 0.08em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .cp-container { grid-template-columns: 1fr; }
+  .cp-sidebar { position: static; }
+  .cp-grid-2 { grid-template-columns: 1fr; }
+  .cp-span-2 { grid-column: span 1; }
+  .cp-page { padding: 2rem 1rem 3rem; }
+  .cp-hero-upload-btn { bottom: 1rem; right: 1rem; }
+}

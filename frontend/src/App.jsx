@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { BookingModalProvider } from './context/BookingModalContext';
+import { CustomerAuthProvider } from './context/CustomerAuthContext';
 import { PageStatusProvider, usePageStatuses } from './context/PageStatusContext';
 import { SectionStylesProvider } from './context/SectionStylesContext';
 import { useGlobalCustomizer } from './hooks/useGlobalCustomizer';
@@ -24,6 +25,7 @@ import MethodologyPage  from './pages/MethodologyPage';
 import TeachingPage from './pages/TeachingPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import BookingPage from './pages/BookingPage';
+import CustomerProfile from './pages/CustomerProfile';
 import AdminApp    from './pages/admin/AdminApp';
 import DynamicPage from './pages/DynamicPage';
 import PageLoader from './components/UI/PageLoader';
@@ -91,6 +93,7 @@ function SiteShell({ isLoading, loaderSettings }) {
         <Route path="/workshops"   element={<PageGate slug="workshops"><WorkshopsPage /></PageGate>} />
         <Route path="/testimonials"  element={<PageGate slug="testimonials"><TestimonialsPage /></PageGate>} />
         <Route path="/book-discovery" element={<PageGate slug="booking"><BookingPage /></PageGate>} />
+        <Route path="/my-profile"    element={<CustomerProfile />} />
         <Route path="/admin/*"     element={<AdminApp />} />
         <Route path="/:slug"       element={<DynamicPage />} />
       </Routes>
@@ -111,13 +114,15 @@ function App() {
 
   return (
     <SectionStylesProvider>
-      <BookingModalProvider>
-        <PageStatusProvider>
-          <Router>
-            <SiteShell isLoading={isLoading} loaderSettings={loaderSettings} />
-          </Router>
-        </PageStatusProvider>
-      </BookingModalProvider>
+      <CustomerAuthProvider>
+        <BookingModalProvider>
+          <PageStatusProvider>
+            <Router>
+              <SiteShell isLoading={isLoading} loaderSettings={loaderSettings} />
+            </Router>
+          </PageStatusProvider>
+        </BookingModalProvider>
+      </CustomerAuthProvider>
     </SectionStylesProvider>
   );
 }

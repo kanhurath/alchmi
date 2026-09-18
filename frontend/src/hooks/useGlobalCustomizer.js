@@ -404,11 +404,12 @@ export function applyCustomizerSettings({
   const SERVER_ORIGIN = (import.meta.env.VITE_API_URL || 'http://localhost:3001/api').replace('/api', '');
   const ihUrl = (u) => u ? (u.startsWith('http') ? u : `${SERVER_ORIGIN}${u}`) : null;
 
+  // Always apply bg when either field is set (bgColor has a non-empty default of #012e5e)
   if (innerHero.bgColor || innerHero.bgImage) {
     const bgParts = [];
     if (innerHero.bgImage) bgParts.push(`url('${ihUrl(innerHero.bgImage)}')`);
-    if (innerHero.bgColor) bgParts.push(innerHero.bgColor);
-    else if (innerHero.bgImage) bgParts.push('linear-gradient(175deg,#f3b33e 0%,#de7336 100%)');
+    const bg = innerHero.bgColor || 'linear-gradient(160deg,#012e5e 0%,#01224a 100%)';
+    bgParts.push(bg);
     css += `.inner-hero { background: ${bgParts.join(', ')} !important; background-size: cover !important; background-position: center !important; }\n`;
   }
   if (innerHero.afterColor) {
