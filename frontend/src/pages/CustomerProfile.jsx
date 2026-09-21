@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
 import '../components/Sections/InnerPageHero.css';
 import './CustomerProfile.css';
@@ -17,8 +17,13 @@ function resolveUrl(path) {
 export default function CustomerProfile() {
   const { customer, loading, logout, refreshProfile, getToken } = useCustomerAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [tab, setTab]           = useState('profile');
+  const VALID_TABS = ['profile', 'bookings', 'security'];
+  const [tab, setTab] = useState(() => {
+    const t = searchParams.get('tab');
+    return VALID_TABS.includes(t) ? t : 'profile';
+  });
   const [form, setForm]         = useState({});
   const [saving, setSaving]     = useState(false);
   const [saveMsg, setSaveMsg]   = useState('');
@@ -35,6 +40,12 @@ export default function CustomerProfile() {
   useEffect(() => {
     if (!loading && !customer) navigate('/');
   }, [loading, customer, navigate]);
+
+  // Sync tab when URL search param changes (e.g. navigating from header dropdown while already on this page)
+  useEffect(() => {
+    const t = searchParams.get('tab');
+    setTab(VALID_TABS.includes(t) ? t : 'profile');
+  }, [searchParams]);
 
   // Signal to Header that this page has a dark inner hero — nav links flip to white
   useEffect(() => {

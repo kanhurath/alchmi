@@ -143,7 +143,7 @@ body[data-hero-theme="dark"] .navbar:not(.scrolled) .nav-user-menu .nav-login-bt
 }
 .nav-login-btn:hover { border-color: #b8922a; color: #b8922a; }
 .navbar.scrolled .nav-login-btn { color: #1a1208; border-color: rgba(26, 18, 8, 0.4); }
-.navbar.scrolled .nav-login-btn:hover { border-color: #b8922a; color: #b8922a; }
+.navbar.scrolled .nav-login-btn:hover { color: #ffffff; }
 
 /* ── USER MENU (logged in) ── */
 .nav-user-menu {

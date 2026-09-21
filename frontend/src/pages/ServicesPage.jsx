@@ -72,7 +72,7 @@ const SECTION_DEF = {
   cta: {
     eyebrow: 'Not sure where to start?',
     heading: 'Tell us the problem. We will design the engagement.',
-    btn1_text: 'Book a Discovery Session', btn1_link: '/connect',
+    btn1_text: 'Book a Discovery Session', btn1_link: '/book-discovery',
     btn2_text: 'Sign up for a 3C Analysis', btn2_link: '/connect',
   },
 };
@@ -395,7 +395,7 @@ function CtaBand({ data }) {
       <Eyebrow text={data.eyebrow} center />
       <h2 className="svc-cta-heading">{data.heading}</h2>
       <div className="svc-cta-buttons">
-        <Link to={data.btn1_link || '/connect'} className="svc-btn svc-btn-primary">
+        <Link to={data.btn1_link || '/book-discovery'} className="svc-btn svc-btn-primary">
           {data.btn1_text}
         </Link>
         <Link to={data.btn2_link || '/connect'} className="svc-btn svc-btn-outline">

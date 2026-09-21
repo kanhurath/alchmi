@@ -161,7 +161,7 @@ const SECTION_DEFAULTS = {
     eyebrow:   'Not sure where to start?',
     heading:   'Tell us the problem. We will design the engagement.',
     btn1_text: 'Book a Discovery Session',
-    btn1_link: '/connect',
+    btn1_link: '/book-discovery',
     btn2_text: 'Sign up for a 3C Analysis',
     btn2_link: '/connect',
   },

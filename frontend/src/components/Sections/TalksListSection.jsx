@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useBookingModal } from '../../context/BookingModalContext';
 import { STATIC_THUMB_MAP } from '../../pages/TalksPage';
 import { uploadUrl } from '../../services/apiUtils';
 import './TalksListSection.css';
@@ -24,8 +23,6 @@ function TalksListSection({ videos = [], sidebar = {} }) {
   const [active,      setActive]      = useState('All');
   const [activeVideo, setActiveVideo] = useState(null);
   const mainRef = useRef(null);
-  const { openModal } = useBookingModal();
-
   // Derive unique filter types from the live video list
   const filterTypes = ['All', ...Array.from(new Set(
     videos.map(v => v.type?.trim()).filter(Boolean)
@@ -168,9 +165,9 @@ function TalksListSection({ videos = [], sidebar = {} }) {
           <div className="sidebar-block sidebar-invite reveal reveal-delay-2">
             <div className="sidebar-title">{sidebar.invite_title || 'Invite Vinay'}</div>
             <p>{sidebar.invite_text || 'Vinay speaks on IKS, Dharmic leadership, education, and civilizational futures.'}</p>
-            <button className="sidebar-btn" onClick={openModal}>
+            <Link to="/book-discovery" className="sidebar-btn">
               {sidebar.invite_btn_label || 'Book a Session'}
-            </button>
+            </Link>
             <Link to="/connect" className="sidebar-btn outline">Send an Enquiry</Link>
           </div>
         </aside>

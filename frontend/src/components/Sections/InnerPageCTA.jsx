@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useBookingModal } from '../../context/BookingModalContext';
 import './InnerPageCTA.css';
 
@@ -8,7 +9,7 @@ function InnerPageCTA() {
       <h2>Begin a <em>Conversation</em></h2>
       <p>Explore a collaboration, commission a workshop, or simply reach out.</p>
       <div className="cta-btns">
-        <button className="btn-light" onClick={openModal}>Book a Session</button>
+        <Link to="/book-discovery" className="btn-light">Book a Session</Link>
         <button className="btn-outline-light" onClick={openModal}>Send a Message</button>
       </div>
     </section>

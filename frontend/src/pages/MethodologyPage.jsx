@@ -66,7 +66,7 @@ const EXPLAINER_DEF = {
 const CTA_DEF = {
   heading: 'Learn to be a Dharmic leader.',
   desc: 'Bring these frameworks into your organization through coaching, programs, workshops, and retreats.',
-  btn1_text: 'Book a Discovery Session', btn1_link: '/connect',
+  btn1_text: 'Book a Discovery Session', btn1_link: '/book-discovery',
   btn2_text: 'See the Services',         btn2_link: '/services',
 };
 
@@ -242,7 +242,7 @@ function CtaBand({ data }) {
       {data.desc     && <p  className="mth-cta-desc">{data.desc}</p>}
       <div className="mth-cta-buttons">
         {data.btn1_text && (
-          <Link to={data.btn1_link || '/connect'} className="mth-btn mth-btn-primary">
+          <Link to={data.btn1_link || '/book-discovery'} className="mth-btn mth-btn-primary">
             {data.btn1_text}
           </Link>
         )}

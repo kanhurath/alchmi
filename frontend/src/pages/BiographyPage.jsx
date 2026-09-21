@@ -1,4 +1,5 @@
 import { useState, useEffect, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { useReveal } from '../hooks/useReveal';
 import { useBookingModal } from '../context/BookingModalContext';
 import InnerPageHero from '../components/Sections/InnerPageHero';
@@ -137,7 +138,7 @@ function BiographyPage() {
           <div className="bio-socials reveal">
             {profile.linkedin_url && <a href={profile.linkedin_url} className="bio-social-link" target="_blank" rel="noreferrer">in LinkedIn</a>}
             {profile.twitter_url  && <a href={profile.twitter_url}  className="bio-social-link" target="_blank" rel="noreferrer">𝕏 {profile.twitter_handle}</a>}
-            <button className="bio-social-link primary" onClick={openModal}>◎ Book a Session</button>
+            <Link to="/book-discovery" className="bio-social-link primary">◎ Book a Session</Link>
           </div>
         </div>
       </section>

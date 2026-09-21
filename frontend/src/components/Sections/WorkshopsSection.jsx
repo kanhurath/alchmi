@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useBookingModal } from '../../context/BookingModalContext';
 import './WorkshopsSection.css';
 
 const stagger = (i) => ['', ' reveal-delay-1', ' reveal-delay-2'][i % 3];
@@ -13,7 +12,6 @@ function WorkshopsSection({
   testimonials = [],
 }) {
   const [activeFilter, setActiveFilter] = useState('all');
-  const { openModal } = useBookingModal();
 
   const visibleCards = activeFilter === 'all'
     ? cards
@@ -38,9 +36,9 @@ function WorkshopsSection({
           </h2>
           <p className="ws-page-intro-desc">{intro.description}</p>
         </div>
-        <button className="ws-enquire-btn" onClick={openModal}>
+        <Link to="/book-discovery" className="ws-enquire-btn">
           {intro.btn_label || 'Book a Session'}
-        </button>
+        </Link>
       </div>
 
       {/* ── FILTER STRIP ── */}

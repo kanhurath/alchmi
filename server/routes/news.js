@@ -277,22 +277,6 @@ async function ensureTables() {
     }
   }
 
-  // Seed news/navigation entry
-  try {
-    const [[evtNav]] = await db.execute(
-      "SELECT sort_order FROM nav_items WHERE menu='header' AND url='/events' LIMIT 1"
-    );
-    const [[newsNav]] = await db.execute(
-      "SELECT id FROM nav_items WHERE menu='header' AND url='/news' LIMIT 1"
-    );
-    if (!newsNav) {
-      const nextOrder = evtNav ? evtNav.sort_order + 1 : 50;
-      await db.execute(
-        "INSERT INTO nav_items (menu, label, url, is_external, parent_id, sort_order) VALUES ('header','News','/news',0,NULL,?)",
-        [nextOrder]
-      );
-    }
-  } catch (_) { /* nav_items table might not exist — skip */ }
 }
 
 ensureTables().catch(e => console.error('[news] table init failed:', e.message));

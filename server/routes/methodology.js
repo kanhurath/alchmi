@@ -139,7 +139,7 @@ const CONTENT_DEFAULTS = {
     heading:   'Learn to be a Dharmic leader.',
     desc:      'Bring these frameworks into your organization through coaching, programs, workshops, and retreats.',
     btn1_text: 'Book a Discovery Session',
-    btn1_link: '/connect',
+    btn1_link: '/book-discovery',
     btn2_text: 'See the Services',
     btn2_link: '/services',
   },

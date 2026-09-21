@@ -1,10 +1,9 @@
-import { useBookingModal } from '../../context/BookingModalContext';
+import { Link } from 'react-router-dom';
 import ContactForm from '../UI/ContactForm';
 import { useSectionStyle, buildSectionCss } from '../../context/SectionStylesContext';
 import './ConnectSection.css';
 
 function ConnectSection({ connect }) {
-  const { openModal } = useBookingModal();
   const ss = useSectionStyle('home:connect');
   const { style: sectionStyle, css: sectionCss } = buildSectionCss(ss, 'connect-section');
   const desc  = connect?.description || '';
@@ -19,10 +18,10 @@ function ConnectSection({ connect }) {
         <h2 className="section-title">Begin a <em style={{ color: '#f3b33e' }}>Conversation</em></h2>
         <p className="connect-desc">{desc}</p>
         <div className="connect-links">
-          <button className="connect-link connect-link-btn" onClick={openModal}>
+          <Link to="/book-discovery" className="connect-link connect-link-btn">
             <span className="link-icon">◎</span>
             Book a Session
-          </button>
+          </Link>
           {links.map(link => (
             <a key={link.id || link.href} href={link.href} className="connect-link" target="_blank" rel="noreferrer">
               <span className="link-icon">{link.icon}</span>

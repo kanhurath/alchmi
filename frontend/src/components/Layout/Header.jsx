@@ -16,7 +16,7 @@ function Header() {
   const [closedDropdown, setClosedDropdown] = useState(null);
   const [navigationLinks, setNavigationLinks] = useState(staticLinks);
   const [headerSettings, setHeaderSettings] = useState({
-    logoUrl: '', logoWidth: '', logoHeight: '60', logoAlt: 'Vinay Kulkarni', tagline: 'Dharayati Iti Dharmaha', ctaText: 'Book a Session', ctaAction: 'modal', ctaLink: '',
+    logoUrl: '', logoWidth: '', logoHeight: '60', logoAlt: 'Vinay Kulkarni', tagline: 'Dharayati Iti Dharmaha', ctaText: 'Book a Session', ctaAction: 'url', ctaLink: '/book-discovery',
     navFontColor: '', navHoverColor: '', navActiveBarColor: '', navActiveBarHeight: '',
     stickyBg: '', stickyFontColor: '', stickyHoverColor: '',
     ctaBg: '', ctaBorder: '', ctaTextColor: '',
@@ -114,10 +114,10 @@ function Header() {
       if (headerSettings.ctaLink.startsWith('http')) {
         window.open(headerSettings.ctaLink, '_blank', 'noreferrer');
       } else {
-        window.location.href = headerSettings.ctaLink;
+        navigate(headerSettings.ctaLink);
       }
     } else {
-      openModal();
+      navigate('/book-discovery');
     }
   };
 
@@ -244,6 +244,9 @@ function Header() {
                 <Link to="/my-profile" className="mmlink" onClick={closeMenu} style={{ fontSize: '0.75rem', letterSpacing: '0.15em' }}>
                   My Profile
                 </Link>
+                <Link to="/my-profile?tab=bookings" className="mmlink" onClick={closeMenu} style={{ fontSize: '0.75rem', letterSpacing: '0.15em' }}>
+                  My Bookings
+                </Link>
                 <button
                   className="mmlink"
                   onClick={() => { closeMenu(); logout(); navigate('/'); }}
@@ -331,13 +334,13 @@ function Header() {
 
         {customer ? (
           <div className="nav-user-menu">
-            <button className="nav-login-btn" onClick={() => navigate('/my-profile')} title="My Profile">
+            <button className="nav-login-btn" title="My Profile">
               <span className="nav-user-avatar">{customer.full_name?.[0]?.toUpperCase() || '?'}</span>
             </button>
             <div className="nav-user-dropdown">
               <div className="nav-user-dropdown-inner">
                 <Link to="/my-profile" className="nav-user-dd-link">My Profile</Link>
-                <Link to="/my-profile" className="nav-user-dd-link">My Bookings</Link>
+                <Link to="/my-profile?tab=bookings" className="nav-user-dd-link">My Bookings</Link>
                 <button className="nav-user-dd-link nav-user-dd-logout" onClick={() => { logout(); navigate('/'); }}>Sign Out</button>
               </div>
             </div>

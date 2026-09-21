@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 
 // ─────────────────────────────────────────────────────────────
 //  DATA
@@ -163,10 +164,9 @@ function Nav() {
             </li>
           ))}
           <li>
-            <a href="https://vkulkarni-alchmi6.zohobookings.in/#/254745000000053002"
-               className="nav-cta" target="_blank" rel="noopener noreferrer" onClick={close}>
+            <Link to="/book-discovery" className="nav-cta" onClick={close}>
               Book a Session
-            </a>
+            </Link>
           </li>
         </ul>
 
