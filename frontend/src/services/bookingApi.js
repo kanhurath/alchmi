@@ -139,3 +139,10 @@ export const deleteBooking = (id) =>
 
 export const getAdminStats = () =>
   fetch(`${BASE}/admin/stats`, { headers: authHeaders() }).then(handleJson);
+
+export const getBizTypes        = ()         => fetch(`${BASE}/biz-types`).then(handleJson);
+export const getAdminBizTypes   = ()         => fetch(`${BASE}/admin/biz-types`,         { headers: authHeaders() }).then(handleJson);
+export const createBizType      = (data)     => fetch(`${BASE}/admin/biz-types`,         { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeaders() }, body: JSON.stringify(data) }).then(handleJson);
+export const updateBizType      = (id, data) => fetch(`${BASE}/admin/biz-types/${id}`,   { method: 'PUT',  headers: { 'Content-Type': 'application/json', ...authHeaders() }, body: JSON.stringify(data) }).then(handleJson);
+export const deleteBizType      = (id)       => fetch(`${BASE}/admin/biz-types/${id}`,   { method: 'DELETE', headers: authHeaders() }).then(handleJson);
+export const reorderBizTypes    = (items)    => fetch(`${BASE}/admin/biz-types/reorder`, { method: 'PUT',  headers: { 'Content-Type': 'application/json', ...authHeaders() }, body: JSON.stringify(items) }).then(handleJson);

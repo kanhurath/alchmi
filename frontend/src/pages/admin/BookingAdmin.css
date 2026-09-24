@@ -68,41 +68,58 @@
   color: #5a4e3a;
 }
 
-/* ── Tabs (matches bio-adm-tabs pattern) ─────────────────────────────────── */
+/* ── Vertical tab panel ───────────────────────────────────────────────────── */
+.bka-panel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  border: 1px solid #e8e0d4;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+/* ── Sidebar nav ──────────────────────────────────────────────────────────── */
 .bka-tabs {
   display: flex;
-  gap: 0;
-  border-bottom: 1px solid #e8e0d4;
-  background: transparent;
-  overflow-x: auto;
-  scrollbar-width: none;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 192px;
+  border-right: 1px solid #e8e0d4;
+  background: #fdf9f4;
+  padding: 0.5rem 0;
 }
-.bka-tabs::-webkit-scrollbar { display: none; }
 
 .bka-tab {
+  display: block;
+  width: 100%;
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
-  padding: 0.65rem 1.25rem;
-  font-size: 0.76rem;
+  border-left: 3px solid transparent;
+  padding: 0.72rem 1.25rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: #9a8e78;
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.13s, border-color 0.13s;
-  margin-bottom: -1px;
+  text-align: left;
+  transition: color 0.13s, background 0.13s, border-color 0.13s;
   white-space: nowrap;
+  line-height: 1.4;
 }
-.bka-tab:hover  { color: #5a4e3a; }
-.bka-tab.active { color: #d4670a; border-bottom-color: #d4670a; }
+.bka-tab:hover  { color: #5a4e3a; background: #f5ede0; }
+.bka-tab.active {
+  color: #d4670a;
+  border-left-color: #d4670a;
+  background: #fff;
+}
 
 /* ── Tab content wrapper ──────────────────────────────────────────────────── */
 .bka-tab-content {
-  background: #fff;
-  border: 1px solid #e8e0d4;
-  border-radius: 10px;
+  flex: 1;
+  min-width: 0;
   padding: 1.75rem 2rem;
 }
 
@@ -401,7 +418,31 @@
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .bka-root { padding: 1.25rem 1rem 2.5rem; }
-  .bka-tab-content { padding: 1.25rem; }
   .bka-stats { grid-template-columns: repeat(2, 1fr); }
   .bka-modal { padding: 1.25rem 1.25rem; }
+
+  /* Stack sidebar above content on small screens */
+  .bka-panel { flex-direction: column; }
+  .bka-tabs {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid #e8e0d4;
+    padding: 0.25rem 0.5rem;
+    gap: 0;
+  }
+  .bka-tab {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+  .bka-tab.active {
+    border-left: none;
+    border-bottom-color: #d4670a;
+    background: transparent;
+  }
+  .bka-tab-content { padding: 1.25rem; }
 }

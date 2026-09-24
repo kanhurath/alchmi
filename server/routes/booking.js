@@ -6,19 +6,65 @@ const { verifyToken } = require('../middleware/verifyToken');
 
 const router = express.Router();
 
-// ── Startup: ensure bookings table has all expected columns ───────────────────
+// ── Startup: ensure tables have all expected columns ─────────────────────────
+async function ensureColumn(table, column, definition) {
+  const [rows] = await db.query(
+    `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
+    [table, column]
+  );
+  if (!rows.length) {
+    await db.query(`ALTER TABLE \`${table}\` ADD COLUMN \`${column}\` ${definition}`);
+  }
+}
+
 (async () => {
   const cols = [
-    "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS notes TEXT",
-    "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS booking_date DATE",
-    "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS booking_time VARCHAR(20)",
-    "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_id VARCHAR(255)",
-    "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_order_id VARCHAR(255)",
-    "ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_signature VARCHAR(500)",
+    ['bookings',           'notes',             'TEXT'],
+    ['bookings',           'booking_date',       'DATE'],
+    ['bookings',           'booking_time',       'VARCHAR(20)'],
+    ['bookings',           'payment_id',         'VARCHAR(255)'],
+    ['bookings',           'payment_order_id',   'VARCHAR(255)'],
+    ['bookings',           'payment_signature',  'VARCHAR(500)'],
+    ['booking_durations',  'biz_type_id',        'INT NULL DEFAULT NULL'],
+    ['booking_biz_types',  'tagline',            'VARCHAR(255) NULL DEFAULT NULL'],
   ];
-  for (const sql of cols) {
-    try { await db.query(sql); } catch (_) { /* column already exists or unsupported syntax */ }
+  for (const [table, column, def] of cols) {
+    try { await ensureColumn(table, column, def); } catch (_) {}
   }
+})();
+
+(async () => {
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS booking_biz_types (
+        id         INT AUTO_INCREMENT PRIMARY KEY,
+        label      VARCHAR(100) NOT NULL,
+        sort_order INT DEFAULT 0,
+        is_active  TINYINT(1) DEFAULT 1
+      )
+    `);
+    const [[{ cnt }]] = await db.query('SELECT COUNT(*) AS cnt FROM booking_biz_types');
+    const seeds = [
+      ['MSME',      0, 'Ideal for small & medium enterprises'],
+      ['Startup',   1, 'For early-stage and growth-phase startups'],
+      ['Large',     2, 'For established businesses scaling up'],
+      ['Corporate', 3, 'Tailored sessions for large organisations'],
+    ];
+    if (!cnt) {
+      for (const [label, sort_order, tagline] of seeds) {
+        await db.query('INSERT INTO booking_biz_types (label,sort_order,is_active,tagline) VALUES (?,?,1,?)', [label, sort_order, tagline]);
+      }
+    } else {
+      // Back-fill taglines for rows seeded before tagline column was added
+      for (const [label, , tagline] of seeds) {
+        await db.query(
+          "UPDATE booking_biz_types SET tagline=? WHERE label=? AND (tagline IS NULL OR tagline='')",
+          [tagline, label]
+        ).catch(() => {}); // column may not exist yet; ensureColumn handles it
+      }
+    }
+  } catch (e) { console.error('[biz-types] init failed:', e.message); }
 })();
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -181,9 +227,37 @@ router.get('/settings', async (_req, res) => {
 // Active session durations (public)
 router.get('/durations', async (_req, res) => {
   try {
-    const [rows] = await db.query('SELECT id,label,duration_minutes,price,currency,description FROM booking_durations WHERE is_active=1 ORDER BY sort_order,id');
+    // Try with biz_type_id; fall back to without it if column not yet migrated
+    let rows;
+    try {
+      [rows] = await db.query('SELECT id,label,duration_minutes,price,currency,description,biz_type_id FROM booking_durations WHERE is_active=1 ORDER BY sort_order,id');
+    } catch (_) {
+      [rows] = await db.query('SELECT id,label,duration_minutes,price,currency,description FROM booking_durations WHERE is_active=1 ORDER BY sort_order,id');
+    }
     res.json(rows);
   } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// Active business types (public)
+router.get('/biz-types', async (_req, res) => {
+  try {
+    let rows;
+    try {
+      // Preferred: include tagline if column exists
+      [rows] = await db.query(
+        'SELECT id,label,tagline,sort_order FROM booking_biz_types WHERE is_active=1 ORDER BY sort_order,id'
+      );
+    } catch (_) {
+      // tagline column not yet migrated — fall back gracefully
+      [rows] = await db.query(
+        'SELECT id,label,sort_order FROM booking_biz_types WHERE is_active=1 ORDER BY sort_order,id'
+      );
+    }
+    res.json(rows);
+  } catch (_err) {
+    // Table not yet migrated at all
+    res.json([]);
+  }
 });
 
 // Payment gateway public key (public — key_id only, never secret)
@@ -466,12 +540,12 @@ router.get('/admin/durations', verifyToken, async (_req, res) => {
 });
 
 router.post('/admin/durations', verifyToken, async (req, res) => {
-  const { label, duration_minutes, price, currency, description, is_active, sort_order } = req.body;
+  const { label, duration_minutes, price, currency, description, is_active, sort_order, biz_type_id } = req.body;
   if (!label || !duration_minutes || price == null) return res.status(400).json({ error: 'label, duration_minutes and price are required' });
   try {
     const [result] = await db.query(
-      'INSERT INTO booking_durations (label,duration_minutes,price,currency,description,is_active,sort_order) VALUES (?,?,?,?,?,?,?)',
-      [label, duration_minutes, price, currency || 'INR', description || null, is_active ? 1 : 0, sort_order || 0]
+      'INSERT INTO booking_durations (label,duration_minutes,price,currency,description,is_active,sort_order,biz_type_id) VALUES (?,?,?,?,?,?,?,?)',
+      [label, duration_minutes, price, currency || 'INR', description || null, is_active ? 1 : 0, sort_order || 0, biz_type_id || null]
     );
     const [rows] = await db.query('SELECT * FROM booking_durations WHERE id=?', [result.insertId]);
     res.json(rows[0]);
@@ -479,11 +553,11 @@ router.post('/admin/durations', verifyToken, async (req, res) => {
 });
 
 router.put('/admin/durations/:id', verifyToken, async (req, res) => {
-  const { label, duration_minutes, price, currency, description, is_active, sort_order } = req.body;
+  const { label, duration_minutes, price, currency, description, is_active, sort_order, biz_type_id } = req.body;
   try {
     await db.query(
-      'UPDATE booking_durations SET label=?,duration_minutes=?,price=?,currency=?,description=?,is_active=?,sort_order=? WHERE id=?',
-      [label, duration_minutes, price, currency || 'INR', description || null, is_active ? 1 : 0, sort_order || 0, req.params.id]
+      'UPDATE booking_durations SET label=?,duration_minutes=?,price=?,currency=?,description=?,is_active=?,sort_order=?,biz_type_id=? WHERE id=?',
+      [label, duration_minutes, price, currency || 'INR', description || null, is_active ? 1 : 0, sort_order || 0, biz_type_id || null, req.params.id]
     );
     const [rows] = await db.query('SELECT * FROM booking_durations WHERE id=?', [req.params.id]);
     res.json(rows[0]);
@@ -713,6 +787,80 @@ router.put('/admin/date-schedules/:id', verifyToken, async (req, res) => {
 router.delete('/admin/date-schedules/:id', verifyToken, async (req, res) => {
   try {
     await db.query('DELETE FROM booking_date_schedules WHERE id=?', [req.params.id]);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ── Business Types admin ──────────────────────────────────────────────────────
+
+router.get('/admin/biz-types', verifyToken, async (_req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM booking_biz_types ORDER BY sort_order,id');
+    res.json(rows);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// IMPORTANT: reorder route must come before :id route
+router.put('/admin/biz-types/reorder', verifyToken, async (req, res) => {
+  const items = req.body;
+  if (!Array.isArray(items)) return res.status(400).json({ error: 'expected array' });
+  try {
+    for (const { id, sort_order } of items) {
+      await db.query('UPDATE booking_biz_types SET sort_order=? WHERE id=?', [sort_order, id]);
+    }
+    const [rows] = await db.query('SELECT * FROM booking_biz_types ORDER BY sort_order,id');
+    res.json(rows);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+router.post('/admin/biz-types', verifyToken, async (req, res) => {
+  const { label, tagline, sort_order, is_active } = req.body;
+  if (!label?.trim()) return res.status(400).json({ error: 'label is required' });
+  try {
+    let insertId;
+    try {
+      const [r] = await db.query(
+        'INSERT INTO booking_biz_types (label,tagline,sort_order,is_active) VALUES (?,?,?,?)',
+        [label.trim(), tagline?.trim() || null, sort_order ?? 0, is_active ? 1 : 0]
+      );
+      insertId = r.insertId;
+    } catch (_) {
+      // tagline column not yet added — insert without it
+      const [r] = await db.query(
+        'INSERT INTO booking_biz_types (label,sort_order,is_active) VALUES (?,?,?)',
+        [label.trim(), sort_order ?? 0, is_active ? 1 : 0]
+      );
+      insertId = r.insertId;
+    }
+    const [rows] = await db.query('SELECT * FROM booking_biz_types WHERE id=?', [insertId]);
+    res.json(rows[0]);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+router.put('/admin/biz-types/:id', verifyToken, async (req, res) => {
+  const { label, tagline, sort_order, is_active } = req.body;
+  if (!label?.trim()) return res.status(400).json({ error: 'label is required' });
+  try {
+    try {
+      await db.query(
+        'UPDATE booking_biz_types SET label=?,tagline=?,sort_order=?,is_active=? WHERE id=?',
+        [label.trim(), tagline?.trim() || null, sort_order ?? 0, is_active ? 1 : 0, req.params.id]
+      );
+    } catch (_) {
+      // tagline column not yet added — update without it
+      await db.query(
+        'UPDATE booking_biz_types SET label=?,sort_order=?,is_active=? WHERE id=?',
+        [label.trim(), sort_order ?? 0, is_active ? 1 : 0, req.params.id]
+      );
+    }
+    const [rows] = await db.query('SELECT * FROM booking_biz_types WHERE id=?', [req.params.id]);
+    res.json(rows[0]);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+router.delete('/admin/biz-types/:id', verifyToken, async (req, res) => {
+  try {
+    await db.query('DELETE FROM booking_biz_types WHERE id=?', [req.params.id]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

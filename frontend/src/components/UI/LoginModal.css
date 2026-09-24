@@ -20,6 +20,8 @@
   padding: 2.5rem 2.2rem 2rem;
   width: 100%;
   max-width: 420px;
+  max-height: 92vh;
+  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(26, 18, 8, 0.28);
   animation: lm-slidein 0.22s ease;
 }
@@ -125,6 +127,63 @@
 }
 .lf-submit:hover:not(:disabled) { background: #9a7a22; }
 .lf-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.lf-forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -0.3rem;
+}
+
+.lf-forgot-link {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: #b8922a;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+.lf-forgot-link:hover { color: #9a7a22; }
+
+.lf-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.2rem 0;
+}
+.lf-divider::before,
+.lf-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e8c96d;
+  opacity: 0.5;
+}
+.lf-divider span {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #aaa098;
+  white-space: nowrap;
+}
+
+.lf-alt-btn {
+  padding: 0.7rem 1.5rem;
+  background: transparent;
+  color: #b8922a;
+  border: 1px solid #b8922a;
+  border-radius: 2px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  width: 100%;
+}
+.lf-alt-btn:hover:not(:disabled) { background: #b8922a; color: #fff; }
+.lf-alt-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .lf-hint {
   margin-top: 1.2rem;

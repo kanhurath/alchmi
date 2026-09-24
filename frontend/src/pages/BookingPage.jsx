@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageSeo } from '../components/PageSeo';
+import { useCustomerAuth } from '../context/CustomerAuthContext';
 import {
   getBookingSettings,
   getActiveDurations,
+  getBizTypes,
   getPaymentPublic,
   getAvailability,
   getDateAvailability,
@@ -33,33 +35,99 @@ function loadRazorpayScript() {
 const STEPS = ['Duration', 'Details', 'Review & Pay'];
 
 // ── Step 1: Duration selection ────────────────────────────────────────────────
-function StepDuration({ durations, selectedId, onSelect, onNext }) {
+function StepDuration({ durations, bizTypes, activeBizType, onBizTypeChange, selectedId, onSelect, onNext }) {
+  // Filter: show durations assigned to the active tab OR universal ones (biz_type_id null/undefined).
+  // Use loose == so MySQL int, JS number, and string all compare correctly across environments.
+  // eslint-disable-next-line eqeqeq
+  const visibleDurations = activeBizType
+    ? durations.filter(d => d.biz_type_id == null || d.biz_type_id == activeBizType.id)
+    : durations;
+
+  const sel      = durations.find(d => d.id === selectedId);
+  const bizLabel = activeBizType?.label || '';
+
+  // If selected duration becomes invisible after tab switch, treat as unselected
+  const selVisible = sel && visibleDurations.some(d => d.id === sel.id);
+
   return (
-    <div>
-      <div className="bk-section-heading">
-        <p className="bk-section-label">Step 1 of 3</p>
-        <h2 className="bk-section-title">Choose Session Duration</h2>
+    <div className="s1-wrap">
+      <div className="s1-heading">
+        <p className="s1-label">Step 1 of 3</p>
+        <h2 className="s1-title">Choose Session Duration</h2>
       </div>
-      <div className="bk-durations">
-        {durations.map(d => (
+
+      {/* Business-type tabs — only render if bizTypes loaded */}
+      {bizTypes.length > 0 && (
+        <>
+          <div className="s1-biz-tabs">
+            {bizTypes.map(t => (
+              <button
+                key={t.id}
+                className={`s1-biz-tab${activeBizType?.id === t.id ? ' active' : ''}`}
+                onClick={() => onBizTypeChange(t)}
+              >
+                {t.label.toUpperCase()}
+              </button>
+            ))}
+          </div>
+          {activeBizType?.tagline && (
+            <p key={`tagline-${activeBizType.id}`} className="s1-biz-tagline">
+              {activeBizType.tagline}
+            </p>
+          )}
+        </>
+      )}
+
+      {/* Duration cards — key forces re-mount (and CSS fade-in) on tab switch */}
+      <div key={`grid-${activeBizType?.id ?? 'all'}`} className="s1-dur-grid">
+        {visibleDurations.length === 0 ? (
+          <div style={{
+            gridColumn: '1 / -1', textAlign: 'center', padding: '2.5rem',
+            color: '#6b7a9a', fontFamily: 'Josefin Sans, sans-serif',
+            fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase',
+          }}>
+            No sessions available for this category.
+          </div>
+        ) : visibleDurations.map(d => (
           <button
             key={d.id}
-            className={`bk-dur-card${selectedId === d.id ? ' selected' : ''}`}
+            className={`s1-dur-card${selectedId === d.id ? ' selected' : ''}`}
             onClick={() => onSelect(d)}
           >
-            <div className="bk-dur-check">
-              <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" /></svg>
+            <div className="s1-dur-top">
+              <div className="s1-dur-time">
+                <svg className="s1-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span className="s1-dur-time-text">{d.label}</span>
+              </div>
+              <div className="s1-radio" aria-hidden="true">
+                <div className="s1-radio-dot" />
+              </div>
             </div>
-            <div className="bk-dur-label">{d.label}</div>
-            <div className="bk-dur-price">{formatINR(d.price)}</div>
-            {d.description && <div className="bk-dur-desc">{d.description}</div>}
+            <div className="s1-dur-price">{formatINR(d.price)}</div>
+            <div className="s1-dur-rule" />
+            {d.description && <p className="s1-dur-desc">{d.description}</p>}
           </button>
         ))}
       </div>
-      <div className="bk-nav">
-        <span />
-        <button className="bk-btn bk-btn-primary" onClick={onNext} disabled={!selectedId}>
-          Continue →
+
+      {/* Summary + continue bar */}
+      <div className="s1-bar">
+        <div className="s1-bar-top">
+          <div className="s1-bar-info">
+            <span className="s1-bar-tag">SELECTED</span>
+            <span className="s1-bar-sel">
+              {selVisible
+                ? `${bizLabel ? bizLabel + ' · ' : ''}${sel.label}`
+                : '—'}
+            </span>
+          </div>
+          {selVisible && <div className="s1-bar-price">{formatINR(sel.price)}</div>}
+        </div>
+        <button className="s1-bar-btn" onClick={onNext} disabled={!selectedId || !selVisible}>
+          CONTINUE <span className="s1-bar-arrow">→</span>
         </button>
       </div>
     </div>
@@ -440,11 +508,16 @@ function Confirmation({ bookingRef, form, selectedDuration, confirmationTitle, c
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function BookingPage() {
-  const [settings,     setSettings]     = useState(null);
-  const [durations,    setDurations]    = useState([]);
-  const [gateway,      setGateway]      = useState({ is_enabled: false, key_id: null });
-  const [availability, setAvailability] = useState({ time_slots: [], available_days: [1,2,3,4,5], blocked_dates: [] });
-  const [loading,      setLoading]      = useState(true);
+  const { customer, loading: authLoading } = useCustomerAuth();
+  const navigate = useNavigate();
+
+  const [settings,       setSettings]       = useState(null);
+  const [durations,      setDurations]      = useState([]);
+  const [bizTypes,       setBizTypes]       = useState([]);
+  const [activeBizType,  setActiveBizType]  = useState(null);
+  const [gateway,        setGateway]        = useState({ is_enabled: false, key_id: null });
+  const [availability,   setAvailability]   = useState({ time_slots: [], available_days: [1,2,3,4,5], blocked_dates: [] });
+  const [loading,        setLoading]        = useState(true);
 
   const [step,     setStep]     = useState(0);
   const [selected, setSelected] = useState(null);
@@ -452,6 +525,25 @@ export default function BookingPage() {
     customer_name: '', customer_email: '', customer_phone: '',
     session_requirements: '', booking_date: '', booking_time: '',
   });
+
+  // Redirect unauthenticated users back to home (Header CTA handles showing the login modal)
+  useEffect(() => {
+    if (!authLoading && !customer) {
+      navigate('/', { replace: true });
+    }
+  }, [authLoading, customer, navigate]);
+
+  // Pre-fill details form from logged-in customer
+  useEffect(() => {
+    if (customer) {
+      setForm(prev => ({
+        ...prev,
+        customer_name:  prev.customer_name  || customer.full_name || '',
+        customer_email: prev.customer_email || customer.email     || '',
+        customer_phone: prev.customer_phone || customer.phone     || '',
+      }));
+    }
+  }, [customer]);
 
   const [paying,    setPaying]    = useState(false);
   const [payError,  setPayError]  = useState('');
@@ -464,11 +556,14 @@ export default function BookingPage() {
       getActiveDurations().catch(() => []),
       getPaymentPublic().catch(() => ({ is_enabled: false })),
       getAvailability().catch(() => ({ time_slots: [], available_days: [1,2,3,4,5], blocked_dates: [] })),
-    ]).then(([s, d, g, av]) => {
+      getBizTypes().catch(() => []),
+    ]).then(([s, d, g, av, bt]) => {
       setSettings(s);
       setDurations(d);
       setGateway(g);
       setAvailability(av);
+      setBizTypes(bt);
+      if (bt.length > 0) setActiveBizType(bt[0]); // auto-select first tab
       setLoading(false);
     });
   }, []);
@@ -486,7 +581,9 @@ export default function BookingPage() {
         if (!loaded) throw new Error('Razorpay failed to load. Please check your connection.');
 
         const orderData = await createOrder({
-          duration_id: selected.id,
+          duration_id:    selected.id,
+          biz_type_id:    activeBizType?.id   || null,
+          biz_type_label: activeBizType?.label || null,
           ...form,
         });
 
@@ -528,6 +625,8 @@ export default function BookingPage() {
         // Payment gateway not configured — submit as offline/pending booking
         const result = await submitManualBooking({
           duration_id:          selected.id,
+          biz_type_id:          activeBizType?.id   || null,
+          biz_type_label:       activeBizType?.label || null,
           customer_name:        form.customer_name,
           customer_email:       form.customer_email,
           customer_phone:       form.customer_phone,
@@ -546,6 +645,8 @@ export default function BookingPage() {
       setPaying(false);
     }
   };
+
+  if (authLoading || (!customer && !authLoading)) return <div className="bk-loading">Loading…</div>;
 
   if (loading) return <div className="bk-loading">Loading session options…</div>;
 
@@ -609,6 +710,9 @@ export default function BookingPage() {
             {step === 0 && (
               <StepDuration
                 durations={durations}
+                bizTypes={bizTypes}
+                activeBizType={activeBizType}
+                onBizTypeChange={setActiveBizType}
                 selectedId={selected?.id}
                 onSelect={setSelected}
                 onNext={() => setStep(1)}

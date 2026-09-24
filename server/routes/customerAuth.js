@@ -131,6 +131,49 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// ── POST /api/customer-auth/register ─────────────────────────────────────────
+router.post('/register', async (req, res) => {
+  try {
+    const { full_name, email, phone, password, confirm_password } = req.body;
+
+    if (!full_name?.trim()) return res.status(400).json({ error: 'Full name is required' });
+    if (!email?.trim())     return res.status(400).json({ error: 'Email is required' });
+    if (!phone?.trim())     return res.status(400).json({ error: 'Mobile number is required' });
+    if (!password)          return res.status(400).json({ error: 'Password is required' });
+    if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    if (password !== confirm_password) return res.status(400).json({ error: 'Passwords do not match' });
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) return res.status(400).json({ error: 'Invalid email address' });
+
+    // Check for duplicate email
+    const [dupEmail] = await db.query('SELECT id FROM customers WHERE email=? LIMIT 1', [email.trim()]);
+    if (dupEmail.length) return res.status(400).json({ error: 'An account with this email already exists' });
+
+    // Check for duplicate phone
+    const [dupPhone] = await db.query('SELECT id FROM customers WHERE phone=? LIMIT 1', [phone.trim()]);
+    if (dupPhone.length) return res.status(400).json({ error: 'An account with this phone number already exists' });
+
+    const password_hash = await bcrypt.hash(password, 12);
+
+    const [result] = await db.query(
+      'INSERT INTO customers (email, phone, full_name, password_hash, is_active) VALUES (?, ?, ?, ?, 1)',
+      [email.trim(), phone.trim(), full_name.trim(), password_hash]
+    );
+
+    const [rows] = await db.query('SELECT * FROM customers WHERE id=? LIMIT 1', [result.insertId]);
+    const customer = rows[0];
+
+    const token = makeToken(customer);
+    res.status(201).json({ token, customer: safeCustomer(customer) });
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json({ error: 'An account with this email or phone already exists' });
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── GET /api/customer-auth/verify ─────────────────────────────────────────────
 router.get('/verify', verifyCustomerToken, async (req, res) => {
   try {

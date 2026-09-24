@@ -4,6 +4,7 @@ import {
   getAdminPayment,  saveAdminPayment,
   getAdminEmail,    saveAdminEmail,
   getAdminDurations, createDuration, updateDuration, deleteDuration,
+  getAdminBizTypes, createBizType, updateBizType, deleteBizType, reorderBizTypes,
   getAdminBookings,  updateBooking,  deleteBooking,
   getAdminStats,
   getAdminTimeSlots, createTimeSlot, updateTimeSlot, deleteTimeSlot,
@@ -135,10 +136,17 @@ function TabPageSettings() {
 }
 
 // ── Duration modal ────────────────────────────────────────────────────────────
-function DurationModal({ initial, onSave, onClose }) {
-  const [form, setForm] = useState(initial || {
-    label: '', duration_minutes: '', price: '', currency: 'INR',
-    description: '', is_active: true, sort_order: 0,
+function DurationModal({ initial, bizTypes, onSave, onClose }) {
+  const [form, setForm] = useState(() => {
+    const base = initial || {
+      label: '', duration_minutes: '', price: '', currency: 'INR',
+      description: '', is_active: true, sort_order: 0,
+    };
+    return {
+      ...base,
+      // Always store as string so <select> controlled value matches option strings
+      biz_type_id: base.biz_type_id != null && base.biz_type_id !== '' ? String(base.biz_type_id) : '',
+    };
   });
   const [saving, setSaving] = useState(false);
   const [err,    setErr]    = useState('');
@@ -150,7 +158,13 @@ function DurationModal({ initial, onSave, onClose }) {
       setErr('Label, duration, and price are required.'); return;
     }
     setSaving(true); setErr('');
-    try { await onSave(form); onClose(); }
+    try {
+      await onSave({
+        ...form,
+        biz_type_id: form.biz_type_id !== '' ? Number(form.biz_type_id) : null,
+      });
+      onClose();
+    }
     catch (e) { setErr(e.message); setSaving(false); }
   };
 
@@ -176,9 +190,23 @@ function DurationModal({ initial, onSave, onClose }) {
             <input className="adm-input" type="number" value={form.price} onChange={e => set('price', e.target.value)} placeholder="50000" />
           </div>
           <div className="adm-field">
+            <label className="adm-label">Business Type</label>
+            <select className="adm-input" value={form.biz_type_id ?? ''} onChange={e => set('biz_type_id', e.target.value)}>
+              <option value="">All Types (show under every tab)</option>
+              {bizTypes.map(t => (
+                <option key={t.id} value={String(t.id)}>{t.label}</option>
+              ))}
+            </select>
+            <p className="adm-hint">Leave blank to show this duration under all business-type tabs.</p>
+          </div>
+        </div>
+
+        <div className="adm-field-row" style={{ marginBottom: '1rem' }}>
+          <div className="adm-field">
             <label className="adm-label">Display Order</label>
             <input className="adm-input" type="number" value={form.sort_order} onChange={e => set('sort_order', e.target.value)} />
           </div>
+          <div className="adm-field" />
         </div>
 
         <div className="adm-field" style={{ marginBottom: '1rem' }}>
@@ -208,12 +236,20 @@ function DurationModal({ initial, onSave, onClose }) {
 // ── Tab: Durations ────────────────────────────────────────────────────────────
 function TabDurations() {
   const [durations, setDurations] = useState([]);
+  const [bizTypes,  setBizTypes]  = useState([]);
   const [modal,     setModal]     = useState(null);
   const [loading,   setLoading]   = useState(true);
 
   const reload = useCallback(() => {
     setLoading(true);
-    getAdminDurations().then(d => { setDurations(d); setLoading(false); }).catch(() => setLoading(false));
+    Promise.all([
+      getAdminDurations().catch(() => []),
+      getAdminBizTypes().catch(() => []),
+    ]).then(([d, bt]) => {
+      setDurations(d);
+      setBizTypes(bt);
+      setLoading(false);
+    });
   }, []);
   useEffect(reload, [reload]);
 
@@ -229,13 +265,16 @@ function TabDurations() {
     reload();
   };
 
+  // eslint-disable-next-line eqeqeq
+  const getBizLabel = (id) => (id != null && id !== '') ? (bizTypes.find(t => t.id == id)?.label || id) : 'All Types';
+
   if (loading) return <div className="bka-loading">Loading…</div>;
 
   return (
     <>
       <div className="bka-sub-heading">
         <h3>Session Durations &amp; Pricing</h3>
-        <p>Add, edit, or remove session options. Price changes reflect immediately on the booking page.</p>
+        <p>Add, edit, or remove session options. Assign each duration to a specific business-type tab, or leave "All Types" to show it under every tab.</p>
       </div>
 
       <div className="bka-table-header">
@@ -252,6 +291,7 @@ function TabDurations() {
               <th>Label</th>
               <th>Duration</th>
               <th>Price</th>
+              <th>Business Type</th>
               <th>Description</th>
               <th>Status</th>
               <th>Order</th>
@@ -260,12 +300,20 @@ function TabDurations() {
           </thead>
           <tbody>
             {durations.length === 0 ? (
-              <tr><td colSpan={7}><div className="bka-table-empty">No durations yet. Click "Add Duration" to create one.</div></td></tr>
+              <tr><td colSpan={8}><div className="bka-table-empty">No durations yet. Click "Add Duration" to create one.</div></td></tr>
             ) : durations.map(d => (
               <tr key={d.id}>
                 <td style={{ fontWeight: 700 }}>{d.label}</td>
                 <td style={{ color: '#5a4e3a' }}>{d.duration_minutes} min</td>
                 <td style={{ fontWeight: 700 }}>{fmtINR(d.price)}</td>
+                <td>
+                  <span style={{
+                    fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em',
+                    color: d.biz_type_id ? '#1a2543' : '#9a8e78',
+                  }}>
+                    {getBizLabel(d.biz_type_id)}
+                  </span>
+                </td>
                 <td style={{ color: '#9a8e78', fontSize: '0.82rem', maxWidth: 200 }}>{d.description || '—'}</td>
                 <td>
                   <span className={`bka-badge ${d.is_active ? 'bka-badge-active' : 'bka-badge-inactive'}`}>
@@ -275,7 +323,11 @@ function TabDurations() {
                 <td style={{ color: '#9a8e78' }}>{d.sort_order}</td>
                 <td>
                   <div className="bka-cell-actions">
-                    <button className="adm-btn adm-btn-sm" onClick={() => setModal(d)}>Edit</button>
+                    <button className="adm-btn adm-btn-sm" onClick={() => setModal({
+                      ...d,
+                      // Normalise to string so <select> value comparison works reliably
+                      biz_type_id: d.biz_type_id != null ? String(d.biz_type_id) : '',
+                    })}>Edit</button>
                     <button className="adm-btn adm-btn-sm adm-btn-danger" onClick={() => handleDelete(d.id)}>Delete</button>
                   </div>
                 </td>
@@ -288,6 +340,7 @@ function TabDurations() {
       {modal !== null && (
         <DurationModal
           initial={modal.id ? modal : null}
+          bizTypes={bizTypes}
           onSave={handleSave}
           onClose={() => setModal(null)}
         />
@@ -1225,9 +1278,172 @@ function DateScheduleModal({ initial, globalSlots, onSave, onClose }) {
   );
 }
 
+// ── Biz Type modal ────────────────────────────────────────────────────────────
+function BizTypeModal({ initial, onSave, onClose }) {
+  const [form, setForm] = useState(initial || { label: '', tagline: '', sort_order: 0, is_active: true });
+  const [saving, setSaving] = useState(false);
+  const [err,    setErr]    = useState('');
+  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
+
+  const handleSave = async () => {
+    if (!form.label.trim()) { setErr('Label is required.'); return; }
+    setSaving(true); setErr('');
+    try { await onSave(form); onClose(); }
+    catch (e) { setErr(e.message); setSaving(false); }
+  };
+
+  return (
+    <div className="bka-backdrop" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="bka-modal" style={{ maxWidth: 480 }}>
+        <h3 className="bka-modal-title">{initial?.id ? 'Edit Business Type' : 'Add Business Type'}</h3>
+
+        <div className="adm-field" style={{ marginBottom: '1rem' }}>
+          <label className="adm-label">Tab Label <span style={{ color: '#d4670a' }}>*</span></label>
+          <input className="adm-input" value={form.label}
+            onChange={e => set('label', e.target.value)} placeholder="e.g. MSME" />
+          <p className="adm-hint">Short name displayed as the tab button on the booking page.</p>
+        </div>
+
+        <div className="adm-field" style={{ marginBottom: '1rem' }}>
+          <label className="adm-label">Tagline</label>
+          <input className="adm-input" value={form.tagline || ''}
+            onChange={e => set('tagline', e.target.value)}
+            placeholder="e.g. Ideal for small & medium enterprises" />
+          <p className="adm-hint">A short description shown below the tabs when this category is selected. Helps customers identify the right option.</p>
+        </div>
+
+        <div className="adm-field-row" style={{ marginBottom: '1rem' }}>
+          <div className="adm-field">
+            <label className="adm-label">Display Order</label>
+            <input className="adm-input" type="number" value={form.sort_order}
+              onChange={e => set('sort_order', Number(e.target.value))} />
+          </div>
+          <div className="adm-field" style={{ paddingTop: '1.5rem' }}>
+            <div className="bka-toggle-row" style={{ padding: 0 }}>
+              <Toggle checked={form.is_active} onChange={v => set('is_active', v)} />
+              <span className="bka-toggle-label">Active</span>
+            </div>
+          </div>
+        </div>
+
+        {err && <p style={{ color: '#c0392b', fontSize: '0.78rem', margin: '0.25rem 0' }}>{err}</p>}
+
+        <div className="bka-modal-footer">
+          <button className="adm-btn" onClick={onClose}>Cancel</button>
+          <button className="adm-btn adm-btn-primary" onClick={handleSave} disabled={saving}>
+            {saving ? 'Saving…' : 'Save'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Tab: Business Types ───────────────────────────────────────────────────────
+function TabBizTypes() {
+  const [items,   setItems]   = useState([]);
+  const [modal,   setModal]   = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const reload = useCallback(() => {
+    setLoading(true);
+    getAdminBizTypes().then(d => { setItems(d); setLoading(false); }).catch(() => setLoading(false));
+  }, []);
+  useEffect(reload, [reload]);
+
+  const handleSave = async (form) => {
+    if (form.id) await updateBizType(form.id, form);
+    else          await createBizType(form);
+    reload();
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this business type? Durations linked only to this type will still exist but become hidden from its tab.')) return;
+    await deleteBizType(id);
+    reload();
+  };
+
+  const moveItem = async (index, direction) => {
+    const newItems = [...items];
+    const swapIdx  = index + direction;
+    if (swapIdx < 0 || swapIdx >= newItems.length) return;
+    [newItems[index], newItems[swapIdx]] = [newItems[swapIdx], newItems[index]];
+    const payload = newItems.map((it, i) => ({ id: it.id, sort_order: i }));
+    setItems(newItems);
+    await reorderBizTypes(payload);
+  };
+
+  if (loading) return <div className="bka-loading">Loading…</div>;
+
+  return (
+    <>
+      <div className="bka-sub-heading">
+        <h3>Business Type Tabs</h3>
+        <p>Manage the tabs shown in Step 1 of the booking form (e.g. MSME, Startup, Large, Corporate). Each tab filters the session durations assigned to it. A duration with "All Types" appears under every tab.</p>
+      </div>
+
+      <div className="bka-table-header">
+        <div />
+        <button className="adm-btn adm-btn-primary" onClick={() => setModal({})}>
+          + Add Business Type
+        </button>
+      </div>
+
+      <div className="bka-table-wrap">
+        <table className="bka-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Label</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.length === 0 ? (
+              <tr><td colSpan={4}><div className="bka-table-empty">No business types yet. Add one to show category tabs on the booking page.</div></td></tr>
+            ) : items.map((item, idx) => (
+              <tr key={item.id}>
+                <td>
+                  <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                    <button className="adm-btn adm-btn-sm" onClick={() => moveItem(idx, -1)} disabled={idx === 0} title="Move up">↑</button>
+                    <button className="adm-btn adm-btn-sm" onClick={() => moveItem(idx, 1)} disabled={idx === items.length - 1} title="Move down">↓</button>
+                    <span style={{ color: '#9a8e78', fontSize: '0.78rem', marginLeft: '0.25rem' }}>{idx + 1}</span>
+                  </div>
+                </td>
+                <td style={{ fontWeight: 700 }}>{item.label}</td>
+                <td>
+                  <span className={`bka-badge ${item.is_active ? 'bka-badge-active' : 'bka-badge-inactive'}`}>
+                    {item.is_active ? 'Active' : 'Disabled'}
+                  </span>
+                </td>
+                <td>
+                  <div className="bka-cell-actions">
+                    <button className="adm-btn adm-btn-sm" onClick={() => setModal(item)}>Edit</button>
+                    <button className="adm-btn adm-btn-sm adm-btn-danger" onClick={() => handleDelete(item.id)}>Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {modal !== null && (
+        <BizTypeModal
+          initial={modal.id ? modal : null}
+          onSave={handleSave}
+          onClose={() => setModal(null)}
+        />
+      )}
+    </>
+  );
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 const TABS = [
-  { id: 'settings',     label: 'Page Settings'      },
+  { id: 'settings',     label: 'Page Settings'       },
+  { id: 'biztypes',     label: 'Business Types'      },
   { id: 'durations',    label: 'Durations & Pricing' },
   { id: 'availability', label: 'Availability'        },
   { id: 'bookings',     label: 'Bookings'            },
@@ -1273,25 +1489,28 @@ export default function BookingAdmin() {
         </div>
       )}
 
-      <div className="bka-tabs">
-        {TABS.map(t => (
-          <button
-            key={t.id}
-            className={`bka-tab${activeTab === t.id ? ' active' : ''}`}
-            onClick={() => setActiveTab(t.id)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      <div className="bka-panel">
+        <nav className="bka-tabs">
+          {TABS.map(t => (
+            <button
+              key={t.id}
+              className={`bka-tab${activeTab === t.id ? ' active' : ''}`}
+              onClick={() => setActiveTab(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </nav>
 
-      <div className="bka-tab-content">
-        {activeTab === 'settings'     && <TabPageSettings />}
-        {activeTab === 'durations'    && <TabDurations />}
-        {activeTab === 'availability' && <TabAvailability />}
-        {activeTab === 'bookings'     && <TabBookings />}
-        {activeTab === 'payment'      && <TabPayment />}
-        {activeTab === 'email'        && <TabEmail />}
+        <div className="bka-tab-content">
+          {activeTab === 'settings'     && <TabPageSettings />}
+          {activeTab === 'biztypes'     && <TabBizTypes />}
+          {activeTab === 'durations'    && <TabDurations />}
+          {activeTab === 'availability' && <TabAvailability />}
+          {activeTab === 'bookings'     && <TabBookings />}
+          {activeTab === 'payment'      && <TabPayment />}
+          {activeTab === 'email'        && <TabEmail />}
+        </div>
       </div>
 
     </div>

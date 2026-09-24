@@ -45,6 +45,19 @@ export function CustomerAuthProvider({ children }) {
     return data.customer;
   }, []);
 
+  const register = useCallback(async (full_name, email, phone, password, confirm_password) => {
+    const res = await fetch(`${API}/customer-auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ full_name, email, phone, password, confirm_password }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    localStorage.setItem(TOKEN_KEY, data.token);
+    setCustomer(data.customer);
+    return data.customer;
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     setCustomer(null);
@@ -58,7 +71,7 @@ export function CustomerAuthProvider({ children }) {
   const getToken = () => localStorage.getItem(TOKEN_KEY);
 
   return (
-    <CustomerAuthContext.Provider value={{ customer, loading, login, logout, refreshProfile, getToken }}>
+    <CustomerAuthContext.Provider value={{ customer, loading, login, register, logout, refreshProfile, getToken }}>
       {children}
     </CustomerAuthContext.Provider>
   );

@@ -102,6 +102,7 @@ function Header() {
   const { customer, logout } = useCustomerAuth();
   const navigate = useNavigate();
   const [loginOpen, setLoginOpen] = useState(false);
+  const [loginRedirect, setLoginRedirect] = useState('/my-profile');
 
   const logoSrc = headerSettings.logoUrl
     ? (headerSettings.logoUrl.startsWith('http')
@@ -109,15 +110,24 @@ function Header() {
         : `${API_ROOT.replace('/api', '')}${headerSettings.logoUrl}`)
     : null;
 
-  const handleCta = () => {
+  const getCtaTarget = () => {
     if (headerSettings.ctaAction === 'url' && headerSettings.ctaLink) {
-      if (headerSettings.ctaLink.startsWith('http')) {
-        window.open(headerSettings.ctaLink, '_blank', 'noreferrer');
-      } else {
-        navigate(headerSettings.ctaLink);
-      }
+      return headerSettings.ctaLink;
+    }
+    return '/book-discovery';
+  };
+
+  const handleCta = () => {
+    const target = getCtaTarget();
+    if (target.startsWith('http')) {
+      window.open(target, '_blank', 'noreferrer');
+      return;
+    }
+    if (!customer) {
+      setLoginRedirect(target);
+      setLoginOpen(true);
     } else {
-      navigate('/book-discovery');
+      navigate(target);
     }
   };
 
@@ -259,7 +269,7 @@ function Header() {
               <button
                 className="mobile-cta-btn"
                 style={{ background: 'none', border: '1px solid rgba(26,37,67,0.3)', color: '#1a2543', marginBottom: '0.75rem' }}
-                onClick={() => { closeMenu(); setLoginOpen(true); }}
+                onClick={() => { closeMenu(); setLoginRedirect('/my-profile'); setLoginOpen(true); }}
               >
                 Login
               </button>
@@ -346,7 +356,7 @@ function Header() {
             </div>
           </div>
         ) : (
-          <button className="nav-cta" onClick={() => setLoginOpen(true)}>Login</button>
+          <button className="nav-cta" onClick={() => { setLoginRedirect('/my-profile'); setLoginOpen(true); }}>Login</button>
         )}
 
         <button className="nav-cta" onClick={handleCta}>
@@ -364,7 +374,7 @@ function Header() {
           <span />
         </button>
       </nav>
-      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} redirectTo={loginRedirect} />
     </>
   );
 }

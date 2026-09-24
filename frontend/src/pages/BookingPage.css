@@ -1,5 +1,5 @@
 /* ── Booking Page ─────────────────────────────────────────────────────────── */
-.bk-page { background: var(--cream); min-height: 100vh; }
+.bk-page { background: #e8edf7; min-height: 100vh; }
 
 /* Hero */
 .bk-hero {
@@ -58,38 +58,39 @@
   gap: 0.5rem;
 }
 .bk-step-num {
-  width: 32px; height: 32px;
+  width: 34px; height: 34px;
   border-radius: 50%;
-  border: 2px solid var(--border, rgba(184,146,42,0.25));
+  border: 2px solid rgba(26,37,67,0.2);
   display: flex; align-items: center; justify-content: center;
   font-family: 'Josefin Sans', sans-serif;
   font-size: 0.75rem;
-  color: var(--warm-gray, #8a7d6b);
-  background: var(--cream);
+  color: rgba(26,37,67,0.4);
+  background: transparent;
   transition: all 0.25s;
+  flex-shrink: 0;
 }
 .bk-step.active .bk-step-num {
-  background: var(--gold, #b8922a);
-  border-color: var(--gold, #b8922a);
+  background: #1a2543;
+  border-color: #1a2543;
   color: #fff;
 }
 .bk-step.done .bk-step-num {
-  background: var(--ink, #1a1208);
-  border-color: var(--ink, #1a1208);
+  background: #1a2543;
+  border-color: #1a2543;
   color: #fff;
 }
 .bk-step-label {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--warm-gray, #8a7d6b);
+  color: rgba(26,37,67,0.4);
 }
-.bk-step.active .bk-step-label { color: var(--gold, #b8922a); }
-.bk-step.done .bk-step-label   { color: var(--ink, #1a1208); }
+.bk-step.active .bk-step-label { color: #1a2543; }
+.bk-step.done .bk-step-label   { color: #1a2543; }
 .bk-step-connector {
-  width: 48px; height: 1px;
-  background: var(--border, rgba(184,146,42,0.25));
+  width: 52px; height: 1px;
+  background: rgba(26,37,67,0.18);
   margin: 0 0.25rem;
 }
 
@@ -657,4 +658,340 @@
   .bk-confirm-receipt-cell:last-child { border-bottom: none; }
   .bk-confirm-actions { flex-direction: column; }
   .bk-confirm-actions .bk-btn { text-align: center; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STEP 1 – Choose Session Duration  (new design)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.s1-wrap { display: flex; flex-direction: column; }
+
+/* Heading */
+.s1-heading {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.s1-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #6b7a9a;
+  margin-bottom: 0.55rem;
+}
+.s1-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  font-weight: 500;
+  color: #1a2543;
+  margin: 0;
+  line-height: 1.15;
+}
+
+/* Business-type tabs */
+.s1-biz-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: rgba(26,37,67,0.07);
+  border-radius: 8px;
+  padding: 5px;
+  margin-bottom: 2rem;
+  gap: 4px;
+}
+.s1-biz-tab {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #1a2543;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+}
+.s1-biz-tab.active {
+  background: #fff;
+  color: #1a2543;
+  box-shadow: 0 1px 4px rgba(26,37,67,0.14);
+}
+.s1-biz-tab:not(.active):hover {
+  background: rgba(255,255,255,0.45);
+}
+
+/* Per-tab tagline */
+.s1-biz-tagline {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: #6b7a9a;
+  text-align: center;
+  margin: -0.75rem 0 1.5rem;
+  animation: s1FadeUp 0.22s ease both;
+}
+
+/* Fade-up animation — applied to grid on tab switch (via key change) */
+@keyframes s1FadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Duration card grid */
+.s1-dur-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: stretch;
+  animation: s1FadeUp 0.22s ease both;
+}
+
+/* Individual duration card */
+.s1-dur-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1.5px solid rgba(26,37,67,0.12);
+  border-radius: 10px;
+  padding: 1.4rem 1.35rem 1.6rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s, transform 0.15s;
+}
+.s1-dur-card:hover:not(.selected) {
+  border-color: rgba(26,37,67,0.3);
+  box-shadow: 0 4px 16px rgba(26,37,67,0.08);
+  transform: translateY(-2px);
+}
+.s1-dur-card.selected {
+  background: #1a2543;
+  border-color: #1a2543;
+  box-shadow: 0 6px 24px rgba(26,37,67,0.22);
+}
+
+/* Card top row: time label + radio */
+.s1-dur-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+.s1-dur-time {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+.s1-clock {
+  width: 15px; height: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #6b7a9a;
+  opacity: 0.9;
+}
+.s1-dur-card.selected .s1-clock { color: rgba(255,255,255,0.65); }
+
+.s1-dur-time-text {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b7a9a;
+  line-height: 1.25;
+}
+.s1-dur-card.selected .s1-dur-time-text { color: rgba(255,255,255,0.72); }
+
+/* Radio button */
+.s1-radio {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(26,37,67,0.25);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+.s1-dur-card.selected .s1-radio {
+  border-color: rgba(255,255,255,0.9);
+}
+.s1-radio-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.2s;
+}
+.s1-dur-card.selected .s1-radio-dot {
+  background: #fff;
+}
+
+/* Price */
+.s1-dur-price {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  font-weight: 600;
+  color: #1a2543;
+  line-height: 1;
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+.s1-dur-card.selected .s1-dur-price { color: #fff; }
+
+/* Horizontal rule */
+.s1-dur-rule {
+  height: 1px;
+  background: rgba(26,37,67,0.1);
+  margin-bottom: 0.9rem;
+}
+.s1-dur-card.selected .s1-dur-rule { background: rgba(255,255,255,0.18); }
+
+/* Description */
+.s1-dur-desc {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  color: #5a6680;
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+.s1-dur-card.selected .s1-dur-desc {
+  color: rgba(255,255,255,0.82);
+  font-weight: 500;
+}
+
+/* ── Summary / continue bar ─────────────────────────────────────────────── */
+.s1-bar {
+  background: #fff;
+  border: 1.5px solid rgba(26,37,67,0.1);
+  border-radius: 10px;
+  padding: 1.1rem 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.s1-bar-top {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+.s1-bar-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+.s1-bar-tag {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #6b7a9a;
+}
+.s1-bar-sel {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1a2543;
+  font-weight: 600;
+}
+.s1-bar-price {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a2543;
+  white-space: nowrap;
+  padding-left: 1.25rem;
+  border-left: 1px solid rgba(26,37,67,0.12);
+}
+.s1-bar-btn {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: #1a2543;
+  border: none;
+  border-radius: 6px;
+  padding: 0.95rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.s1-bar-btn:hover:not(:disabled) { background: #253570; }
+.s1-bar-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.s1-bar-arrow { font-size: 1rem; }
+
+/* ── Step 1 responsive ──────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .s1-heading { text-align: left; margin-bottom: 1.5rem; }
+  .s1-title { font-size: 2.2rem; }
+
+  /* Tabs: 2×2 on mobile */
+  .s1-biz-tabs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    padding: 6px;
+    background: transparent;
+  }
+  .s1-biz-tab {
+    background: #fff;
+    border: 1.5px solid rgba(26,37,67,0.15);
+    border-radius: 6px;
+    padding: 0.85rem 0.5rem;
+    font-size: 0.65rem;
+  }
+  .s1-biz-tab.active {
+    background: #1a2543;
+    color: #fff;
+    border-color: #1a2543;
+    box-shadow: none;
+  }
+
+  /* Stack cards vertically */
+  .s1-dur-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Horizontal card layout on mobile */
+  .s1-dur-card {
+    padding: 1.1rem 1.15rem;
+  }
+  .s1-dur-top { margin-bottom: 0.6rem; }
+  .s1-dur-price { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .s1-dur-desc { font-size: 0.95rem; }
+
+  /* Summary bar: stacked on mobile */
+  .s1-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  .s1-bar-top {
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid rgba(26,37,67,0.08);
+    gap: 0.75rem;
+  }
+  .s1-bar-price {
+    border-left: 1px solid rgba(26,37,67,0.12);
+    padding-left: 0.85rem;
+    font-size: 1.65rem;
+  }
+  .s1-bar-btn {
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
+    justify-content: center;
+    padding: 1.1rem;
+    font-size: 0.72rem;
+  }
 }
