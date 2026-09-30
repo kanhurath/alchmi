@@ -26,6 +26,21 @@ const upload = multer({
   },
 });
 
+// Comment images use the same directory, same filter, 5 MB limit
+const commentStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadDir),
+  filename:    (_req, file, cb) =>
+    cb(null, `comment-${Date.now()}${path.extname(file.originalname).toLowerCase()}`),
+});
+const uploadComment = multer({
+  storage: commentStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (/^image\//.test(file.mimetype)) cb(null, true);
+    else cb(new Error('Only image files are allowed'));
+  },
+});
+
 // ── Table setup ───────────────────────────────────────────────────────────────
 async function ensureTables() {
   await db.execute(`
@@ -76,6 +91,44 @@ async function ensureTables() {
       updated_at          TIMESTAMP     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
   `);
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS article_likes (
+      id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      article_id  INT UNSIGNED NOT NULL,
+      user_token  VARCHAR(120) NOT NULL,
+      created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE KEY uq_like (article_id, user_token)
+    )
+  `);
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS article_comments (
+      id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      article_id  INT UNSIGNED NOT NULL,
+      author_name VARCHAR(200) NOT NULL DEFAULT 'Anonymous',
+      content     TEXT,
+      image_url   VARCHAR(1000) DEFAULT '',
+      status      ENUM('pending','approved','rejected') DEFAULT 'pending',
+      is_admin    TINYINT(1)   DEFAULT 0,
+      created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_article_status (article_id, status)
+    )
+  `);
+
+  // Add is_admin column if it was created before this migration ran
+  try {
+    await db.execute(`ALTER TABLE article_comments ADD COLUMN is_admin TINYINT(1) DEFAULT 0`);
+  } catch (e) {
+    if (!e.message.includes('Duplicate column')) console.warn('[articles] is_admin column:', e.message);
+  }
+
+  // Add virtual_likes column for admin-controlled like boost
+  try {
+    await db.execute(`ALTER TABLE articles ADD COLUMN virtual_likes INT DEFAULT 0`);
+  } catch (e) {
+    if (!e.message.includes('Duplicate column')) console.warn('[articles] virtual_likes column:', e.message);
+  }
 }
 
 ensureTables().catch(e => console.error('[articles] table init failed:', e.message));
@@ -270,6 +323,153 @@ router.get('/hero', async (_req, res) => {
     const [rows] = await db.query('SELECT * FROM articles_hero LIMIT 1');
     res.json(rows[0] ? { ...HERO_DEFAULTS, ...rows[0] } : HERO_DEFAULTS);
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: all comments (global list with optional status filter) ─────────────
+router.get('/admin/comments', verifyToken, async (req, res) => {
+  try {
+    const status = req.query.status || '';
+    let sql = `
+      SELECT c.*, a.title AS article_title, a.slug AS article_slug
+      FROM article_comments c
+      JOIN articles a ON a.id = c.article_id
+    `;
+    const params = [];
+    if (status) { sql += ' WHERE c.status = ?'; params.push(status); }
+    sql += ' ORDER BY c.created_at DESC';
+    const [rows] = await db.execute(sql, params);
+    res.json(rows);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: all comments for one article ──────────────────────────────────────
+router.get('/admin/:id/comments', verifyToken, async (req, res) => {
+  try {
+    const [rows] = await db.execute(
+      'SELECT * FROM article_comments WHERE article_id=? ORDER BY created_at ASC',
+      [req.params.id]
+    );
+    res.json(rows);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: post a comment as admin (auto-approved, is_admin=1) ────────────────
+router.post('/admin/:id/comments', verifyToken, async (req, res) => {
+  const { author_name = 'Admin', content = '', image_url = '', status = 'approved' } = req.body;
+  const safeStatus = ['pending','approved','rejected'].includes(status) ? status : 'approved';
+  if (!content.trim() && !image_url.trim())
+    return res.status(400).json({ error: 'Comment content or image is required' });
+  try {
+    const [r] = await db.execute(
+      'INSERT INTO article_comments (article_id, author_name, content, image_url, status, is_admin) VALUES (?,?,?,?,?,1)',
+      [req.params.id, author_name.trim() || 'Admin', content.trim(), image_url.trim(), safeStatus]
+    );
+    const [[row]] = await db.execute('SELECT * FROM article_comments WHERE id=?', [r.insertId]);
+    res.status(201).json(row);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: update comment (status and/or content/author_name) ─────────────────
+router.put('/admin/comments/:cid', verifyToken, async (req, res) => {
+  const { status, content, author_name } = req.body;
+  try {
+    const [[existing]] = await db.execute('SELECT * FROM article_comments WHERE id=?', [req.params.cid]);
+    if (!existing) return res.status(404).json({ error: 'Comment not found' });
+
+    const newStatus      = status      !== undefined ? status      : existing.status;
+    const newContent     = content     !== undefined ? content     : existing.content;
+    const newAuthorName  = author_name !== undefined ? author_name : existing.author_name;
+
+    if (!['pending','approved','rejected'].includes(newStatus))
+      return res.status(400).json({ error: 'Invalid status' });
+
+    await db.execute(
+      'UPDATE article_comments SET status=?, content=?, author_name=? WHERE id=?',
+      [newStatus, newContent, newAuthorName, req.params.cid]
+    );
+    const [[row]] = await db.execute('SELECT * FROM article_comments WHERE id=?', [req.params.cid]);
+    res.json(row);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+router.delete('/admin/comments/:cid', verifyToken, async (req, res) => {
+  try {
+    await db.execute('DELETE FROM article_comments WHERE id=?', [req.params.cid]);
+    res.json({ deleted: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: like stats for all articles ───────────────────────────────────────
+const ADMIN_LIKE_TOKEN = 'vk_admin_like_token';
+
+router.get('/admin/likes', verifyToken, async (req, res) => {
+  try {
+    const [rows] = await db.execute(`
+      SELECT a.id, a.title, a.slug, a.status,
+             COALESCE(a.virtual_likes, 0) AS virtual_likes,
+             COUNT(l.id) AS user_like_count,
+             SUM(l.user_token = ?) AS admin_liked
+      FROM articles a
+      LEFT JOIN article_likes l ON l.article_id = a.id
+      GROUP BY a.id
+      ORDER BY (COUNT(l.id) + COALESCE(a.virtual_likes,0)) DESC, a.pub_date DESC
+    `, [ADMIN_LIKE_TOKEN]);
+    res.json(rows.map(r => ({
+      ...r,
+      user_like_count: Number(r.user_like_count),
+      virtual_likes:   Number(r.virtual_likes),
+      like_count:      Number(r.user_like_count) + Number(r.virtual_likes),
+      admin_liked:     r.admin_liked > 0,
+    })));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: set total like count (adjusts virtual_likes) ──────────────────────
+// total_likes = user_like_count + virtual_likes
+// virtual_likes = max(0, requested_total - user_like_count)
+router.put('/admin/:id/likes', verifyToken, async (req, res) => {
+  const total = parseInt(req.body.total_likes, 10);
+  if (isNaN(total) || total < 0)
+    return res.status(400).json({ error: 'total_likes must be a non-negative integer' });
+  try {
+    const [[{ cnt }]] = await db.execute(
+      'SELECT COUNT(*) AS cnt FROM article_likes WHERE article_id=?', [req.params.id]
+    );
+    const userLikes   = Number(cnt);
+    const virtualLikes = Math.max(0, total - userLikes);
+    await db.execute('UPDATE articles SET virtual_likes=? WHERE id=?', [virtualLikes, req.params.id]);
+    res.json({ user_like_count: userLikes, virtual_likes: virtualLikes, like_count: userLikes + virtualLikes });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: toggle admin like for an article ───────────────────────────────────
+router.post('/admin/:id/like', verifyToken, async (req, res) => {
+  try {
+    const [[{ n }]] = await db.execute(
+      'SELECT COUNT(*) AS n FROM article_likes WHERE article_id=? AND user_token=?',
+      [req.params.id, ADMIN_LIKE_TOKEN]
+    );
+    if (n > 0) {
+      await db.execute('DELETE FROM article_likes WHERE article_id=? AND user_token=?', [req.params.id, ADMIN_LIKE_TOKEN]);
+    } else {
+      await db.execute('INSERT INTO article_likes (article_id, user_token) VALUES (?,?)', [req.params.id, ADMIN_LIKE_TOKEN]);
+    }
+    const [[{ cnt }]] = await db.execute(
+      'SELECT COUNT(*) AS cnt FROM article_likes WHERE article_id=?', [req.params.id]
+    );
+    const [[{ virtual_likes }]] = await db.execute(
+      'SELECT COALESCE(virtual_likes,0) AS virtual_likes FROM articles WHERE id=?', [req.params.id]
+    );
+    const total = Number(cnt) + Number(virtual_likes);
+    res.json({ count: total, user_like_count: Number(cnt), virtual_likes: Number(virtual_likes), admin_liked: n === 0 });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── ADMIN: upload image for an admin comment (auth-gated) ─────────────────────
+router.post('/admin/:id/comments/image', verifyToken, uploadComment.single('image'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const relativePath = `/uploads/articles/${req.file.filename}`;
+  res.json({ image_url: relativePath });
 });
 
 router.put('/hero', verifyToken, async (req, res) => {
@@ -467,6 +667,89 @@ router.delete('/categories/:id', verifyToken, async (req, res) => {
     await db.execute('DELETE FROM article_categories WHERE id=?', [req.params.id]);
     res.json({ deleted: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── PUBLIC: likes ─────────────────────────────────────────────────────────────
+// GET  /:id/likes  — return { count, liked } for a given user_token
+// count = real user likes + virtual_likes boost set by admin
+router.get('/:id/likes', async (req, res) => {
+  const token = (req.query.token || '').trim();
+  try {
+    const [[{ cnt }]] = await db.execute(
+      'SELECT COUNT(*) AS cnt FROM article_likes WHERE article_id=?', [req.params.id]
+    );
+    const [[{ virtual_likes }]] = await db.execute(
+      'SELECT COALESCE(virtual_likes,0) AS virtual_likes FROM articles WHERE id=?', [req.params.id]
+    );
+    let liked = false;
+    if (token) {
+      const [[{ n }]] = await db.execute(
+        'SELECT COUNT(*) AS n FROM article_likes WHERE article_id=? AND user_token=?',
+        [req.params.id, token]
+      );
+      liked = n > 0;
+    }
+    res.json({ count: Number(cnt) + Number(virtual_likes), liked });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// POST /:id/like   — toggle like, body: { token }
+router.post('/:id/like', async (req, res) => {
+  const token = (req.body.token || '').trim();
+  if (!token) return res.status(400).json({ error: 'token required' });
+  try {
+    const [[{ n }]] = await db.execute(
+      'SELECT COUNT(*) AS n FROM article_likes WHERE article_id=? AND user_token=?',
+      [req.params.id, token]
+    );
+    if (n > 0) {
+      await db.execute('DELETE FROM article_likes WHERE article_id=? AND user_token=?', [req.params.id, token]);
+    } else {
+      await db.execute('INSERT INTO article_likes (article_id, user_token) VALUES (?,?)', [req.params.id, token]);
+    }
+    // Return real + virtual so the count matches what GET /:id/likes returns
+    const [[{ cnt }]] = await db.execute(
+      'SELECT COUNT(*) AS cnt FROM article_likes WHERE article_id=?', [req.params.id]
+    );
+    const [[{ virtual_likes }]] = await db.execute(
+      'SELECT COALESCE(virtual_likes,0) AS virtual_likes FROM articles WHERE id=?', [req.params.id]
+    );
+    res.json({ count: Number(cnt) + Number(virtual_likes), liked: n === 0 });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── PUBLIC: comments ──────────────────────────────────────────────────────────
+// GET /:id/comments — approved comments only
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const [rows] = await db.execute(
+      "SELECT id, author_name, content, image_url, created_at FROM article_comments WHERE article_id=? AND status='approved' ORDER BY created_at ASC",
+      [req.params.id]
+    );
+    res.json(rows);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// POST /:id/comments — submit a comment (goes to pending)
+router.post('/:id/comments', async (req, res) => {
+  const { author_name = 'Anonymous', content = '', image_url = '' } = req.body;
+  if (!content.trim() && !image_url.trim())
+    return res.status(400).json({ error: 'Comment content or image is required' });
+  try {
+    const [r] = await db.execute(
+      'INSERT INTO article_comments (article_id, author_name, content, image_url) VALUES (?,?,?,?)',
+      [req.params.id, author_name.trim() || 'Anonymous', content.trim(), image_url.trim()]
+    );
+    const [[row]] = await db.execute('SELECT * FROM article_comments WHERE id=?', [r.insertId]);
+    res.status(201).json(row);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// POST /:id/comments/image — upload image for a comment (public, 5 MB)
+router.post('/:id/comments/image', uploadComment.single('image'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const relativePath = `/uploads/articles/${req.file.filename}`;
+  res.json({ image_url: relativePath });
 });
 
 module.exports = router;

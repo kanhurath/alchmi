@@ -278,3 +278,459 @@
 
   .art-article-actions .adm-btn:last-child { display: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   COMMENTS & LIKES ADMIN TABS  (admt- prefix)
+═══════════════════════════════════════════════════════════ */
+
+/* ── Utility row ────────────────────────────────────────── */
+.admt-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Small badge (count inside filter button) ─────────────── */
+.admt-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2em;
+  padding: 0.05em 0.4em;
+  border-radius: 10px;
+  font-size: 0.65em;
+  font-weight: 700;
+  line-height: 1.4;
+  background: rgba(26, 37, 67, 0.12);
+  color: #1a2543;
+}
+
+/* ── Author-type badges ───────────────────────────────────── */
+.admt-badge--admin {
+  background: #1a2543;
+  color: #f3b33e;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.18em 0.55em;
+  border-radius: 3px;
+}
+
+.admt-badge--user {
+  background: rgba(222, 115, 54, 0.12);
+  color: #de7336;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.18em 0.55em;
+  border-radius: 3px;
+}
+
+/* ── Status pill ─────────────────────────────────────────── */
+.admt-status-pill {
+  display: inline-block;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 0.18em 0.55em;
+  border-radius: 3px;
+}
+
+/* ── Comment card ────────────────────────────────────────── */
+.admt-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.admt-comment-card {
+  background: #fff;
+  border: 1px solid #e8e0d4;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  transition: border-color 0.15s;
+}
+
+.admt-comment-card:hover { border-color: #c8bfb0; }
+
+.admt-comment-card--admin {
+  border-left: 3px solid #1a2543;
+  background: #fafaf8;
+}
+
+/* ── Comment card header ─────────────────────────────────── */
+.admt-comment-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.admt-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.admt-author {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #1a1208;
+}
+
+.admt-date {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: #9a8e78;
+  white-space: nowrap;
+}
+
+.admt-comment-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* ── Comment body ────────────────────────────────────────── */
+.admt-comment-text {
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #1a1208;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.admt-comment-img {
+  margin-top: 0.65rem;
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid rgba(222, 115, 54, 0.18);
+  display: block;
+}
+
+/* ── Inline edit input ───────────────────────────────────── */
+.admt-inline-input {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.82rem !important;
+  max-width: 200px;
+}
+
+/* ── Add Comment Modal ───────────────────────────────────── */
+.admt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 18, 8, 0.55);
+  z-index: 300;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem 1rem;
+  overflow-y: auto;
+}
+
+.admt-modal-box {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(26, 18, 8, 0.3);
+  width: 100%;
+  max-width: 620px;
+  overflow: hidden;
+  animation: admt-slide-in 0.18s ease;
+  flex-shrink: 0;
+}
+
+@keyframes admt-slide-in {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.admt-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid #e8e0d4;
+  background: #faf7f2;
+}
+
+.admt-modal-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1208;
+  margin: 0;
+  font-family: 'Josefin Sans', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.admt-modal-close {
+  background: none;
+  border: 1px solid rgba(26, 18, 8, 0.14);
+  color: rgba(26, 18, 8, 0.45);
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  transition: background 0.18s, color 0.18s;
+}
+.admt-modal-close:hover { background: #de7336; color: #fff; border-color: #de7336; }
+
+.admt-modal-body {
+  padding: 1.25rem 1.4rem;
+}
+
+.admt-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.9rem 1.4rem;
+  border-top: 1px solid #e8e0d4;
+  background: #faf7f2;
+}
+
+/* ── Image upload in modal ───────────────────────────────── */
+.admt-img-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admt-img-pick-btn {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px dashed rgba(26, 37, 67, 0.25);
+  color: rgba(26, 37, 67, 0.6);
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s;
+}
+.admt-img-pick-btn:hover { border-color: #d4670a; color: #d4670a; }
+
+.admt-img-preview-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.admt-img-preview {
+  height: 56px;
+  width: auto;
+  max-width: 120px;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 103, 10, 0.25);
+  object-fit: cover;
+  display: block;
+}
+
+.admt-img-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #d4670a;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.55rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIKES TAB
+═══════════════════════════════════════════════════════════ */
+
+.admt-total-pill {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(212, 103, 10, 0.1);
+  color: #d4670a;
+  border-radius: 3px;
+  padding: 0.3em 0.75em;
+}
+
+.admt-likes-table {
+  border: 1px solid #e8e0d4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.admt-likes-thead {
+  display: grid;
+  grid-template-columns: 1fr 110px 160px 110px;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  background: #f8f4ee;
+  border-bottom: 1px solid #e8e0d4;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9a8e78;
+}
+
+.admt-likes-row {
+  display: grid;
+  grid-template-columns: 1fr 110px 160px 110px;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0ebe3;
+  transition: background 0.12s;
+}
+
+.admt-likes-row:last-child { border-bottom: none; }
+.admt-likes-row:hover { background: #fdf9f4; }
+.admt-likes-row--draft { opacity: 0.6; }
+
+.admt-likes-col-title {
+  min-width: 0;
+}
+
+.admt-likes-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #1a1208;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.admt-likes-col-count {
+  display: flex;
+  align-items: center;
+}
+
+.admt-like-count {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #d4670a;
+  letter-spacing: 0.06em;
+}
+
+.admt-likes-col-count {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.admt-like-breakdown {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  color: #9a8e78;
+  line-height: 1.3;
+}
+
+.admt-likes-col-set {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.admt-likes-set-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.admt-likes-input {
+  width: 70px !important;
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.82rem !important;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.admt-likes-input::-webkit-inner-spin-button,
+.admt-likes-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.admt-likes-save-btn {
+  padding: 0.35rem 0.65rem !important;
+  font-size: 0.62rem !important;
+}
+
+.admt-likes-feedback {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+}
+.admt-likes-feedback--ok  { color: #2a7a3b; }
+.admt-likes-feedback--err { color: #c0392b; }
+
+.admt-virtual-badge {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(212, 103, 10, 0.1);
+  color: #d4670a;
+  border-radius: 3px;
+  padding: 0.1em 0.45em;
+}
+
+.admt-likes-col-admin {
+  display: flex;
+  align-items: center;
+}
+
+.admt-btn-liked {
+  background: #d4670a !important;
+  color: #fff !important;
+  border-color: #d4670a !important;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .admt-likes-thead,
+  .admt-likes-row {
+    grid-template-columns: 1fr 90px 150px;
+  }
+  /* Hide the admin toggle column on small screens — still accessible via keyboard scroll */
+  .admt-likes-col-admin { display: none; }
+  .admt-likes-thead span:last-child { display: none; }
+}
+
+@media (max-width: 600px) {
+  .admt-likes-thead,
+  .admt-likes-row {
+    grid-template-columns: 1fr 140px;
+    gap: 0.5rem;
+  }
+  .admt-likes-col-count { display: none; }
+  .admt-likes-thead span:nth-child(2) { display: none; }
+
+  .admt-comment-head { flex-direction: column; }
+  .admt-comment-actions { flex-wrap: wrap; }
+  .admt-modal-backdrop { padding: 0; align-items: flex-end; }
+  .admt-modal-box { border-radius: 12px 12px 0 0; max-width: 100%; }
+}

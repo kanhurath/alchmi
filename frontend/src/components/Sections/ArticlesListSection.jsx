@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { getArticles, getCategories, resolveUploadUrl } from '../../services/articlesApi';
+import ArticleActions from './ArticleActions';
 import './ArticlesListSection.css';
 
 const ARTICLES_PER_PAGE = 12;
@@ -245,6 +246,12 @@ function ArticlesListSection() {
                     </div>
                   </div>
 
+                  <ArticleActions
+                    articleId={article.id}
+                    articleSlug={article.slug}
+                    articleTitle={article.title}
+                    compact={true}
+                  />
                 </div>
               </div>
             );

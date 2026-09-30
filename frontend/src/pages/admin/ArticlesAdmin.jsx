@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import * as api from '../../services/articlesApi';
 const ArticleRichEditor = lazy(() => import('./ArticleRichEditor'));
 import { SeoTab }          from './SeoTab';
@@ -598,11 +598,545 @@ function HeroTab() {
   );
 }
 
+// ── Shared helpers ────────────────────────────────────────────────────────────
+const SERVER_ORIGIN = (import.meta.env.VITE_API_URL || 'http://localhost:3001/api').replace(/\/api$/, '');
+function resolveAdminImg(url) {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  return SERVER_ORIGIN + url;
+}
+function fmtDatetime(s) {
+  if (!s) return '';
+  const d = new Date(s);
+  return isNaN(d) ? s : d.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+// ── Add Comment Modal ─────────────────────────────────────────────────────────
+const EMPTY_COMMENT_FORM = {
+  article_id:  '',
+  author_name: 'Admin',
+  status:      'approved',
+  content:     '',
+};
+
+function AddCommentModal({ articles, preselectedId, onClose, onSaved }) {
+  const [form,       setForm]       = useState({ ...EMPTY_COMMENT_FORM, article_id: preselectedId || '' });
+  const [imgFile,    setImgFile]    = useState(null);
+  const [imgPreview, setImgPreview] = useState('');
+  const [saving,     setSaving]     = useState(false);
+  const [error,      setError]      = useState('');
+  const fileRef = useRef(null);
+
+  // Close on Escape
+  useEffect(() => {
+    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [onClose]);
+
+  const set = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleImg = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImgFile(file);
+    const reader = new FileReader();
+    reader.onload = ev => setImgPreview(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const removeImg = () => { setImgFile(null); setImgPreview(''); if (fileRef.current) fileRef.current.value = ''; };
+
+  const submit = async () => {
+    if (!form.article_id) { setError('Please select an article.'); return; }
+    if (!form.content.trim() && !imgFile) {
+      setError('At least one of Comment or Image is required.');
+      return;
+    }
+    setSaving(true); setError('');
+    try {
+      let image_url = '';
+      if (imgFile) {
+        const up = await api.uploadAdminCommentImage(form.article_id, imgFile);
+        image_url = up.image_url || '';
+      }
+      await api.postAdminComment(form.article_id, {
+        author_name: form.author_name.trim() || 'Admin',
+        content:     form.content.trim(),
+        image_url,
+        status:      form.status,
+      });
+      onSaved(form.article_id);
+      onClose();
+    } catch (e) { setError(e.message || 'Failed to add comment.'); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div className="admt-modal-backdrop" onClick={onClose}>
+      <div className="admt-modal-box" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="admt-modal-header">
+          <h3 className="admt-modal-title">Add Comment</h3>
+          <button className="admt-modal-close" onClick={onClose} aria-label="Close">✕</button>
+        </div>
+
+        {/* Body */}
+        <div className="admt-modal-body">
+          {/* Select Article */}
+          <div className="adm-field">
+            <label className="adm-label">Select Article <span className="art-required">*</span></label>
+            <select className="adm-input" name="article_id" value={form.article_id} onChange={set}>
+              <option value="">— Choose an article —</option>
+              {articles.map(a => (
+                <option key={a.id} value={a.id}>{a.title} ({a.status})</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Author + Status row */}
+          <div className="art-form-grid">
+            <div className="adm-field">
+              <label className="adm-label">Author Name</label>
+              <input className="adm-input" name="author_name" value={form.author_name} onChange={set} placeholder="Admin" />
+            </div>
+            <div className="adm-field">
+              <label className="adm-label">Status</label>
+              <select className="adm-input" name="status" value={form.status} onChange={set}>
+                <option value="approved">Approved (Active)</option>
+                <option value="pending">Pending (Inactive)</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Comment */}
+          <div className="adm-field">
+            <label className="adm-label">Comment</label>
+            <textarea
+              className="adm-input adm-textarea"
+              name="content"
+              rows={4}
+              placeholder="Write the comment text…"
+              value={form.content}
+              onChange={set}
+            />
+          </div>
+
+          {/* Image upload */}
+          <div className="adm-field">
+            <label className="adm-label">Image <span style={{ color: '#9a8e78', fontWeight: 400 }}>(optional)</span></label>
+            <div className="admt-img-upload-row">
+              <button type="button" className="admt-img-pick-btn" onClick={() => fileRef.current?.click()}>
+                {imgFile ? '↺ Change Image' : '+ Attach Image'}
+              </button>
+              {imgPreview && (
+                <div className="admt-img-preview-wrap">
+                  <img src={imgPreview} alt="Preview" className="admt-img-preview" />
+                  <button type="button" className="admt-img-remove" onClick={removeImg} aria-label="Remove image">✕</button>
+                </div>
+              )}
+              <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImg} />
+            </div>
+            {!form.content.trim() && !imgFile && (
+              <p className="adm-hint" style={{ color: '#9a8e78' }}>At least one of Comment or Image is required.</p>
+            )}
+          </div>
+
+          {error && <p className="art-error-msg" style={{ marginTop: 0 }}>{error}</p>}
+        </div>
+
+        {/* Footer */}
+        <div className="admt-modal-footer">
+          <button className="adm-btn" onClick={onClose}>Cancel</button>
+          <button className="adm-btn adm-btn-primary" onClick={submit} disabled={saving}>
+            {saving ? 'Adding…' : 'Add Comment'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Comments Tab ──────────────────────────────────────────────────────────────
+function CommentsTab() {
+  const [articles,     setArticles]     = useState([]);
+  const [selectedId,   setSelectedId]   = useState('');
+  const [comments,     setComments]     = useState([]);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [loading,      setLoading]      = useState(false);
+  const [error,        setError]        = useState('');
+  const [editingId,    setEditingId]    = useState(null);
+  const [editContent,  setEditContent]  = useState('');
+  const [editAuthor,   setEditAuthor]   = useState('');
+  const [editSaving,   setEditSaving]   = useState(false);
+  const [showModal,    setShowModal]    = useState(false);
+
+  useEffect(() => {
+    api.getAllArticles()
+      .then(data => setArticles(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
+
+  const loadComments = useCallback((id) => {
+    if (!id) { setComments([]); return; }
+    setLoading(true); setError('');
+    api.getAdminArticleComments(id)
+      .then(data => setComments(Array.isArray(data) ? data : []))
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { loadComments(selectedId); }, [selectedId, loadComments]);
+
+  const selectArticle = (id) => { setSelectedId(id); setEditingId(null); };
+
+  // Called by modal after a successful save — switch to the article that got the comment
+  const onCommentSaved = (articleId) => {
+    const id = String(articleId);
+    setSelectedId(id);
+    loadComments(id);
+  };
+
+  const updateStatus = async (id, status) => {
+    try { await api.updateAdminComment(id, { status }); loadComments(selectedId); }
+    catch (e) { alert(e.message); }
+  };
+
+  const del = async (id) => {
+    if (!confirm('Delete this comment permanently?')) return;
+    try { await api.deleteComment(id); loadComments(selectedId); }
+    catch (e) { alert(e.message); }
+  };
+
+  const startEdit = (c) => { setEditingId(c.id); setEditContent(c.content || ''); setEditAuthor(c.author_name || ''); };
+
+  const saveEdit = async (id) => {
+    setEditSaving(true);
+    try {
+      await api.updateAdminComment(id, { content: editContent, author_name: editAuthor });
+      setEditingId(null);
+      loadComments(selectedId);
+    } catch (e) { alert(e.message); }
+    finally { setEditSaving(false); }
+  };
+
+  const visible = comments.filter(c => statusFilter === 'all' || c.status === statusFilter);
+  const STATUS_COLORS = { pending: '#d4670a', approved: '#2a7a3b', rejected: '#8b1a1a' };
+
+  return (
+    <div className="adm-section">
+      {/* Section header */}
+      <div className="art-list-header" style={{ marginBottom: '1.25rem' }}>
+        <h2 className="adm-section-title" style={{ margin: 0 }}>Comments Management</h2>
+        <button className="adm-btn adm-btn-primary" onClick={() => setShowModal(true)}>
+          + Add Comment
+        </button>
+      </div>
+
+      {/* Article selector */}
+      <div className="adm-field" style={{ marginBottom: '1.25rem' }}>
+        <label className="adm-label">Select Article to View Comments</label>
+        <select
+          className="adm-input"
+          value={selectedId}
+          onChange={e => selectArticle(e.target.value)}
+          style={{ maxWidth: 520 }}
+        >
+          <option value="">— Choose an article —</option>
+          {articles.map(a => (
+            <option key={a.id} value={a.id}>{a.title} ({a.status})</option>
+          ))}
+        </select>
+      </div>
+
+      {!selectedId && (
+        <p className="art-empty">Select an article above to view and manage its comments.</p>
+      )}
+
+      {selectedId && (
+        <>
+          {/* Status filter */}
+          <div className="admt-row" style={{ marginBottom: '1rem', gap: '0.4rem', flexWrap: 'wrap' }}>
+            {['all', 'pending', 'approved', 'rejected'].map(s => (
+              <button
+                key={s}
+                className={`adm-btn adm-btn-sm${statusFilter === s ? ' adm-btn-primary' : ''}`}
+                onClick={() => setStatusFilter(s)}
+              >
+                {s.charAt(0).toUpperCase() + s.slice(1)}
+                {s !== 'all' && (
+                  <span className="admt-badge" style={{ marginLeft: '0.35rem' }}>
+                    {comments.filter(c => c.status === s).length}
+                  </span>
+                )}
+              </button>
+            ))}
+            <span style={{ marginLeft: 'auto', fontSize: '0.7rem', color: '#9a8e78', fontFamily: "'Josefin Sans',sans-serif", alignSelf: 'center' }}>
+              {visible.length} comment{visible.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+
+          {loading && <p className="art-empty">Loading comments…</p>}
+          {!loading && error && <p className="art-error-msg">{error}</p>}
+          {!loading && !error && visible.length === 0 && (
+            <p className="art-empty">No {statusFilter !== 'all' ? statusFilter : ''} comments for this article.</p>
+          )}
+
+          <div className="admt-comments-list">
+            {visible.map(c => (
+              <div key={c.id} className={`admt-comment-card${c.is_admin ? ' admt-comment-card--admin' : ''}`}>
+                <div className="admt-comment-head">
+                  <div className="admt-comment-meta">
+                    {c.is_admin
+                      ? <span className="admt-badge admt-badge--admin">Admin</span>
+                      : <span className="admt-badge admt-badge--user">User</span>
+                    }
+                    {editingId === c.id
+                      ? <input className="adm-input admt-inline-input" value={editAuthor}
+                          onChange={e => setEditAuthor(e.target.value)} placeholder="Author name" />
+                      : <strong className="admt-author">{c.author_name}</strong>
+                    }
+                    <span className="admt-status-pill" style={{ background: STATUS_COLORS[c.status] || '#666' }}>
+                      {c.status}
+                    </span>
+                    <span className="admt-date">{fmtDatetime(c.created_at)}</span>
+                  </div>
+                  <div className="admt-comment-actions">
+                    {editingId === c.id ? (
+                      <>
+                        <button className="adm-btn adm-btn-sm adm-btn-primary" onClick={() => saveEdit(c.id)} disabled={editSaving}>
+                          {editSaving ? 'Saving…' : 'Save'}
+                        </button>
+                        <button className="adm-btn adm-btn-sm" onClick={() => setEditingId(null)}>Cancel</button>
+                      </>
+                    ) : (
+                      <>
+                        {c.status !== 'approved' && (
+                          <button className="adm-btn adm-btn-sm" style={{ color: '#2a7a3b', borderColor: '#2a7a3b' }}
+                            onClick={() => updateStatus(c.id, 'approved')}>Approve</button>
+                        )}
+                        {c.status !== 'rejected' && (
+                          <button className="adm-btn adm-btn-sm" style={{ color: '#8b1a1a', borderColor: '#8b1a1a' }}
+                            onClick={() => updateStatus(c.id, 'rejected')}>Reject</button>
+                        )}
+                        {c.status !== 'pending' && (
+                          <button className="adm-btn adm-btn-sm" onClick={() => updateStatus(c.id, 'pending')}>Pending</button>
+                        )}
+                        <button className="adm-btn adm-btn-sm" onClick={() => startEdit(c)}>Edit</button>
+                        <button className="adm-btn adm-btn-sm adm-btn-danger" onClick={() => del(c.id)}>Delete</button>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {editingId === c.id ? (
+                  <textarea className="adm-input adm-textarea" rows={3} value={editContent}
+                    onChange={e => setEditContent(e.target.value)} style={{ marginTop: '0.6rem' }} />
+                ) : (
+                  <>
+                    {c.content && <p className="admt-comment-text">{c.content}</p>}
+                    {c.image_url && (
+                      <img src={resolveAdminImg(c.image_url)} alt="Attachment" className="admt-comment-img" />
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Add Comment Modal */}
+      {showModal && (
+        <AddCommentModal
+          articles={articles}
+          preselectedId={selectedId}
+          onClose={() => setShowModal(false)}
+          onSaved={onCommentSaved}
+        />
+      )}
+    </div>
+  );
+}
+
+// ── Likes Tab ─────────────────────────────────────────────────────────────────
+function LikesTab() {
+  const [rows,     setRows]     = useState([]);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState('');
+  const [toggling, setToggling] = useState(null);
+  // per-row draft counts: { [id]: string }
+  const [drafts,   setDrafts]   = useState({});
+  // per-row saving state and feedback
+  const [saving,   setSaving]   = useState({});
+  const [saved,    setSaved]    = useState({});
+  const [saveErr,  setSaveErr]  = useState({});
+
+  const load = useCallback(() => {
+    setLoading(true);
+    api.getAdminLikeStats()
+      .then(data => {
+        const arr = Array.isArray(data) ? data : [];
+        setRows(arr);
+        // Initialise draft inputs to current totals
+        const init = {};
+        arr.forEach(r => { init[r.id] = String(r.like_count); });
+        setDrafts(init);
+      })
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const toggle = async (id) => {
+    setToggling(id);
+    try {
+      const res = await api.adminToggleLike(id);
+      setRows(prev => prev.map(r =>
+        r.id === id ? { ...r, like_count: res.count, user_like_count: res.user_like_count, virtual_likes: res.virtual_likes, admin_liked: res.admin_liked } : r
+      ));
+      setDrafts(prev => ({ ...prev, [id]: String(res.count) }));
+    } catch (e) { alert(e.message); }
+    finally { setToggling(null); }
+  };
+
+  const handleDraftChange = (id, val) => {
+    // Allow only digits
+    if (!/^\d*$/.test(val)) return;
+    setDrafts(prev => ({ ...prev, [id]: val }));
+    setSaveErr(prev => ({ ...prev, [id]: '' }));
+  };
+
+  const saveLikeCount = async (id) => {
+    const raw = (drafts[id] || '').trim();
+    const num = parseInt(raw, 10);
+    if (raw === '' || isNaN(num) || num < 0) {
+      setSaveErr(prev => ({ ...prev, [id]: 'Enter a valid non-negative number.' }));
+      return;
+    }
+    setSaving(prev => ({ ...prev, [id]: true }));
+    setSaved(prev => ({ ...prev, [id]: false }));
+    setSaveErr(prev => ({ ...prev, [id]: '' }));
+    try {
+      const res = await api.setAdminLikeCount(id, num);
+      setRows(prev => prev.map(r =>
+        r.id === id ? { ...r, like_count: res.like_count, user_like_count: res.user_like_count, virtual_likes: res.virtual_likes } : r
+      ));
+      setDrafts(prev => ({ ...prev, [id]: String(res.like_count) }));
+      setSaved(prev => ({ ...prev, [id]: true }));
+      setTimeout(() => setSaved(prev => ({ ...prev, [id]: false })), 2500);
+    } catch (e) {
+      setSaveErr(prev => ({ ...prev, [id]: e.message }));
+    } finally {
+      setSaving(prev => ({ ...prev, [id]: false }));
+    }
+  };
+
+  const totalLikes = rows.reduce((s, r) => s + (r.like_count || 0), 0);
+
+  return (
+    <div className="adm-section">
+      <div className="art-list-header" style={{ marginBottom: '1.2rem' }}>
+        <h2 className="adm-section-title" style={{ margin: 0 }}>Likes Management</h2>
+        {!loading && (
+          <span className="admt-total-pill">
+            {totalLikes} total like{totalLikes !== 1 ? 's' : ''} across {rows.length} article{rows.length !== 1 ? 's' : ''}
+          </span>
+        )}
+      </div>
+
+      {loading && <p className="art-empty">Loading…</p>}
+      {!loading && error && <p className="art-error-msg">{error}</p>}
+      {!loading && !error && rows.length === 0 && <p className="art-empty">No articles found.</p>}
+
+      {!loading && rows.length > 0 && (
+        <div className="admt-likes-table">
+          <div className="admt-likes-thead">
+            <span className="admt-likes-col-title">Article</span>
+            <span className="admt-likes-col-count">Total Likes</span>
+            <span className="admt-likes-col-set">Set Count</span>
+            <span className="admt-likes-col-admin">Admin Like</span>
+          </div>
+
+          {rows.map(r => (
+            <div key={r.id} className={`admt-likes-row${r.status === 'draft' ? ' admt-likes-row--draft' : ''}`}>
+              {/* Article info */}
+              <div className="admt-likes-col-title">
+                <span className="admt-likes-title">{r.title}</span>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '0.15rem', flexWrap: 'wrap' }}>
+                  <code className="art-slug" style={{ fontSize: '0.6rem' }}>/articles/{r.slug}</code>
+                  <span className={`art-status ${r.status}`} style={{ fontSize: '0.55rem' }}>{r.status}</span>
+                  {r.virtual_likes > 0 && (
+                    <span className="admt-virtual-badge" title="Admin boost">+{r.virtual_likes} boost</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Current total — read-only display */}
+              <div className="admt-likes-col-count">
+                <span className="admt-like-count">♥ {r.like_count}</span>
+                {r.user_like_count !== undefined && (
+                  <span className="admt-like-breakdown">
+                    {r.user_like_count} user{r.user_like_count !== 1 ? 's' : ''}
+                    {r.virtual_likes > 0 ? ` + ${r.virtual_likes} boost` : ''}
+                  </span>
+                )}
+              </div>
+
+              {/* Editable count input */}
+              <div className="admt-likes-col-set">
+                <div className="admt-likes-set-row">
+                  <input
+                    className="adm-input admt-likes-input"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={drafts[r.id] ?? r.like_count}
+                    onChange={e => handleDraftChange(r.id, e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') saveLikeCount(r.id); }}
+                    aria-label={`Set like count for ${r.title}`}
+                  />
+                  <button
+                    className="adm-btn adm-btn-sm adm-btn-primary admt-likes-save-btn"
+                    onClick={() => saveLikeCount(r.id)}
+                    disabled={!!saving[r.id]}
+                    title="Save like count"
+                  >
+                    {saving[r.id] ? '…' : 'Save'}
+                  </button>
+                </div>
+                {saved[r.id]    && <span className="admt-likes-feedback admt-likes-feedback--ok">✓ Saved</span>}
+                {saveErr[r.id]  && <span className="admt-likes-feedback admt-likes-feedback--err">{saveErr[r.id]}</span>}
+              </div>
+
+              {/* Admin toggle */}
+              <div className="admt-likes-col-admin">
+                <button
+                  className={`adm-btn adm-btn-sm${r.admin_liked ? ' admt-btn-liked' : ''}`}
+                  onClick={() => toggle(r.id)}
+                  disabled={toggling === r.id}
+                  title={r.admin_liked ? 'Remove admin like' : 'Add admin like'}
+                >
+                  {toggling === r.id ? '…' : r.admin_liked ? '♥ Unlike' : '♡ Like'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 const PAGE_TABS = [
   { id: 'hero',       label: 'Hero Section' },
   { id: 'articles',   label: 'Articles'     },
   { id: 'categories', label: 'Categories'   },
+  { id: 'comments',   label: 'Comments'     },
+  { id: 'likes',      label: 'Likes'        },
   { id: 'seo',        label: 'SEO'          },
   { id: 'blocks',     label: 'Blocks'       },
   { id: 'order',      label: 'Section Order' },
@@ -649,6 +1183,8 @@ function ArticlesAdmin() {
         {active === 'hero'       && <HeroTab />}
         {active === 'articles'   && <ArticlesListTab categories={categories} />}
         {active === 'categories' && <CategoriesTab />}
+        {active === 'comments'   && <CommentsTab />}
+        {active === 'likes'      && <LikesTab />}
         {active === 'seo'        && <SeoTab pageSlug="articles" />}
         {active === 'blocks'     && <SiteBlocksTab page="articles" />}
         {active === 'order'      && <SectionOrderTab page="articles" />}

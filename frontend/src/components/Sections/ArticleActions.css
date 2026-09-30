@@ -1,0 +1,454 @@
+/* ════════════════════════════════════════
+   ARTICLE ACTIONS  (Like · Comment · Share)
+════════════════════════════════════════ */
+
+/* ── Action bar ────────────────────────────────────────────── */
+.ac-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(222, 115, 54, 0.15);
+}
+
+/* Compact variant for listing cards */
+.ac-actions--compact {
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+}
+
+/* ── Base button ─────────────────────────────────────────────── */
+.ac-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(26, 37, 67, 0.16);
+  color: rgba(26, 37, 67, 0.55);
+  padding: 0.38rem 0.85rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ac-actions--compact .ac-btn {
+  font-size: 0.52rem;
+  padding: 0.3rem 0.65rem;
+}
+
+.ac-btn:hover {
+  border-color: #de7336;
+  color: #de7336;
+}
+
+.ac-btn:active { transform: scale(0.96); }
+
+.ac-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.ac-actions--compact .ac-icon {
+  width: 11px;
+  height: 11px;
+}
+
+/* ── Like button states ──────────────────────────────────────── */
+.ac-btn--liked {
+  background: rgba(222, 115, 54, 0.08);
+  border-color: #de7336;
+  color: #de7336;
+}
+
+.ac-btn--liked:hover {
+  background: rgba(222, 115, 54, 0.15);
+}
+
+/* ── Active state (e.g. share open) ─────────────────────────── */
+.ac-btn--active {
+  border-color: #1a2543;
+  color: #1a2543;
+  background: rgba(26, 37, 67, 0.05);
+}
+
+/* ── Share dropdown wrapper ──────────────────────────────────── */
+.ac-share-wrap {
+  position: relative;
+}
+
+/* ── Share dropdown menu ─────────────────────────────────────── */
+.ac-share-dropdown {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: #fff;
+  border: 1px solid rgba(26, 37, 67, 0.14);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(26, 18, 8, 0.14);
+  z-index: 200;
+  min-width: 180px;
+  overflow: hidden;
+}
+
+.ac-share-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.7rem 1rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #1a2543;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ac-share-item:hover {
+  background: rgba(222, 115, 54, 0.08);
+  color: #de7336;
+}
+
+.ac-share-item + .ac-share-item {
+  border-top: 1px solid rgba(26, 37, 67, 0.06);
+}
+
+/* ════════════════════════════════════════
+   COMMENT MODAL
+════════════════════════════════════════ */
+.ac-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 18, 8, 0.68);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.ac-modal {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 700px;
+  max-height: 88vh;
+  background: #fdf8f3;
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(26, 18, 8, 0.28);
+  overflow: hidden;
+}
+
+/* Modal header */
+.ac-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.6rem 1.8rem 1rem;
+  border-bottom: 1px solid rgba(222, 115, 54, 0.15);
+  flex-shrink: 0;
+}
+
+.ac-modal-eyebrow {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-bottom: 0.4rem;
+}
+
+.ac-modal-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 400;
+  color: #1a1208;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ac-modal-close {
+  background: none;
+  border: 1px solid rgba(26, 18, 8, 0.14);
+  color: rgba(26, 18, 8, 0.45);
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.ac-modal-close:hover {
+  background: #de7336;
+  color: #fff;
+  border-color: #de7336;
+}
+
+/* Comment list */
+.ac-comments-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.4rem 1.8rem;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.ac-comments-area::-webkit-scrollbar { width: 4px; }
+.ac-comments-area::-webkit-scrollbar-track { background: transparent; }
+.ac-comments-area::-webkit-scrollbar-thumb { background: rgba(222, 115, 54, 0.3); border-radius: 4px; }
+
+.ac-empty {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: rgba(26, 37, 67, 0.4);
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.ac-comment {
+  border: 1px solid rgba(222, 115, 54, 0.14);
+  border-radius: 6px;
+  background: #fff;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 1px 6px rgba(26, 18, 8, 0.04);
+}
+
+.ac-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.ac-comment-author {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a2543;
+}
+
+.ac-comment-date {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(26, 37, 67, 0.38);
+}
+
+.ac-comment-text {
+  font-family: sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #1a1208;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ac-comment-img-wrap {
+  margin-top: 0.85rem;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(222, 115, 54, 0.12);
+}
+
+.ac-comment-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 360px;
+  object-fit: contain;
+}
+
+/* Submission form */
+.ac-form-area {
+  padding: 1.2rem 1.8rem 1.6rem;
+  border-top: 1px solid rgba(222, 115, 54, 0.12);
+  flex-shrink: 0;
+}
+
+.ac-form-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #de7336;
+  margin-bottom: 0.75rem;
+}
+
+.ac-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ac-form-input,
+.ac-form-textarea {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(26, 37, 67, 0.16);
+  border-radius: 3px;
+  padding: 0.6rem 0.85rem;
+  background: #fff;
+  color: #1a2543;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ac-form-input:focus,
+.ac-form-textarea:focus {
+  border-color: #de7336;
+  box-shadow: 0 0 0 3px rgba(222, 115, 54, 0.1);
+}
+
+.ac-form-textarea { min-height: 80px; }
+
+.ac-form-img-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ac-img-attach-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px dashed rgba(26, 37, 67, 0.22);
+  color: rgba(26, 37, 67, 0.55);
+  padding: 0.4rem 0.85rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.ac-img-attach-btn:hover {
+  border-color: #de7336;
+  color: #de7336;
+}
+
+.ac-img-preview-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ac-img-preview {
+  height: 48px;
+  width: auto;
+  border-radius: 3px;
+  border: 1px solid rgba(222, 115, 54, 0.25);
+  object-fit: cover;
+  display: block;
+}
+
+.ac-img-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #de7336;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.ac-form-error {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: #8b1a1a;
+  padding: 0.4rem 0.7rem;
+  background: #fdf0ee;
+  border: 1px solid rgba(139, 26, 26, 0.18);
+  border-radius: 2px;
+}
+
+.ac-form-submit {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: #de7336;
+  color: #fff;
+  border: none;
+  padding: 0.72rem 1.6rem;
+  border-radius: 2px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.2s;
+}
+
+.ac-form-submit:hover:not(:disabled) { background: #c45e22; }
+.ac-form-submit:disabled { opacity: 0.6; cursor: default; }
+
+.ac-submitted {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: #1a2543;
+  padding: 0.85rem 1rem;
+  background: rgba(222, 115, 54, 0.08);
+  border: 1px solid rgba(222, 115, 54, 0.2);
+  border-radius: 4px;
+}
+
+.ac-submitted-icon {
+  color: #de7336;
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .ac-modal { width: 100%; max-height: 92vh; border-radius: 6px 6px 0 0; align-self: flex-end; }
+  .ac-overlay { padding: 0; align-items: flex-end; }
+  .ac-modal-header { padding: 1.2rem 1.2rem 0.8rem; }
+  .ac-comments-area { padding: 1rem 1.2rem; }
+  .ac-form-area { padding: 1rem 1.2rem 1.4rem; }
+  .ac-share-dropdown { left: auto; right: 0; }
+}

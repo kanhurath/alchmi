@@ -183,6 +183,23 @@
   font-style: italic;
 }
 
+/* ── Article Actions (Like / Comment / Share) ─────── */
+.article-body-wrap .ac-actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(243, 179, 62, 0.25);
+}
+
+.article-body-wrap .ac-btn {
+  font-size: 0.6rem;
+  padding: 0.5rem 1rem;
+}
+
+.article-body-wrap .ac-icon {
+  width: 15px;
+  height: 15px;
+}
+
 /* ── Tags row ──────────────────────────────────────── */
 .article-tags-row {
   display: flex;
