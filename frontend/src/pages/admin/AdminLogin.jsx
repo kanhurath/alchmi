@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { getAdminSettings } from '../../services/customizerApi';
 import './AdminLogin.css';
@@ -132,6 +132,10 @@ function AdminLogin() {
           <button className="login-btn" type="submit" disabled={loading}>
             {loading ? 'Signing in…' : 'Sign In'}
           </button>
+
+          <Link to="/admin/forgot-password" className="login-forgot-link">
+            Forgot Password?
+          </Link>
 
           <a href="/" className="login-back-link">← Back to website</a>
         </form>

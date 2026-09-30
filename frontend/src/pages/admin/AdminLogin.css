@@ -232,6 +232,78 @@
   color: #d4670a;
 }
 
+/* ── Forgot password link ─────────────────────────────────────────────────── */
+
+.login-forgot-link {
+  text-align: right;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.75rem;
+  color: #9a8e78;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.15s;
+  align-self: flex-end;
+  margin-top: -0.5rem;
+}
+
+.login-forgot-link:hover {
+  color: #d4670a;
+}
+
+/* ── Success message ──────────────────────────────────────────────────────── */
+
+.login-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #f0faf4;
+  border: 1px solid #a8d5b8;
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #1a5c34;
+}
+
+.login-success-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  color: #2a9455;
+}
+
+/* ── Info / neutral message ───────────────────────────────────────────────── */
+
+.login-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #f0f4fa;
+  border: 1px solid #b0c4d8;
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #1a3a5c;
+}
+
+.login-info-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ── Password strength hint ───────────────────────────────────────────────── */
+
+.login-hint {
+  font-size: 0.72rem;
+  color: #9a8e78;
+  letter-spacing: 0.02em;
+  margin-top: -0.25rem;
+}
+
 /* ── Responsive ───────────────────────────────────────────────────────────── */
 
 @media (max-width: 680px) {

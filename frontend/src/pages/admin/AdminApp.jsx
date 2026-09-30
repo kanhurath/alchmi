@@ -3,6 +3,8 @@ import { AdminAuthProvider } from '../../context/AdminAuthContext';
 import ProtectedRoute   from './ProtectedRoute.jsx';
 import AdminLayout      from './AdminLayout.jsx';
 import AdminLogin       from './AdminLogin.jsx';
+import ForgotPassword  from './ForgotPassword.jsx';
+import ResetPassword   from './ResetPassword.jsx';
 import AdminDashboard   from './AdminDashboard.jsx';
 import AdminPages       from './AdminPages.jsx';
 import HomeAdmin        from './HomeAdmin.jsx';
@@ -39,7 +41,9 @@ function AdminApp() {
         <Route index element={<Navigate to="login" replace />} />
 
         {/* Public */}
-        <Route path="login" element={<AdminLogin />} />
+        <Route path="login"            element={<AdminLogin />} />
+        <Route path="forgot-password"  element={<ForgotPassword />} />
+        <Route path="reset-password"   element={<ResetPassword />} />
 
         {/* Protected — all share AdminLayout */}
         <Route element={<ProtectedRoute />}>
