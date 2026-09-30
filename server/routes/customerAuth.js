@@ -9,6 +9,75 @@ const fs       = require('fs');
 
 const router = express.Router();
 
+async function sendRegistrationEmails(customer) {
+  try {
+    const [rows] = await db.query('SELECT * FROM booking_email_settings WHERE id=1 LIMIT 1');
+    const es = rows[0];
+    if (!es?.is_enabled || !es.smtp_host) return;
+
+    const nodemailer = require('nodemailer');
+    const transporter = nodemailer.createTransport({
+      host: es.smtp_host, port: es.smtp_port || 587,
+      secure: (es.smtp_port || 587) === 465,
+      auth: { user: es.smtp_user, pass: es.smtp_pass },
+    });
+    const fromLine = `"${es.smtp_from_name || 'Alchmi'}" <${es.smtp_from || es.smtp_user}>`;
+    const siteUrl  = process.env.SITE_URL || 'https://www.alchmi.com';
+
+    // Email to customer
+    await transporter.sendMail({
+      from: fromLine,
+      to:   customer.email,
+      subject: 'Welcome to Alchmi — Registration Successful',
+      html: `
+        <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;color:#1a1208;">
+          <h2 style="color:#b8922a;">Welcome to Alchmi, ${customer.full_name}!</h2>
+          <p>Your account has been successfully created. Here are your registration details:</p>
+          <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+            <tr><td style="padding:8px;border-bottom:1px solid #e8c96d;color:#8a7d6b;width:140px;">Full Name</td>
+                <td style="padding:8px;border-bottom:1px solid #e8c96d;">${customer.full_name}</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #e8c96d;color:#8a7d6b;">Email</td>
+                <td style="padding:8px;border-bottom:1px solid #e8c96d;">${customer.email}</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #e8c96d;color:#8a7d6b;">Phone</td>
+                <td style="padding:8px;border-bottom:1px solid #e8c96d;">${customer.phone || '—'}</td></tr>
+            <tr><td style="padding:8px;color:#8a7d6b;">Registered On</td>
+                <td style="padding:8px;">${new Date(customer.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td></tr>
+          </table>
+          <p>You can log in to your account at <a href="${siteUrl}" style="color:#b8922a;">${siteUrl}</a></p>
+          <p>If you have any questions, feel free to reply to this email.</p>
+        </div>`,
+    });
+
+    // Email to admin
+    if (es.admin_email) {
+      await transporter.sendMail({
+        from: fromLine,
+        to:   es.admin_email,
+        subject: `New Customer Registration — ${customer.full_name}`,
+        html: `
+          <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;color:#1a1208;">
+            <h2 style="color:#b8922a;">New Customer Registered</h2>
+            <p>A new customer has self-registered on Alchmi:</p>
+            <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+              <tr><td style="padding:8px;border-bottom:1px solid #e8c96d;color:#8a7d6b;width:140px;">ID</td>
+                  <td style="padding:8px;border-bottom:1px solid #e8c96d;">${customer.id}</td></tr>
+              <tr><td style="padding:8px;border-bottom:1px solid #e8c96d;color:#8a7d6b;">Full Name</td>
+                  <td style="padding:8px;border-bottom:1px solid #e8c96d;">${customer.full_name}</td></tr>
+              <tr><td style="padding:8px;border-bottom:1px solid #e8c96d;color:#8a7d6b;">Email</td>
+                  <td style="padding:8px;border-bottom:1px solid #e8c96d;">${customer.email}</td></tr>
+              <tr><td style="padding:8px;border-bottom:1px solid #e8c96d;color:#8a7d6b;">Phone</td>
+                  <td style="padding:8px;border-bottom:1px solid #e8c96d;">${customer.phone || '—'}</td></tr>
+              <tr><td style="padding:8px;color:#8a7d6b;">Registered On</td>
+                  <td style="padding:8px;">${new Date(customer.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td></tr>
+            </table>
+          </div>`,
+      });
+    }
+  } catch (err) {
+    console.error('[registration-email]', err.message);
+  }
+}
+
 // ── Startup: ensure customers table and all columns exist ─────────────────────
 (async () => {
   try {
@@ -166,6 +235,9 @@ router.post('/register', async (req, res) => {
 
     const token = makeToken(customer);
     res.status(201).json({ token, customer: safeCustomer(customer) });
+
+    // Fire-and-forget — registration emails don't block the response
+    sendRegistrationEmails(customer);
   } catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
       return res.status(400).json({ error: 'An account with this email or phone already exists' });
