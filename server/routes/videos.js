@@ -35,7 +35,7 @@ router.get('/', async (_req, res) => {
   try {
     const results = await Promise.allSettled([
       db.query('SELECT * FROM vid_hero LIMIT 1'),
-      db.query('SELECT * FROM vid_videos ORDER BY sort_order, id'),
+      db.query('SELECT * FROM vid_videos ORDER BY sort_order, id DESC'),
       db.query('SELECT * FROM vid_sidebar LIMIT 1'),
     ]);
 
@@ -84,7 +84,7 @@ router.put('/hero', verifyToken, async (req, res) => {
 // ── VIDEOS ────────────────────────────────────────────────────────────────────
 router.get('/videos', async (_req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM vid_videos ORDER BY sort_order, id');
+    const [rows] = await db.query('SELECT * FROM vid_videos ORDER BY sort_order, id DESC');
     res.json(rows.map(parseVideo));
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
