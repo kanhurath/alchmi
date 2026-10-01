@@ -208,11 +208,24 @@ router.get('/', async (req, res) => {
       params.push(category);
     }
 
+    // MySQL FULLTEXT ignores purely numeric tokens and tokens shorter than its
+    // ft_min_word_len (default 3–4). Use LIKE for those cases so that article
+    // titles/content beginning with numbers are still found.
+    const useLike = search && search.split(/\s+/).every(tok => /^\d+$/.test(tok) || tok.length < 3);
+    const likeVal = search ? `%${search}%` : null;
+
     if (search) {
-      // Use FULLTEXT MATCH for speed and relevance; fall back to LIKE on title
-      // if the FULLTEXT index isn't ready yet (e.g. first boot).
-      where += ' AND MATCH(a.title, a.excerpt, a.tags) AGAINST (? IN BOOLEAN MODE)';
-      params.push(search);
+      if (useLike) {
+        where += ' AND (a.title LIKE ? OR a.excerpt LIKE ? OR a.tags LIKE ?)';
+        params.push(likeVal, likeVal, likeVal);
+      } else {
+        // FULLTEXT for text queries; also include a LIKE fallback so that
+        // alphanumeric tokens (e.g. "10 tips") aren't silently dropped when the
+        // numeric part alone would match a title.
+        where += ` AND (MATCH(a.title, a.excerpt, a.tags) AGAINST (? IN BOOLEAN MODE)
+                    OR a.title LIKE ? OR a.excerpt LIKE ? OR a.tags LIKE ?)`;
+        params.push(search, likeVal, likeVal, likeVal);
+      }
     }
 
     const [[{ total }]] = await db.execute(
@@ -220,17 +233,19 @@ router.get('/', async (req, res) => {
       params
     );
 
-    // Title matches sort above excerpt/tag matches via MATCH score on title alone.
-    // LIMIT / OFFSET must be interpolated as safe integers — mysql2 prepared
-    // statement binding treats them as strings in some versions, causing
-    // "Incorrect arguments to mysqld_stmt_execute".
+    // Title matches sort above excerpt/tag matches. For LIKE-only queries,
+    // order by title match first (CASE), then standard featured/date ordering.
     const orderBy = search
-      ? `ORDER BY
-           MATCH(a.title) AGAINST (? IN BOOLEAN MODE) DESC,
-           a.is_featured DESC, a.pub_date DESC, a.sort_order, a.id DESC`
+      ? (useLike
+          ? `ORDER BY
+               CASE WHEN a.title LIKE ? THEN 0 ELSE 1 END,
+               a.is_featured DESC, a.pub_date DESC, a.sort_order, a.id DESC`
+          : `ORDER BY
+               MATCH(a.title) AGAINST (? IN BOOLEAN MODE) DESC,
+               a.is_featured DESC, a.pub_date DESC, a.sort_order, a.id DESC`)
       : `ORDER BY a.is_featured DESC, a.pub_date DESC, a.sort_order, a.id DESC`;
 
-    const rowParams = search ? [...params, search] : params;
+    const rowParams = search ? [...params, useLike ? likeVal : search] : params;
 
     const [rows] = await db.execute(
       `SELECT a.* FROM articles a ${where} ${orderBy} LIMIT ${per_page} OFFSET ${offset}`,
